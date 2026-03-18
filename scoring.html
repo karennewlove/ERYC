@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,6 +44,16 @@
       font-size: 13px;
     }
 
+    .import-date {
+      margin-left: 20px;
+      font-weight: 400;
+    }
+
+    .import-date label {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
     .scoring-table {
       width: 100%;
       border-collapse: collapse;
@@ -76,6 +87,29 @@
       box-sizing: border-box;
     }
 
+    /* Rationale box */
+    .scoring-notes {
+      padding: 8px 12px;
+      border-top: 1px solid #e1e5ea;
+    }
+
+    .scoring-notes label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .scoring-notes textarea {
+      width: 100%;
+      min-height: 70px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      padding: 6px;
+      border: 1px solid #c2cbd3;
+      border-radius: 3px;
+      resize: vertical;
+    }
+
     .scoring-actions {
       padding: 8px 12px;
       text-align: right;
@@ -97,7 +131,7 @@
       background-color: #163656;
     }
 
-    /* By default show closed framework rows */
+    /* Framework switching */
     .step1-row[data-framework="closed"] { display: table-row; }
     .step1-row[data-framework="apl"]    { display: none; }
   </style>
@@ -115,6 +149,12 @@
         <option value="closed">Closed framework</option>
         <option value="apl">APL framework</option>
       </select>
+
+      <!-- NEW: Additional Information Last Import Date -->
+      <span class="import-date">
+        <label>Additional Information Last Import Date:</label>
+        <span id="lastImportDate">dd/mm/yyyy</span>
+      </span>
     </div>
 
     <table class="scoring-table">
@@ -127,25 +167,29 @@
         </tr>
       </thead>
       <tbody>
-        <!-- CLOSED FRAMEWORK FIELDS (default visible) -->
+
+        <!-- CLOSED FRAMEWORK -->
         <tr class="step1-row" data-framework="closed">
           <td>CQC Rating</td>
           <td><input type="text" readonly></td>
           <td>Start date</td>
           <td><input type="number"></td>
         </tr>
+
         <tr class="step1-row" data-framework="closed">
           <td>Performance</td>
           <td><input type="text" readonly></td>
           <td>SU Preferences</td>
           <td><input type="number"></td>
         </tr>
+
         <tr class="step1-row" data-framework="closed">
           <td>Contract Compliance</td>
           <td><input type="text" readonly></td>
           <td></td>
           <td></td>
         </tr>
+
         <tr class="step1-row" data-framework="closed">
           <td>Quality Assurance</td>
           <td><input type="text" readonly></td>
@@ -153,19 +197,21 @@
           <td></td>
         </tr>
 
-        <!-- APL FRAMEWORK FIELDS (hidden until chosen) -->
+        <!-- APL FRAMEWORK -->
         <tr class="step1-row" data-framework="apl">
           <td>CQC Score</td>
           <td><input type="text" readonly></td>
           <td>Start date</td>
           <td><input type="number"></td>
         </tr>
+
         <tr class="step1-row" data-framework="apl">
           <td>Quality of Provision</td>
           <td><input type="text" readonly></td>
           <td>SU Preferences</td>
           <td><input type="number"></td>
         </tr>
+
       </tbody>
 
       <tfoot>
@@ -182,6 +228,12 @@
       </tfoot>
     </table>
 
+    <!-- NEW: Rationale / Notes -->
+    <div class="scoring-notes">
+      <label for="rationale">Rationale / Notes:</label>
+      <textarea id="rationale" placeholder="Enter rationale, comments or decision details here..."></textarea>
+    </div>
+
     <div class="scoring-actions">
       <button type="button">Calculate score</button>
     </div>
@@ -189,23 +241,20 @@
 
   <script>
     (function () {
-      var select   = document.getElementById('frameworkSelect');
-      var scoring  = document.getElementById('providerScoring');
-      var rows     = scoring.querySelectorAll('.step1-row');
+      var select = document.getElementById('frameworkSelect');
+      var rows = document.querySelectorAll('.step1-row');
 
       function updateRows() {
-        var fw = select.value; // 'closed' or 'apl'
+        var fw = select.value;
         rows.forEach(function (row) {
-          if (row.getAttribute('data-framework') === fw) {
-            row.style.display = 'table-row';
-          } else {
-            row.style.display = 'none';
-          }
+          row.style.display = (row.getAttribute('data-framework') === fw)
+            ? 'table-row'
+            : 'none';
         });
       }
 
       select.addEventListener('change', updateRows);
-      updateRows(); // ensure initial state matches dropdown
+      updateRows(); 
     })();
   </script>
 
