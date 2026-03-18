@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Request – Provider Shortlist</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      margin: 20px;
+      background-color: #ffffff;
+    }
+
+    .container {
+      border: 1px solid #c2cbd3;
+      border-radius: 2px;
+      max-width: 1200px;
+    }
+
+    .main-header {
+      background-color: #1f4e79;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Sub‑headers for sections */
+    .section-header {
+      background-color: #1f4e79;
+      color: #ffffff;
+      padding: 4px 12px;
+      font-weight: 600;
+      font-size: 13px;
+      margin-top: 0;
+    }
+
+    .section-wrapper {
+      border-top: 1px solid #c2cbd3;
+      background-color: #ffffff;
+    }
+
+    .table-wrapper {
+      padding: 8px 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #e1e5ea;
+      vertical-align: top;
+    }
+
+    thead th {
+      background-color: #dde6f1;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .provider-name {
+      font-weight: 600;
+    }
+
+    /* Buttons – grey with black text */
+    button {
+      background-color: #e1e5ea;
+      color: #000000;
+      border: 1px solid #c2cbd3;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ccd2dc;
+    }
+
+    .shortlist-toolbar {
+      padding: 8px 12px;
+      border-top: 1px solid #c2cbd3;
+      border-bottom: 1px solid #c2cbd3;
+      background-color: #f4f7fb;
+      font-size: 12px;
+    }
+
+    .shortlist-actions {
+      border-top: 1px solid #c2cbd3;
+      background-color: #f7f9fc;
+    }
+
+    .shortlist-actions-top {
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    /* Message to provider panel */
+
+    .message-panel {
+      border-top: 1px solid #c2cbd3;
+      background-color: #ffffff;
+    }
+
+    .message-panel-body {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      row-gap: 8px;
+      column-gap: 12px;
+      align-items: flex-start;
+      font-size: 12px;
+    }
+
+    .message-panel-body label {
+      font-weight: 600;
+    }
+
+    .message-panel-body input[type="datetime-local"],
+    .message-panel-body select {
+      font-size: 12px;
+      padding: 2px 4px;
+      max-width: 260px;
+    }
+
+    .message-panel-body textarea {
+      font-size: 12px;
+      padding: 4px;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .message-panel-footer {
+      padding: 8px 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background-color: #f7f9fc;
+      border-top: 1px solid #c2cbd3;
+    }
+
+    /* View response as link-style text */
+    .view-link {
+      color: #0066cc;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Main page header -->
+    <div class="main-header">
+      Service Request – Provider Shortlist (Homecare)
+    </div>
+
+    <!-- Service specification section -->
+    <div class="section-wrapper">
+      <div class="section-header">
+        Service specification
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 4%;">Active</th>
+              <th style="width: 18%;">Service Type</th>
+              <th style="width: 18%;">Service Band Group</th>
+              <th style="width: 40%;">Schedule</th>
+              <th style="width: 10%;">Quantity</th>
+              <th style="width: 10%;">Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input type="checkbox"> Y
+              </td>
+              <td>Homecare closed framework</td>
+              <td>Standard</td>
+              <td>From 13/10/2025 every week, Every day 09:00 to 09:30</td>
+              <td>3.5</td>
+              <td>Hours</td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox"> Y
+              </td>
+              <td>Homecare closed framework</td>
+              <td>Medication calls</td>
+              <td>From 13/10/2025 every week, Every day 12:00</td>
+              <td>1.75</td>
+              <td>Hours</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Provider shortlist section -->
+
+    <div class="shortlist-toolbar">
+      <!-- Reserved for filters / info if needed -->
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 2%;">Select</th>
+            <th style="width: 14%;">Service Provider / Address</th>
+            <th style="width: 10%;">Shortlist Status</th>
+            <th style="width: 7%;">Date Posted</th>
+            <th style="width: 10%;">Response Due<br>Date / Time</th>
+            <th style="width: 9%;">Date Response Received</th>
+            <th style="width: 20%;">Service Type, Packages and Schedule</th>
+            <th style="width: 9%;">Active Service</th>
+            <th style="width: 12%;">Additional Information</th>
+            <th style="width: 8%;">Response Outcome</th>
+            <th style="width: 4%;">Reposted</th>
+            <th style="width: 4%;">Score</th>
+            <th style="width: 4%;">Message</th>
+            <th style="width: 7%;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Row: A & B -->
+          <tr>
+            <td style="text-align:center;">
+              <input type="checkbox">
+            </td>
+            <td>
+              <div class="provider-name">A &amp; B</div>
+              <div>12 street, town, postcode</div>
+            </td>
+            <td>Awaiting shortlisting</td>
+            <td>13/10/2025</td>
+            <td>13/10/2025 12:00</td>
+            <td>13/10/2025</td>
+            <td>
+              <div>Closed Framework Beverley Zone 1 – Standard</div>
+              <div>7 hours, £19.50, £136.50</div>
+              <div>Every day 09:00–10:00 (1 hour)</div>
+              <div>Medication Calls – 3.5 hours, £25.00, £87.50</div>
+              <div>Every day 12:00, 18:00 (0.25 hours)</div>
+              <div style="margin-top:4px; font-style:italic;">
+                Amended schedules offered by the provider would show here
+              </div>
+            </td>
+            <td>Active</td>
+            <td>
+              <div>Framework: Closed</div>
+              <div>CF Restriction: No</div>
+            </td>
+            <td>Accept but differs</td>
+            <td>Yes</td>
+            <td>84</td>
+            <td style="text-align:center;">&#9993;</td>
+            <td>
+              <span class="view-link">View response</span>
+            </td>
+          </tr>
+
+          <!-- Row: A.R.U -->
+          <tr>
+            <td style="text-align:center;">
+              <input type="checkbox">
+            </td>
+            <td>
+              <div class="provider-name">A.R.U</div>
+              <div>12 street, town, postcode</div>
+            </td>
+            <td>Awaiting shortlisting</td>
+            <td>13/10/2025</td>
+            <td>13/10/2025 12:00</td>
+            <td>13/10/2025</td>
+            <td>
+              <div>Closed Framework Beverley Zone 1 – Standard</div>
+              <div>Medication Calls – 3.5 hours, £25.00, £87.50</div>
+            </td>
+            <td>Active</td>
+            <td>
+              <div>Framework: Closed</div>
+              <div>CF Restriction: No</div>
+            </td>
+            <td>Accept as specified</td>
+            <td>No</td>
+            <td>63</td>
+            <td style="text-align:center;"></td>
+            <td>
+              <span class="view-link">View response</span>
+            </td>
+          </tr>
+
+          <!-- Row: Sure Healthcare -->
+          <tr>
+            <td style="text-align:center;">
+              <input type="checkbox">
+            </td>
+            <td>
+              <div class="provider-name">Sure Healthcare</div>
+              <div>12 street, town, postcode</div>
+            </td>
+            <td>Awaiting shortlisting</td>
+            <td>13/10/2025</td>
+            <td>13/10/2025 12:00</td>
+            <td>13/10/2025</td>
+            <td>
+              <div>Closed Framework Beverley Zone 1 – Standard</div>
+              <div>Medication Calls – 3.5 hours, £25.00, £87.50</div>
+            </td>
+            <td>Active</td>
+            <td>
+              <div>Framework: Closed</div>
+              <div>CF Restriction: No</div>
+            </td>
+            <td>Accept</td>
+            <td>No</td>
+            <td>78</td>
+            <td style="text-align:center;"></td>
+            <td>
+              <span class="view-link">View response</span>
+            </td>
+          </tr>
+
+          <!-- Row: Caremark -->
+          <tr>
+            <td style="text-align:center;">
+              <input type="checkbox">
+            </td>
+            <td>
+              <div class="provider-name">Caremark</div>
+              <div>12 street, town, postcode</div>
+            </td>
+            <td>Awaiting shortlisting</td>
+            <td>13/10/2025</td>
+            <td>13/10/2025 12:00</td>
+            <td>13/10/2025</td>
+            <td>
+              <div>Closed Framework Beverley Zone 1 – Standard</div>
+              <div>Medication Calls – 3.5 hours, £25.00, £87.50</div>
+            </td>
+            <td>Active</td>
+            <td>
+              <div>Framework: Closed</div>
+              <div>CF Restriction: No</div>
+            </td>
+            <td>Accept awaiting another offer</td>
+            <td>Yes</td>
+            <td>80</td>
+            <td style="text-align:center;"></td>
+            <td>
+              <span class="view-link">View response</span>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Top row of buttons under the grid -->
+    <div class="shortlist-actions">
+      <div class="shortlist-actions-top">
+        <button type="button">Care Provider Options</button>
+        <button type="button">Cancel shortlisting</button>
+        <button type="button">Add</button>
+        <button type="button">Export to XLSX</button>
+      </div>
+    </div>
+
+    <!-- Message to provider panel -->
+    <div class="message-panel">
+      <div class="section-header">
+        Message to provider
+      </div>
+      <div class="message-panel-body">
+        <label for="responseDue">Response Due Date and Time:</label>
+        <input type="datetime-local" id="responseDue">
+
+        <label for="portalTemplate">Portal Message Template:</label>
+        <select id="portalTemplate">
+          <option>(select template)</option>
+          <option>Standard Homecare Request</option>
+          <option>Emergency Request</option>
+        </select>
+
+        <label for="portalMessage">Portal Request Message:</label>
+        <textarea id="portalMessage"></textarea>
+      </div>
+      <div class="message-panel-footer">
+        <button type="button">Post to all providers</button>
+        <button type="button">Post to selected providers</button>
+        <button type="button">Save</button>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
