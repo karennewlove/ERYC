@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Provider service request history</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      margin: 20px;
+      background-color: #ffffff;
+    }
+
+    /* Container aligned with Service specification interactive.html */
+    .provider-history-container {
+      border: 1px solid #c2cbd3;
+      border-radius: 2px;
+      font-size: 12px;
+      background-color: #ffffff;
+      max-width: 1200px;
+    }
+
+    .provider-history-header {
+      background-color: #1f4e79;  /* dark blue */
+      color: #ffffff;
+      font-weight: 600;
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .provider-history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .provider-history-table th,
+    .provider-history-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #e1e5ea;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .provider-history-table thead th {
+      background-color: #dde6f1; /* pale blue header */
+      font-weight: 600;
+    }
+
+    .provider-history-table tbody tr:nth-child(even) {
+      background-color: #f9fafb; /* subtle stripes */
+    }
+
+    .provider-history-table tbody tr:hover {
+      background-color: #f4f7fb; /* light hover */
+    }
+
+    .schedule-hover {
+      color: #1f4e79;          /* same dark blue as header */
+      text-decoration: underline;
+      cursor: help;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="provider-history-container">
+    <div class="provider-history-header">
+      Provider service request history
+    </div>
+
+    <table class="provider-history-table">
+      <thead>
+        <tr>
+          <th>Date/Time</th>
+          <th>User</th>
+          <th>Provider shortlist status</th>
+          <th>Event type</th>
+          <th>Outcome</th>
+          <th>Amended schedule</th>
+          <th>Additional packages</th>
+          <th>Reason</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Row 1: Posted to providers -->
+        <tr>
+          <td>11/10/2025 13:00</td>
+          <td>A Brokerage User</td>
+          <td>Posted awaiting response</td>
+          <td>Posted to providers</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <!-- Row 2: Initial provider response -->
+        <tr>
+          <td>11/10/2025 13:30</td>
+          <td>A Provider User</td>
+          <td>Awaiting shortlisting</td>
+          <td>Responded</td>
+          <td>Accept</td>
+          <td>
+            <span class="schedule-hover"
+                  title="Morning call 09:00–09:30, every day from 13/10/2025">
+              Display schedule (hover)
+            </span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <!-- Row 3: Provider amends response -->
+        <tr>
+          <td>12/10/2025 13:30</td>
+          <td>A Provider User</td>
+          <td>Awaiting shortlisting</td>
+          <td>Amend response</td>
+          <td>Accept but differs</td>
+          <td>
+            <span class="schedule-hover"
+                  title="Morning call changed to 09:30–10:00, every day from 13/10/2025">
+              Display schedule (hover)
+            </span>
+          </td>
+          <td></td>
+          <td>Offer changed</td>
+          <td>
+            Changed morning call offer to 09:30 as unable to provide at 09:00 after checking
+          </td>
+        </tr>
+
+        <!-- Row 4: Brokerage awards -->
+        <tr>
+          <td>12/10/2025 13:30</td>
+          <td>A Brokerage User</td>
+          <td>Awarded</td>
+          <td>Amend response</td>
+          <td>Accept but differs</td>
+          <td>
+            <span class="schedule-hover"
+                  title="Morning call agreed at 09:30–10:00, every day from 13/10/2025">
+              Display schedule (hover)
+            </span>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
+``
