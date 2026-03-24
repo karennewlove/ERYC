@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Provider – Provider Search</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      margin: 20px;
+      background-color: #ffffff;
+    }
+
+    .container {
+      border: 1px solid #c2cbd3;
+      border-radius: 2px;
+      max-width: 1200px;
+    }
+
+    .main-header {
+      background-color: #1f4e79;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .content {
+      padding: 8px 12px 12px;
+      background-color: #ffffff;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 16px;
+      row-gap: 6px;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 4px;
+    }
+
+    .field label {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      font-size: 12px;
+      padding: 2px 4px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 40px;
+      resize: vertical;
+    }
+
+    .wide {
+      width: 320px;
+    }
+
+    .medium {
+      width: 220px;
+    }
+
+    .small {
+      width: 120px;
+    }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      row-gap: 2px;
+      column-gap: 8px;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .checkbox-group label {
+      font-weight: normal;
+    }
+
+    .note {
+      font-size: 11px;
+      color: #555555;
+      margin: 4px 0;
+    }
+
+    .buttons-row {
+      margin: 8px 0;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons – grey with black text */
+    button {
+      background-color: #e1e5ea;
+      color: #000000;
+      border: 1px solid #c2cbd3;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ccd2dc;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    th,
+    td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #e1e5ea;
+      vertical-align: top;
+    }
+
+    thead th {
+      background-color: #dde6f1;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .provider-name {
+      font-weight: 600;
+    }
+
+    .pagination {
+      font-size: 11px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="main-header">
+      Add Provider
+    </div>
+
+    <div class="content">
+
+      <!-- Top search fields -->
+      <div class="field-row">
+        <div class="field">
+          <label for="providerName">Provider Name</label>
+          <input type="text" id="providerName" class="wide"
+                 placeholder="Wildcard search to find any provider containing those characters">
+        </div>
+        <div class="field">
+          <label for="providerId">Provider ID</label>
+          <input type="text" id="providerId" class="small">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="address">Address</label>
+          <textarea id="address" class="wide"
+            placeholder="Wildcard search to find any address containing those characters"></textarea>
+        </div>
+        <div class="field">
+          <label for="cqcRating">CQC Rating</label>
+          <select id="cqcRating" class="medium">
+            <option value="">(any)</option>
+            <option>Outstanding</option>
+            <option>Good</option>
+            <option>Requires improvement</option>
+            <option>Inadequate</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>CQC Specialism</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox"> Caring for adults under 65 years</label>
+          <label><input type="checkbox"> Caring for adults over 65 years</label>
+          <label><input type="checkbox"> Mental health conditions</label>
+          <label><input type="checkbox"> Sensory impairments</label>
+          <label><input type="checkbox"> Learning disabilities</label>
+          <label><input type="checkbox"> Substance misuse problems</label>
+          <label><input type="checkbox"> Dementia</label>
+          <label><input type="checkbox"> Physical disabilities</label>
+          <label><input type="checkbox"> Eating disorders</label>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="capBedType">Capacity Tracker Bed Type</label>
+          <select id="capBedType" class="medium">
+            <option>Later development</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="capVacancy">Capacity Tracker Vacancy</label>
+          <select id="capVacancy" class="medium">
+            <option>Later development</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="capLastUpdate">Capacity Tracker Last update date</label>
+          <select id="capLastUpdate" class="medium">
+            <option>Later development</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Additional information label only -->
+      <div class="note">
+        Additional information fields will be generated dynamically based on configuration.
+      </div>
+
+      <!-- Framework / restriction etc. -->
+      <div class="field-row">
+        <div class="field">
+          <label for="framework">Framework</label>
+          <select id="framework" class="medium">
+            <option value="">(any)</option>
+            <option>Closed</option>
+            <option>APL</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="restriction">Restriction on placements</label>
+          <select id="restriction" class="medium">
+            <option value="">(any)</option>
+            <option>No</option>
+            <option>Yes</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="resSuspension">Residential/Nursing Suspension</label>
+          <select id="resSuspension" class="medium">
+            <option value="">(any)</option>
+            <option>No</option>
+            <option>Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="standardTob">Standard TOB</label>
+          <select id="standardTob" class="medium">
+            <option value="">(any)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ascArea">Adult social care directory area/team</label>
+          <select id="ascArea" class="medium">
+            <option value="">(any)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="buttons-row">
+        <button type="button" id="btnFilter">Filter</button>
+        <button type="button" id="btnReset">Reset</button>
+      </div>
+
+      <div class="note">
+        This grid will show all providers who offer the service type and package as detailed in the
+        service specification automatically. Users will use the above search fields to filter the list below
+        to narrow the search.
+      </div>
+
+      <!-- Provider search results grid -->
+      <table id="providersTable">
+        <thead>
+          <tr>
+            <th style="width:4%;">Select</th>
+            <th style="width:14%;">Name</th>
+            <th style="width:18%;">Address</th>
+            <th style="width:24%;">Service Type &amp; Packages</th>
+            <th style="width:10%;">CQC Rating</th>
+            <th style="width:10%;">CQC Specialism</th>
+            <th style="width:20%;">Additional Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 6 APL providers -->
+          <tr data-name="apl provider 1" data-framework="APL">
+            <td style="text-align:center;"><input type="checkbox" class="row-select"></td>
+            <td class="provider-name">APL Provider 1</td>
+            <td>1 Hull Road, Beverley, HU17 9LP</td>
+            <td>
+              APL framework Beverley Zone 1<br>
+              Standard<br>
+              Medication Calls
+            </td>
+            <td>Good</td>
+            <td>Specialism</td>
+            <td>Framework: APL<br>Restriction on Placements: No</td>
+          </tr>
+          <tr data-name="apl provider 2" data-framework="APL">
+            <td style="text-align:center;"><input type="checkbox" class="row-select"></td>
+            <td class="provider-name">APL Provider 2</td>
+            <td>1 Hull Road, Beverley, HU17 9LP</td>
+            <td>
+              APL framework Beverley Zone 1<br>
+              Standard<br>
+              Medication Calls
+            </td>
+            <td>Good</td>
+            <td>Specialism</td>
+            <td>Framework: APL<br>Restriction on Placements: No</td>
+          </tr>
+          <tr data-name="apl provider 3" data-framework="APL">
+            <td style="text-align:center;"><input type="checkbox" class="row-select"></td>
+            <td class="provider-name">APL Provider 3</td>
+            <td>2 Market Street, Town, HU10 1AA</td>
+            <td>
+              APL framework Beverley Zone 2<br>
+              Standard<br>
+              Medication Calls
+            </td>
+            <td>Good</td>
+            <td>Specialism</td>
+            <td>Framework: APL<br>Restriction on Placements: No</td>
+          </tr>
+          <tr data-name="apl provider 4" data-framework="APL">
+            <td style="text-align:center;"><input type="checkbox" class="row-select"></td>
+            <td class="provider-name">APL Provider 4</td>
+            <td>3 Main Street, Village, YO15 2BB</td>
+            <td>
+              APL framework Bridlington Zone 1<br>
+              Standard<br>
+              Medication Calls
+            </td>
+            <td>Good</td>
+            <td>Specialism</td>
+            <td>Framework: APL<br>Restriction on Placements: No</td>
+          </tr>
+          <tr data-name="apl provider 5" data-framework="APL">
+            <td style="text-align:center;"><input type="checkbox" class="row-select"></td>
+            <td class="provider-name">APL Provider 5</td>
+            <td>4 Coastal Road, Town, YO16 3CC</td>
+            <td>
+              APL framework Bridlington Zone 2<br>
+              Standard<br>
+              Medication Calls
+            </td>
+            <td>Good</td>
+            <td>Specialism</td>
+            <td>Framework: APL<br>Restriction on Placements: No</td>
+          </tr>
+          <tr data-name="apl provider 6" data-framework="APL">
+            <td style="text-align:center;"><input type="checkbox" class="row-select"></td>
+            <td class="provider-name">APL Provider 6</td>
+            <td>5 High Street, Market Town, HU18 4DD</td>
+            <td>
+              APL framework Holderness Zone 1<br>
+              Standard<br>
+              Medication Calls
+            </td>
+            <td>Good</td>
+            <td>Specialism</td>
+            <td>Framework: APL<br>Restriction on Placements: No</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="buttons-row">
+        <button type="button" id="btnSelectAll">Select All</button>
+        <button type="button" id="btnRefresh">Refresh</button>
+        <button type="button" id="btnAdd">Add</button>
+        <button type="button" id="btnRemove">Remove</button>
+      </div>
+
+      <div class="pagination">
+        <span>First</span>
+        <span>Previous</span>
+        <span>Page</span>
+        <input type="number" value="1" min="1" style="width:40px;">
+        <span>of</span>
+        <span>1</span>
+        <span>Next</span>
+        <span>Last</span>
+        <span>&nbsp;&nbsp;Page Size</span>
+        <select style="font-size:11px;">
+          <option>20</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </div>
+
+      <div class="note">
+        If “Select all” is chosen the user should increase the page display to 100 before choosing the
+        select all button; max of 100 records can be added at a time.
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const providerNameInput = document.getElementById('providerName');
+      const frameworkSelect   = document.getElementById('framework');
+      const btnFilter         = document.getElementById('btnFilter');
+      const btnReset          = document.getElementById('btnReset');
+      const btnSelectAll      = document.getElementById('btnSelectAll');
+      const btnRefresh        = document.getElementById('btnRefresh');
+      const btnRemove         = document.getElementById('btnRemove');
+      const providersTable    = document.getElementById('providersTable');
+      const rows              = Array.from(providersTable.tBodies[0].rows);
+
+      function applyFilter() {
+        const nameFilter      = providerNameInput.value.trim().toLowerCase();
+        const frameworkFilter = frameworkSelect.value;
+
+        rows.forEach(row => {
+          const rowName = row.dataset.name || '';
+          const rowFramework = row.dataset.framework || '';
+
+          const matchesName =
+            !nameFilter || rowName.indexOf(nameFilter) !== -1;
+
+          const matchesFramework =
+            !frameworkFilter || rowFramework === frameworkFilter;
+
+          row.style.display = (matchesName && matchesFramework) ? '' : 'none';
+        });
+      }
+
+      function resetFilter() {
+        providerNameInput.value = '';
+        frameworkSelect.value   = '';
+        rows.forEach(row => row.style.display = '');
+      }
+
+      function selectAllRows() {
+        rows.forEach(row => {
+          if (row.style.display !== 'none') {
+            const cb = row.querySelector('.row-select');
+            if (cb) cb.checked = true;
+          }
+        });
+      }
+
+      function refreshList() {
+        rows.forEach(row => {
+          row.style.display = '';
+          const cb = row.querySelector('.row-select');
+          if (cb) cb.checked = false;
+        });
+        providerNameInput.value = '';
+        frameworkSelect.value   = '';
+      }
+
+      function removeSelected() {
+        rows.forEach(row => {
+          const cb = row.querySelector('.row-select');
+          if (cb && cb.checked) {
+            row.style.display = 'none';
+          }
+        });
+      }
+
+      btnFilter.addEventListener('click', applyFilter);
+      btnReset.addEventListener('click', resetFilter);
+      btnSelectAll.addEventListener('click', selectAllRows);
+      btnRefresh.addEventListener('click', refreshList);
+      btnRemove.addEventListener('click', removeSelected);
+
+      // Optional: allow pressing Enter in Provider Name to trigger Filter
+      providerNameInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          applyFilter();
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
+
