@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Provider Scoring</title>
-
   <style>
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -12,14 +11,12 @@
       margin: 20px;
       background-color: #ffffff;
     }
-
     .scoring-container {
       border: 1px solid #c2cbd3;
       border-radius: 2px;
       overflow: hidden;
       max-width: 900px;
     }
-
     .scoring-header {
       background-color: #1f4e79; /* dark Azeus blue */
       color: #ffffff;
@@ -27,28 +24,23 @@
       font-weight: 600;
       font-size: 14px;
     }
-
     .scoring-toolbar {
       padding: 8px 12px;
       border-bottom: 1px solid #c2cbd3;
       background-color: #f4f7fb;
     }
-
     .scoring-toolbar label {
       font-weight: 600;
       margin-right: 6px;
     }
-
     .scoring-toolbar select {
       padding: 2px 4px;
       font-size: 13px;
     }
-
     .import-date {
       margin-left: 20px;
       font-weight: 400;
     }
-
     .import-date label {
       font-weight: 600;
       margin-right: 4px;
@@ -59,29 +51,37 @@
       border-collapse: collapse;
       font-size: 13px;
     }
-
     .scoring-table th,
     .scoring-table td {
       padding: 4px 8px;
       border-bottom: 1px solid #e1e5ea;
       vertical-align: top;
     }
-
     .scoring-table thead th {
-      background-color: #dde6f1;  /* light blue/grey header band */
+      background-color: #dde6f1; /* light blue/grey header band */
       font-weight: 600;
       text-align: left;
     }
-
-    .scoring-table tfoot td {
+    .section-row td {
+      background-color: #f4f7fb;
       font-weight: 600;
       border-top: 1px solid #c2cbd3;
-      background-color: #f7f9fc;
     }
-
+    .subtotal-row td {
+      font-weight: 600;
+      background-color: #f7f9fc;
+      border-top: 1px solid #c2cbd3;
+    }
+    .total-score-row td {
+      font-weight: 700;
+      background-color: #e9eff7; /* slightly stronger blue/grey */
+      border-top: 2px solid #1f4e79; /* thicker, dark blue line */
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
     .scoring-table input[type="text"],
     .scoring-table input[type="number"] {
-      width: 80px;
+      width: 120px;
       padding: 2px 4px;
       font-size: 12px;
       box-sizing: border-box;
@@ -92,13 +92,11 @@
       padding: 8px 12px;
       border-top: 1px solid #e1e5ea;
     }
-
     .scoring-notes label {
       font-weight: 600;
       display: block;
       margin-bottom: 4px;
     }
-
     .scoring-notes textarea {
       width: 100%;
       min-height: 70px;
@@ -116,7 +114,6 @@
       background-color: #f7f9fc;
       border-top: 1px solid #c2cbd3;
     }
-
     .scoring-actions button {
       background-color: #1f4e79;
       color: #ffffff;
@@ -126,137 +123,154 @@
       border-radius: 2px;
       cursor: pointer;
     }
-
     .scoring-actions button:hover {
       background-color: #163656;
     }
 
     /* Framework switching */
-    .step1-row[data-framework="closed"] { display: table-row; }
-    .step1-row[data-framework="apl"]    { display: none; }
+    .row-framework[data-framework="closed"] { display: table-row; }
+    .row-framework[data-framework="apl"]    { display: none; }
   </style>
 </head>
 <body>
 
-  <div class="scoring-container" id="providerScoring">
-    <div class="scoring-header">
-      Provider scoring – from the bottom of the provider response page
-    </div>
-
-    <div class="scoring-toolbar">
-      <label for="frameworkSelect">Select framework:</label>
-      <select id="frameworkSelect">
-        <option value="closed">Closed framework</option>
-        <option value="apl">APL framework</option>
-      </select>
-
-      <!-- NEW: Additional Information Last Import Date -->
-      <span class="import-date">
-        <label>Additional Information Last Import Date:</label>
-        <span id="lastImportDate">dd/mm/yyyy</span>
-      </span>
-    </div>
-
-    <table class="scoring-table">
-      <thead>
-        <tr>
-          <th style="width: 40%;">Step 1</th>
-          <th style="width: 20%;">Score</th>
-          <th style="width: 30%;">Step 2</th>
-          <th style="width: 10%;">Score</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <!-- CLOSED FRAMEWORK -->
-        <tr class="step1-row" data-framework="closed">
-          <td>CQC Rating</td>
-          <td><input type="text" readonly></td>
-          <td>Start date</td>
-          <td><input type="number"></td>
-        </tr>
-
-        <tr class="step1-row" data-framework="closed">
-          <td>Performance</td>
-          <td><input type="text" readonly></td>
-          <td>SU Preferences</td>
-          <td><input type="number"></td>
-        </tr>
-
-        <tr class="step1-row" data-framework="closed">
-          <td>Contract Compliance</td>
-          <td><input type="text" readonly></td>
-          <td></td>
-          <td></td>
-        </tr>
-
-        <tr class="step1-row" data-framework="closed">
-          <td>Quality Assurance</td>
-          <td><input type="text" readonly></td>
-          <td></td>
-          <td></td>
-        </tr>
-
-        <!-- APL FRAMEWORK -->
-        <tr class="step1-row" data-framework="apl">
-          <td>CQC Score</td>
-          <td><input type="text" readonly></td>
-          <td>Start date</td>
-          <td><input type="number"></td>
-        </tr>
-
-        <tr class="step1-row" data-framework="apl">
-          <td>Quality of Provision</td>
-          <td><input type="text" readonly></td>
-          <td>SU Preferences</td>
-          <td><input type="number"></td>
-        </tr>
-
-      </tbody>
-
-      <tfoot>
-        <tr>
-          <td>Total (Step 1)</td>
-          <td><input type="text" readonly></td>
-          <td>Total (Step 2)</td>
-          <td><input type="text" readonly></td>
-        </tr>
-        <tr>
-          <td colspan="3">Overall total</td>
-          <td><input type="text" readonly></td>
-        </tr>
-      </tfoot>
-    </table>
-
-    <!-- NEW: Rationale / Notes -->
-    <div class="scoring-notes">
-      <label for="rationale">Rationale / Notes:</label>
-      <textarea id="rationale" placeholder="Enter rationale, comments or decision details here..."></textarea>
-    </div>
-
-    <div class="scoring-actions">
-      <button type="button">Calculate score</button>
-    </div>
+<div class="scoring-container" id="providerScoring">
+  <div class="scoring-header">
+    Provider scoring – from the bottom of the provider response page
   </div>
 
-  <script>
-    (function () {
-      var select = document.getElementById('frameworkSelect');
-      var rows = document.querySelectorAll('.step1-row');
+  <div class="scoring-toolbar">
+    <label for="frameworkSelect">Select framework:</label>
+    <select id="frameworkSelect">
+      <option value="closed">Closed framework</option>
+      <option value="apl">APL framework</option>
+    </select>
 
-      function updateRows() {
-        var fw = select.value;
-        rows.forEach(function (row) {
-          row.style.display = (row.getAttribute('data-framework') === fw)
-            ? 'table-row'
-            : 'none';
-        });
-      }
+    <!-- Additional Information Last Import Date -->
+    <span class="import-date">
+      <label>Additional Information Last Import Date:</label>
+      <span id="lastImportDate">dd/mm/yyyy</span>
+    </span>
+  </div>
 
-      select.addEventListener('change', updateRows);
-      updateRows(); 
-    })();
-  </script>
+  <table class="scoring-table">
+    <thead>
+      <tr>
+        <th style="width: 60%;">Criteria</th>
+        <th style="width: 40%;">Score</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <!-- STEP 1 SECTION – AUTO POPULATED -->
+      <tr class="section-row">
+        <td colspan="2">Step 1 – Auto‑populated from Additional Information</td>
+      </tr>
+
+      <!-- Closed framework – Step 1 -->
+      <tr class="row-framework" data-framework="closed">
+        <td>CQC Rating</td>
+        <td><input type="text" readonly></td>
+      </tr>
+      <tr class="row-framework" data-framework="closed">
+        <td>Performance</td>
+        <td><input type="text" readonly></td>
+      </tr>
+      <tr class="row-framework" data-framework="closed">
+        <td>Contract Compliance</td>
+        <td><input type="text" readonly></td>
+      </tr>
+      <tr class="row-framework" data-framework="closed">
+        <td>Quality Assurance</td>
+        <td><input type="text" readonly></td>
+      </tr>
+
+      <!-- APL framework – Step 1 -->
+      <tr class="row-framework" data-framework="apl">
+        <td>CQC Score</td>
+        <td><input type="text" readonly></td>
+      </tr>
+      <tr class="row-framework" data-framework="apl">
+        <td>Quality of Provision</td>
+        <td><input type="text" readonly></td>
+      </tr>
+
+      <!-- Step 1 Total -->
+      <tr class="subtotal-row">
+        <td>Total (Step 1)</td>
+        <td><input type="text" readonly></td>
+      </tr>
+
+      <!-- STEP 2 SECTION – MANUAL SCORING -->
+      <tr class="section-row">
+        <td colspan="2">Step 2 – Manual scoring</td>
+      </tr>
+
+      <!-- Closed framework – Step 2 -->
+      <tr class="row-framework" data-framework="closed">
+        <td>Start date</td>
+        <td><input type="number"></td>
+      </tr>
+      <tr class="row-framework" data-framework="closed">
+        <td>SU Preferences</td>
+        <td><input type="number"></td>
+      </tr>
+
+      <!-- APL framework – Step 2 -->
+      <tr class="row-framework" data-framework="apl">
+        <td>Start date</td>
+        <td><input type="number"></td>
+      </tr>
+      <tr class="row-framework" data-framework="apl">
+        <td>SU Preferences</td>
+        <td><input type="number"></td>
+      </tr>
+
+      <!-- Step 2 Total -->
+      <tr class="subtotal-row">
+        <td>Total (Step 2)</td>
+        <td><input type="text" readonly></td>
+      </tr>
+    </tbody>
+
+    <tfoot>
+      <tr class="total-score-row">
+        <td>Total score</td>
+        <td><input type="text" readonly></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Rationale / Notes -->
+  <div class="scoring-notes">
+    <label for="rationale">Rationale / Notes:</label>
+    <textarea id="rationale" placeholder="Enter rationale, comments or decision details here..."></textarea>
+  </div>
+
+  <div class="scoring-actions">
+    <button type="button">Calculate score</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var select = document.getElementById('frameworkSelect');
+    var rows   = document.querySelectorAll('.row-framework');
+
+    function updateRows() {
+      var fw = select.value;
+      rows.forEach(function (row) {
+        row.style.display = (row.getAttribute('data-framework') === fw)
+          ? 'table-row'
+          : 'none';
+      });
+    }
+
+    select.addEventListener('change', updateRows);
+    updateRows();
+  })();
+</script>
 
 </body>
 </html>
+``
