@@ -2,431 +2,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Event Scheduler</title>
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      font-size: 13px;
-      margin: 20px;
-      background-color: #ffffff;
-    }
-
-    .scheduler-container {
-      border: 1px solid #c2cbd3;
-      border-radius: 2px;
-      max-width: 700px;
-    }
-
-    .scheduler-header {
-      background-color: #1f4e79;
-      color: #ffffff;
-      padding: 6px 12px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .scheduler-body {
-      padding: 8px 12px 12px;
-      background-color: #ffffff;
-    }
-
-    .section {
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    label {
-      font-size: 12px;
-    }
-
-    .required-star {
-      color: #c00000;
-      margin-left: 2px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    input[type="time"],
-    input[type="date"],
-    select,
-    textarea {
-      font-size: 12px;
-      padding: 2px 4px;
-      box-sizing: border-box;
-    }
-
-    input[type="number"] {
-      width: 60px;
-    }
-
-    input[type="time"] {
-      width: 90px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 50px;
-      resize: vertical;
-    }
-
-    .inline {
-      display: inline-block;
-      margin-right: 12px;
-      margin-bottom: 4px;
-    }
-
-    .days-grid label,
-    .period-grid label,
-    .outcomes-grid label {
-      display: inline-block;
-      margin-right: 10px;
-      margin-bottom: 4px;
-      font-size: 12px;
-    }
-
-    .small-label {
-      font-size: 11px;
-      color: #555;
-    }
-
-    .actions {
-      text-align: right;
-      padding-top: 6px;
-      border-top: 1px solid #c2cbd3;
-      margin-top: 10px;
-    }
-
-    button {
-      background-color: #1f4e79;
-      color: #ffffff;
-      border: 1px solid #163656;
-      padding: 4px 10px;
-      font-size: 12px;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #163656;
-    }
-
-    .error {
-      color: #c00000;
-      font-size: 11px;
-      margin-top: 4px;
-      display: none;
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 4px;
-      gap: 8px;
-    }
-
-    .row label.inline-label {
-      min-width: 140px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Event Scheduler</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 13px;
+            margin: 20px;
+            background-color: #ffffff;
+        }
+        .scheduler-container {
+            border: 1px solid #c2cbd3;
+            border-radius: 2px;
+            max-width: 700px;
+        }
+        .scheduler-header {
+            background-color: #1f4e79;
+            color: #ffffff;
+            padding: 6px 12px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .scheduler-body {
+            padding: 8px 12px 12px;
+            background-color: #ffffff;
+        }
+        .section {
+            margin-bottom: 8px;
+        }
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        label {
+            font-size: 12px;
+        }
+        .required-star {
+            color: #c00000;
+            margin-left: 2px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="time"],
+        input[type="date"],
+        select,
+        textarea {
+            font-size: 12px;
+            padding: 2px 4px;
+            box-sizing: border-box;
+        }
+        input[type="number"] {
+            width: 60px;
+        }
+        input[type="time"] {
+            width: 90px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 50px;
+            resize: vertical;
+        }
+        .inline {
+            display: inline-block;
+            margin-right: 12px;
+            margin-bottom: 4px;
+        }
+        .days-grid label,
+        .period-grid label,
+        .outcomes-grid label {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+        .small-label {
+            font-size: 11px;
+            color: #555;
+        }
+        .actions {
+            text-align: right;
+            padding-top: 6px;
+            border-top: 1px solid #c2cbd3;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #1f4e79;
+            color: #ffffff;
+            border: 1px solid #163656;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #163656;
+        }
+        .error {
+            color: #c00000;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 4px;
+            gap: 8px;
+        }
+        .row label.inline-label {
+            min-width: 140px;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="scheduler-container">
+<div class="scheduler-container">
     <div class="scheduler-header">
-      Event Scheduler
+        Event Scheduler
     </div>
-
     <div class="scheduler-body">
-      <!-- Frequency / dates (simple version) -->
-      <div class="section">
-        <div class="row">
-          <label class="inline-label">Frequency:</label>
-          <span>Weekly</span>
-          <label class="inline-label" style="margin-left: 20px;">Interval:</label>
-          <input type="number" id="interval" value="1" min="1">
+        <!-- Frequency / dates -->
+        <div class="section">
+            <div class="row">
+                <label class="inline-label">Frequency:</label>
+                <span>Weekly</span>
+                <label class="inline-label" style="margin-left: 20px;">Interval:</label>
+                <input type="number" id="interval" value="1" min="1">
+            </div>
+            <div class="row">
+                <label class="inline-label">Start Date:</label>
+                <input type="date" id="startDate">
+                <label class="inline-label" style="margin-left: 20px;">End Date:</label>
+                <input type="date" id="endDate">
+            </div>
         </div>
-        <div class="row">
-          <label class="inline-label">Start Date:</label>
-          <input type="date" id="startDate">
-          <label class="inline-label" style="margin-left: 20px;">End Date:</label>
-          <input type="date" id="endDate">
-        </div>
-      </div>
 
-      <!-- Time critical / flexible -->
-      <div class="section">
-        <div class="row">
-          <label class="inline-label">
-            Time critical or flexible schedule<span class="required-star">*</span>:
-          </label>
-          <label class="inline">
-            <input type="radio" name="schedType" value="time_critical" id="schedTimeCritical">
-            Time critical
-          </label>
-          <label class="inline">
-            <input type="radio" name="schedType" value="flexible" id="schedFlexible">
-            Flexible
-          </label>
+        <!-- Time critical / flexible -->
+        <div class="section">
+            <div class="row">
+                <label class="inline-label">
+                    Time critical or flexible schedule<span class="required-star">*</span>:
+                </label>
+                <label class="inline">
+                    <input type="radio" name="schedType" value="time_critical" id="schedTimeCritical">
+                    Time critical
+                </label>
+                <label class="inline">
+                    <input type="radio" name="schedType" value="flexible" id="schedFlexible">
+                    Flexible
+                </label>
+            </div>
+            <div class="row">
+                <label class="inline-label">
+                    Number of carers<span class="required-star">*</span>:
+                </label>
+                <input type="number" id="numCarers" min="1">
+            </div>
         </div>
-        <div class="row">
-          <label class="inline-label">
-            Number of carers<span class="required-star">*</span>:
-          </label>
-          <input type="number" id="numCarers" min="1">
-        </div>
-      </div>
 
-      <!-- Days of week -->
-      <div class="section">
-        <div class="section-title">
-          Days of the week<span class="required-star">*</span>:
+        <!-- Days of week -->
+        <div class="section">
+            <div class="section-title">
+                Days of the week<span class="required-star">*</span>:
+            </div>
+            <div class="days-grid">
+                <label><input type="checkbox" id="dayAll"> All</label>
+                <label><input type="checkbox" class="day" value="Sun"> Sun</label>
+                <label><input type="checkbox" class="day" value="Mon"> Mon</label>
+                <label><input type="checkbox" class="day" value="Tue"> Tues</label>
+                <label><input type="checkbox" class="day" value="Wed"> Wed</label>
+                <label><input type="checkbox" class="day" value="Thu"> Thur</label>
+                <label><input type="checkbox" class="day" value="Fri"> Fri</label>
+                <label><input type="checkbox" class="day" value="Sat"> Sat</label>
+            </div>
         </div>
-        <div class="days-grid">
-          <label><input type="checkbox" id="dayAll"> All</label>
-          <label><input type="checkbox" class="day" value="Sun"> Sun</label>
-          <label><input type="checkbox" class="day" value="Mon"> Mon</label>
-          <label><input type="checkbox" class="day" value="Tue"> Tues</label>
-          <label><input type="checkbox" class="day" value="Wed"> Wed</label>
-          <label><input type="checkbox" class="day" value="Thu"> Thur</label>
-          <label><input type="checkbox" class="day" value="Fri"> Fri</label>
-          <label><input type="checkbox" class="day" value="Sat"> Sat</label>
-        </div>
-      </div>
 
-      <!-- Daily schedule period -->
-      <div class="section">
-        <div class="section-title">Daily schedule period:</div>
-        <div class="period-grid">
-          <label><input type="checkbox" value="Morning"> Morning</label>
-          <label><input type="checkbox" value="Lunch"> Lunch</label>
-          <label><input type="checkbox" value="Etc"> ETC</label>
+        <!-- Daily schedule period -->
+        <div class="section">
+            <div class="section-title">Daily schedule period:</div>
+            <div class="period-grid">
+                <label><input type="checkbox" value="Morning"> Morning</label>
+                <label><input type="checkbox" value="Lunch"> Lunch</label>
+                <label><input type="checkbox" value="Etc"> ETC</label>
+            </div>
         </div>
-      </div>
 
-      <!-- Times / Duration -->
-      <div class="section">
-        <div class="row" id="timeRow">
-          <label class="inline-label">
-            Start time<span class="required-star">*</span>:
-          </label>
-          <input type="time" id="startTime">
+        <!-- Times / Duration -->
+        <div class="section">
+            <div class="row" id="timeRow">
+                <label class="inline-label">
+                    Start time<span class="required-star">*</span>:
+                </label>
+                <input type="time" id="startTime">
+                <label class="inline-label">
+                    End time<span class="required-star">*</span>:
+                </label>
+                <input type="time" id="endTime">
+            </div>
+            <div class="row">
+                <label class="inline-label">
+                    Duration<span class="required-star">*</span>:
+                </label>
+                <input type="number" id="duration" min="0" step="0.25">
+                <span class="small-label">(hours)</span>
+            </div>
+            <div class="small-label">
+                • If <strong>Time critical</strong> is selected, Start and End time are required.<br>
+                • If <strong>Flexible</strong> is selected, only Duration is required and times are optional/hidden.
+            </div>
+        </div>
 
-          <label class="inline-label">
-            End time<span class="required-star">*</span>:
-          </label>
-          <input type="time" id="endTime">
+        <!-- Outcome categories -->
+        <div class="section">
+            <div class="section-title">
+                Outcome category<span class="required-star">*</span>:
+            </div>
+            <div class="outcomes-grid">
+                <label><input type="checkbox" class="outcome" value="Personal Care"> Personal Care</label>
+                <label><input type="checkbox" class="outcome" value="Assistance with meals"> Assistance with meals</label>
+                <label><input type="checkbox" class="outcome" value="Shopping"> Shopping</label>
+                <label><input type="checkbox" class="outcome" value="Cleaning"> Cleaning</label>
+                <label><input type="checkbox" class="outcome" value="Social isolation"> Social isolation</label>
+                <label><input type="checkbox" class="outcome" value="Health appointment"> Health appointment</label>
+                <label><input type="checkbox" class="outcome" value="Medication"> Medication</label>
+            </div>
+            <div class="small-label">
+                System should validate that at least one outcome category is selected.
+            </div>
         </div>
-        <div class="row">
-          <label class="inline-label">
-            Duration<span class="required-star">*</span>:
-          </label>
-          <input type="number" id="duration" min="0" step="0.25">
-          <span class="small-label">(hours)</span>
-        </div>
-        <div class="small-label">
-          • If <strong>Time critical</strong> is selected, Start and End time are required.<br>
-          • If <strong>Flexible</strong> is selected, only Duration is required and times are optional/hidden.
-        </div>
-      </div>
 
-      <!-- Outcome categories (tasks) -->
-      <div class="section">
-        <div class="section-title">
-          Outcome category<span class="required-star">*</span>:
+        <!-- Carer / Outcome text / Provider remarks -->
+        <div class="section">
+            <div class="row">
+                <label class="inline-label">
+                    Carer No<span class="required-star">*</span>:
+                </label>
+                <select id="carerNo">
+                    <option value="">(select)</option>
+                    <option value="1">Carer 1</option>
+                    <option value="2">Carer 2</option>
+                    <option value="3">Carer 3</option>
+                    <option value="4">Carer 4</option>
+                </select>
+            </div>
         </div>
-        <div class="outcomes-grid">
-          <label><input type="checkbox" class="outcome" value="Personal Care"> Personal Care</label>
-          <label><input type="checkbox" class="outcome" value="Assistance with meals"> Assistance with meals</label>
-          <label><input type="checkbox" class="outcome" value="Shopping"> Shopping</label>
-          <label><input type="checkbox" class="outcome" value="Cleaning"> Cleaning</label>
-          <label><input type="checkbox" class="outcome" value="Social isolation"> Social isolation</label>
-          <label><input type="checkbox" class="outcome" value="Health appointment"> Health appointment</label>
-          <label><input type="checkbox" class="outcome" value="Medication"> Medication</label>
-        </div>
-        <div class="small-label">
-          System should validate that at least one outcome category is selected.
-        </div>
-      </div>
 
-      <!-- Carer, Outcome text, Provider remarks -->
-      <div class="section">
-        <div class="row">
-          <label class="inline-label">
-            Carer No<span class="required-star">*</span>:
-          </label>
-          <select id="carerNo">
-            <option value="">(select)</option>
-            <option value="1">Carer 1</option>
-            <option value="2">Carer 2</option>
-            <option value="3">Carer 3</option>
-            <option value="4">Carer 4</option>
-          </select>
+        <div class="section">
+            <div class="section-title">
+                Outcome<span class="required-star">*</span>:
+            </div>
+            <textarea id="outcomeText"></textarea>
         </div>
-      </div>
 
-      <div class="section">
-        <div class="section-title">
-          Outcome<span class="required-star">*</span>:
+        <div class="section">
+            <div class="section-title">
+                Provider remarks<span class="required-star">*</span>:
+            </div>
+            <textarea id="providerRemarks"></textarea>
         </div>
-        <textarea id="outcomeText"></textarea>
-      </div>
 
-      <div class="section">
-        <div class="section-title">
-          Provider remarks<span class="required-star">*</span>:
+        <!-- Errors & actions -->
+        <div id="errorSummary" class="error"></div>
+        <div class="actions">
+            <button type="button" id="btnSave">Save schedule</button>
         </div>
-        <textarea id="providerRemarks"></textarea>
-      </div>
-
-      <!-- Error summary & actions -->
-      <div id="errorSummary" class="error"></div>
-
-      <div class="actions">
-        <button type="button" id="btnSave">Save schedule</button>
-      </div>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     (function () {
-      const schedTimeCritical = document.getElementById('schedTimeCritical');
-      const schedFlexible     = document.getElementById('schedFlexible');
-      const timeRow           = document.getElementById('timeRow');
-      const dayAll            = document.getElementById('dayAll');
-      const dayCheckboxes     = document.querySelectorAll('.day');
-      const btnSave           = document.getElementById('btnSave');
-      const errorSummary      = document.getElementById('errorSummary');
+        const schedTimeCritical = document.getElementById('schedTimeCritical');
+        const schedFlexible = document.getElementById('schedFlexible');
+        const timeRow = document.getElementById('timeRow');
+        const dayAll = document.getElementById('dayAll');
+        const dayCheckboxes = document.querySelectorAll('.day');
+        const btnSave = document.getElementById('btnSave');
+        const errorSummary = document.getElementById('errorSummary');
+        const numCarersInput = document.getElementById('numCarers');
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
+        const durationInput = document.getElementById('duration');
+        const outcomeCheckboxes = document.querySelectorAll('.outcome');
+        const carerNoSelect = document.getElementById('carerNo');
+        const outcomeText = document.getElementById('outcomeText');
+        const providerRemarks = document.getElementById('providerRemarks');
 
-      const numCarersInput    = document.getElementById('numCarers');
-      const startTimeInput    = document.getElementById('startTime');
-      const endTimeInput      = document.getElementById('endTime');
-      const durationInput     = document.getElementById('duration');
-      const outcomeCheckboxes = document.querySelectorAll('.outcome');
-      const carerNoSelect     = document.getElementById('carerNo');
-      const outcomeText       = document.getElementById('outcomeText');
-      const providerRemarks   = document.getElementById('providerRemarks');
-      const serviceTypeInput  = document.getElementById('serviceType');
-      const bandInput         = document.getElementById('bandGroup');
-      const scheduleInput     = document.getElementById('schedule');
-      const unitInput         = document.getElementById('unit');
-      const activeInput       = document.getElementById('active');
-
-      // Toggle time fields visibility based on schedule type
-      function updateTimeMode() {
-        if (schedFlexible.checked) {
-          // Flexible – hide start/end time row
-          timeRow.style.display = 'none';
-        } else {
-          // Time critical (or nothing yet) – show start/end
-          timeRow.style.display = 'flex';
-        }
-      }
-
-      schedTimeCritical.addEventListener('change', updateTimeMode);
-      schedFlexible.addEventListener('change', updateTimeMode);
-      updateTimeMode();
-
-      // "All" days toggles individual days
-      dayAll.addEventListener('change', function () {
-        dayCheckboxes.forEach(cb => cb.checked = dayAll.checked);
-      });
-
-      // Save button – validate
-      btnSave.addEventListener('click', function () {
-        const errors = [];
-
-        // Schedule type
-        if (!schedTimeCritical.checked && !schedFlexible.checked) {
-          errors.push('Select either Time critical or Flexible schedule.');
+        function updateTimeMode() {
+            if (schedFlexible.checked) {
+                timeRow.style.display = 'none';
+            } else {
+                timeRow.style.display = 'flex';
+            }
         }
 
-        // Number of carers
-        if (!numCarersInput.value || Number(numCarersInput.value) < 1) {
-          errors.push('Enter Number of carers (must be at least 1).');
+        schedTimeCritical.addEventListener('change', updateTimeMode);
+        schedFlexible.addEventListener('change', updateTimeMode);
+        updateTimeMode();
+
+        dayAll.addEventListener('change', function () {
+            dayCheckboxes.forEach(cb => cb.checked = dayAll.checked);
+        });
+
+        function buildScheduleSummary() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const interval = document.getElementById('interval').value || '1';
+
+            const selectedDays = [];
+            dayCheckboxes.forEach(cb => {
+                if (cb.checked) selectedDays.push(cb.value);
+            });
+
+            const isTimeCritical = schedTimeCritical.checked;
+            const isFlexible = schedFlexible.checked;
+
+            const duration = durationInput.value;
+            const numCarers = numCarersInput.value;
+
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+
+            const selectedOutcomes = [];
+            outcomeCheckboxes.forEach(cb => {
+                if (cb.checked) selectedOutcomes.push(cb.value);
+            });
+
+            // Build text similar to your example
+            let text = '';
+            if (startDate) {
+                text += 'From ' + startDate;
+            }
+            if (interval) {
+                text += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
+            }
+            if (selectedDays.length > 0) {
+                text += ', ' + selectedDays.join('–');
+            }
+            if (isTimeCritical && startTime && endTime) {
+                text += ' ' + startTime + ' to ' + endTime;
+            }
+
+            if (duration) {
+                text += ' (' + duration + ' hours';
+                if (numCarers) {
+                    text += ', ' + numCarers + ' carers';
+                }
+                text += ')';
+            } else if (numCarers) {
+                text += ' (' + numCarers + ' carers)';
+            }
+
+            if (selectedOutcomes.length > 0) {
+                text += ' – ' + selectedOutcomes.join(', ');
+            }
+
+            return text;
         }
 
-        // Days of week
-        let anyDay = false;
-        dayCheckboxes.forEach(cb => { if (cb.checked) anyDay = true; });
-        if (!anyDay) {
-          errors.push('Select at least one day of the week.');
-        }
+        btnSave.addEventListener('click', function () {
+            const errors = [];
 
-        // Times / duration
-        const isTimeCritical = schedTimeCritical.checked;
-        const isFlexible     = schedFlexible.checked;
+            // Schedule type
+            if (!schedTimeCritical.checked && !schedFlexible.checked) {
+                errors.push('Select either Time critical or Flexible schedule.');
+            }
 
-        if (isTimeCritical) {
-          if (!startTimeInput.value) {
-            errors.push('Start time is required for Time critical schedule.');
-          }
-          if (!endTimeInput.value) {
-            errors.push('End time is required for Time critical schedule.');
-          }
-        }
+            // Number of carers
+            if (!numCarersInput.value || Number(numCarersInput.value) < 1) {
+                errors.push('Enter Number of carers (must be at least 1).');
+            }
 
-        if (!durationInput.value || Number(durationInput.value) <= 0) {
-          errors.push('Duration (hours) is required and must be greater than 0.');
-        }
+            // Days of week
+            let anyDay = false;
+            dayCheckboxes.forEach(cb => { if (cb.checked) anyDay = true; });
+            if (!anyDay) {
+                errors.push('Select at least one day of the week.');
+            }
 
-        // Outcome categories (tasks)
-        let anyOutcome = false;
-        outcomeCheckboxes.forEach(cb => { if (cb.checked) anyOutcome = true; });
-        if (!anyOutcome) {
-          errors.push('Select at least one Outcome category.');
-        }
+            // Times / duration
+            const isTimeCritical = schedTimeCritical.checked;
+            if (isTimeCritical) {
+                if (!startTimeInput.value) {
+                    errors.push('Start time is required for Time critical schedule.');
+                }
+                if (!endTimeInput.value) {
+                    errors.push('End time is required for Time critical schedule.');
+                }
+            }
 
-        // Carer no
-        if (!carerNoSelect.value) {
-          errors.push('Select a Carer No.');
-        }
+            if (!durationInput.value || Number(durationInput.value) <= 0) {
+                errors.push('Duration (hours) is required and must be greater than 0.');
+            }
 
-        // Outcome text
-        if (!outcomeText.value.trim()) {
-          errors.push('Enter an Outcome description.');
-        }
+            // Outcome categories
+            let anyOutcome = false;
+            outcomeCheckboxes.forEach(cb => { if (cb.checked) anyOutcome = true; });
+            if (!anyOutcome) {
+                errors.push('Select at least one Outcome category.');
+            }
 
-        // Provider remarks
-        if (!providerRemarks.value.trim()) {
-          errors.push('Enter Provider remarks.');
-        }
+            // Carer no
+            if (!carerNoSelect.value) {
+                errors.push('Select a Carer No.');
+            }
 
-        // Service spec fields (if you want to treat them as required too)
-        if (!serviceTypeInput.value) {
-          errors.push('Service type is required.');
-        }
-        if (!bandInput.value) {
-          errors.push('Service Band Group is required.');
-        }
-        if (!scheduleInput.value.trim()) {
-          errors.push('Schedule (text) is required.');
-        }
-        if (!unitInput.value) {
-          errors.push('Unit is required.');
-        }
-        if (!activeInput.value) {
-          errors.push('Active indicator is required.');
-        }
+            // Outcome / remarks
+            if (!outcomeText.value.trim()) {
+                errors.push('Enter an Outcome description.');
+            }
+            if (!providerRemarks.value.trim()) {
+                errors.push('Enter Provider remarks.');
+            }
 
-        if (errors.length > 0) {
-          errorSummary.innerHTML = errors.join('<br>');
-          errorSummary.style.display = 'block';
-          return;
-        }
+            if (errors.length > 0) {
+                errorSummary.innerHTML = errors.join('<br>');
+                errorSummary.style.display = 'block';
+                return;
+            }
 
-        errorSummary.style.display = 'none';
+            errorSummary.style.display = 'none';
 
-        // Demo behaviour – in real system this would save to the backend
-        alert('Schedule saved (demo only).');
-      });
+            const summary = buildScheduleSummary();
+
+            // If opened inside the Service Specification modal:
+            if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
+                window.parent.receiveScheduleFromModal(summary);
+            } else {
+                // Standalone – fallback behaviour for testing
+                alert('Schedule saved: ' + summary);
+            }
+        });
     })();
-  </script>
-
+</script>
 </body>
 </html>
+``
