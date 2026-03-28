@@ -150,10 +150,9 @@
       </div>
     </div>
 
-    <!-- Container for Task boxes -->
+    <!-- Task boxes -->
     <div id="tasksContainer"></div>
 
-    <!-- Errors & actions -->
     <div id="errorSummary" class="error"></div>
     <div class="actions">
       <button type="button" id="btnAddTask" title="Add another call">+</button>
@@ -162,7 +161,7 @@
   </div>
 </div>
 
-<!-- Template for a task box -->
+<!-- template for each task -->
 <template id="taskTemplate">
   <div class="task-block">
     <div class="task-header"></div>
@@ -190,7 +189,7 @@
       </div>
     </div>
 
-    <!-- Days of week -->
+    <!-- Days -->
     <div class="section">
       <div class="section-title">
         Days of the week<span class="required-star">*</span>:
@@ -208,7 +207,7 @@
       </div>
     </div>
 
-    <!-- Daily schedule period (only for flexible) -->
+    <!-- Period (for flexible only) -->
     <div class="section periodSection" style="display:none;">
       <div class="section-title">Daily schedule period:</div>
       <div class="period-grid">
@@ -265,7 +264,7 @@
       </div>
     </div>
 
-    <!-- Outcome & Provider remarks -->
+    <!-- Outcome text & Provider remarks -->
     <div class="section">
       <div class="section-title">
         Outcome<span class="required-star">*</span>:
@@ -302,15 +301,16 @@
       taskCount += 1;
       const clone = taskTemplate.content.firstElementChild.cloneNode(true);
 
-      // Header text
       clone.querySelector('.task-header').textContent = 'Task ' + taskCount;
 
-      // Per-block elements
       const timeCriticalRadio = clone.querySelector('.schedTimeCritical');
       const flexibleRadio    = clone.querySelector('.schedFlexible');
       const numCarersInput   = clone.querySelector('.numCarers');
+
       const dayAllCheckbox   = clone.querySelector('.day-all');
-      const dayCheckboxes    = clone.querySelectorAll('.day');
+      const everydayCheckbox = clone.querySelector('.day[value="Everyday"]');
+      const dayCheckboxes    = clone.querySelectorAll('.day:not([value="Everyday"])');
+
       const timeRow          = clone.querySelector('.timeRow');
       const periodSection    = clone.querySelector('.periodSection');
       const startTimeInput   = clone.querySelector('.startTime');
@@ -320,7 +320,6 @@
       const outcomeText      = clone.querySelector('.outcomeText');
       const providerRemarks  = clone.querySelector('.providerRemarks');
 
-      // Radio name needs to be unique per block
       const radioGroupName = 'schedType_' + taskCount;
       timeCriticalRadio.name = radioGroupName;
       flexibleRadio.name = radioGroupName;
@@ -335,16 +334,42 @@
           periodSection.style.display = 'none';
         }
       }
-
       timeCriticalRadio.addEventListener('change', updateTimeAndPeriodModeForBlock);
       flexibleRadio.addEventListener('change', updateTimeAndPeriodModeForBlock);
       updateTimeAndPeriodModeForBlock();
 
-      dayAllCheckbox.addEventListener('change', function () {
-        dayCheckboxes.forEach(cb => cb.checked = dayAllCheckbox.checked);
+      // Everyday & All logic
+      everydayCheckbox.addEventListener('change', function () {
+        if (everydayCheckbox.checked) {
+          dayCheckboxes.forEach(cb => cb.checked = false);
+          dayAllCheckbox.checked = false;
+        }
       });
 
-      // If copying from last block, copy values
+      dayCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function () {
+          if (cb.checked) everydayCheckbox.checked = false;
+        });
+      });
+
+      dayAllCheckbox.addEventListener('change', function () {
+        dayCheckboxes.forEach(cb => cb.checked = dayAllCheckbox.checked);
+        everydayCheckbox.checked = false;
+      });
+
+      function getSelectedDaysForBlock() {
+        if (everydayCheckbox.checked) {
+          return ['Everyday'];
+        }
+        const selected = [];
+        dayCheckboxes.forEach(cb => {
+          if (cb.checked) selected.push(cb.value);
+        });
+        return selected;
+      }
+      clone.getSelectedDaysForBlock = getSelectedDaysForBlock;
+
+      // Copy values from last task if requested
       if (copyFromLast && tasksContainer.lastElementChild) {
         const last = tasksContainer.lastElementChild;
 
@@ -367,7 +392,11 @@
 
         const lastDayAll = last.querySelector('.day-all');
         if (lastDayAll && lastDayAll.checked) dayAllCheckbox.checked = true;
-        const lastDays = last.querySelectorAll('.day');
+
+        const lastEveryday = last.querySelector('.day[value="Everyday"]');
+        if (lastEveryday && lastEveryday.checked) everydayCheckbox.checked = true;
+
+        const lastDays = last.querySelectorAll('.day:not([value="Everyday"])');
         lastDays.forEach((srcCb, idx) => {
           if (srcCb.checked && dayCheckboxes[idx]) dayCheckboxes[idx].checked = true;
         });
@@ -393,14 +422,11 @@
       const timeCriticalRadio = block.querySelector('.schedTimeCritical');
       const flexibleRadio    = block.querySelector('.schedFlexible');
       const numCarersInput   = block.querySelector('.numCarers');
-      const dayAllCheckbox   = block.querySelector('.day-all');
-      const dayCheckboxes    = block.querySelectorAll('.day');
       const startTimeInput   = block.querySelector('.startTime');
       const endTimeInput     = block.querySelector('.endTime');
       const durationInput    = block.querySelector('.duration');
       const outcomeCheckboxes = block.querySelectorAll('.outcome');
       const outcomeText      = block.querySelector('.outcomeText');
-      // providerRemarks optional
 
       const isTimeCritical = timeCriticalRadio.checked;
       const isFlexible     = flexibleRadio.checked;
@@ -413,8 +439,8 @@
         errors.push(`Task ${index}: Enter Number of carers (must be at least 1).`);
       }
 
-      const selectedDays = [];
-      dayCheckboxes.forEach(cb => { if (cb.checked) selectedDays.push(cb.value); });
+      const getSelectedDaysForBlock = block.getSelectedDaysForBlock;
+      const selectedDays = getSelectedDaysForBlock ? getSelectedDaysForBlock() : [];
       if (selectedDays.length === 0) {
         errors.push(`Task ${index}: Select at least one day of the week.`);
       }
@@ -446,7 +472,6 @@
         return { ok: false, errors, summary: '' };
       }
 
-      // Build text for this block
       let text = '';
       if (selectedDays.length > 0) {
         text += selectedDays.join('–');
@@ -479,11 +504,11 @@
       return { ok: true, errors: [], summary: text };
     }
 
-    // First task block on load
+    // First block
     createTaskBlock(false);
 
     btnAddTask.addEventListener('click', function () {
-      createTaskBlock(true); // copy previous values into new box
+      createTaskBlock(true);
     });
 
     btnSave.addEventListener('click', function () {
