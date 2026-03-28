@@ -48,7 +48,6 @@
       padding: 4px 6px;
       border-bottom: 1px solid #e1e5ea;
       vertical-align: top;
-      /* preserve line breaks in cells (esp. Schedule) */
       white-space: pre-wrap;
     }
     thead th {
@@ -66,7 +65,6 @@
       align-items: center;
       flex-wrap: wrap;
     }
-    /* Buttons – grey with black text */
     button {
       background-color: #e1e5ea;
       color: #000000;
@@ -79,13 +77,11 @@
     button:hover {
       background-color: #ccd2dc;
     }
-    /* Link style for Service Band Group */
     .band-link {
       color: #0066cc;
       text-decoration: underline;
       cursor: pointer;
     }
-    /* Edit / Add form panel */
     .form-panel {
       border-top: 1px solid #c2cbd3;
       background-color: #f4f7fb;
@@ -129,7 +125,6 @@
       color: #555555;
       margin: 0 12px 8px;
     }
-    /* --- Modal styles for Event Scheduler --- */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -179,7 +174,6 @@
       width: 100%;
       height: 520px;
     }
-    /* Schedule input + ... button */
     .schedule-input-wrapper {
       display: flex;
       align-items: center;
@@ -192,8 +186,6 @@
       padding: 2px 6px;
       min-width: auto;
     }
-
-    /* Explicitly ensure column 5 uses pre-wrap */
     td:nth-child(5) {
       white-space: pre-wrap !important;
     }
@@ -201,12 +193,10 @@
 </head>
 <body>
 <div class="container">
-  <!-- Main header -->
   <div class="main-header">
     Service Request – Service Specification
   </div>
 
-  <!-- Service specification grid -->
   <div class="section-wrapper">
     <div class="section-header">
       Service specification
@@ -226,7 +216,6 @@
         </tr>
         </thead>
         <tbody id="specBody">
-        <!-- Example Closed framework rows -->
         <tr>
           <td style="text-align:center;">
             <input type="checkbox" class="row-select">
@@ -258,16 +247,13 @@
       Then use the <strong>Service Band Group</strong> link on the copied rows to set the Service type and Active indicator.
     </p>
 
-    <!-- Bottom-right Add & Copy buttons -->
     <div class="actions">
       <button type="button" id="btnCopySelected">Copy selected</button>
       <button type="button" id="btnAddRow">Add service</button>
     </div>
 
-    <!-- Edit / Add form panel -->
     <div class="form-panel" id="formPanel">
       <div class="form-title" id="formTitle">Add service specification</div>
-
       <div class="form-grid">
         <label for="serviceType">
           Service type<span class="required-star">*</span>:
@@ -323,7 +309,6 @@
           <option value="N">N</option>
         </select>
       </div>
-
       <div class="form-panel-buttons">
         <button type="button" id="btnCancel">Cancel</button>
         <button type="button" id="btnApply">Save</button>
@@ -332,7 +317,6 @@
   </div>
 </div>
 
-<!-- Modal for Event Scheduler -->
 <div class="modal-overlay" id="schedulerModal">
   <div class="modal-dialog">
     <div class="modal-header">
@@ -340,7 +324,6 @@
       <button type="button" id="btnCloseScheduler" aria-label="Close">✕</button>
     </div>
     <div class="modal-body">
-      <!-- IMPORTANT: path should match where Event scheduler revised.html is stored -->
       <iframe id="schedulerFrame" src="Event scheduler revised.html"></iframe>
     </div>
   </div>
@@ -351,12 +334,10 @@
     const specBody = document.getElementById('specBody');
     const formPanel = document.getElementById('formPanel');
     const formTitle = document.getElementById('formTitle');
-
     const btnAddRow = document.getElementById('btnAddRow');
     const btnCopySel = document.getElementById('btnCopySelected');
     const btnCancel = document.getElementById('btnCancel');
     const btnApply = document.getElementById('btnApply');
-
     const serviceTypeInput = document.getElementById('serviceType');
     const bandInput = document.getElementById('bandGroup');
     const scheduleInput = document.getElementById('schedule');
@@ -364,12 +345,11 @@
     const unitInput = document.getElementById('unit');
     const activeInput = document.getElementById('active');
 
-    // Modal elements
     const schedulerModal = document.getElementById('schedulerModal');
     const btnOpenScheduler = document.getElementById('btnOpenScheduler');
     const btnCloseScheduler = document.getElementById('btnCloseScheduler');
 
-    let mode = 'add'; // 'add' or 'edit'
+    let mode = 'add';
     let editIndex = null;
 
     function openForm(newMode, rowIndex) {
@@ -380,14 +360,10 @@
         formTitle.textContent = 'Edit service specification';
         const row = specBody.rows[rowIndex];
         const cells = row.cells;
-
         activeInput.value = cells[1].textContent.trim() || '';
         serviceTypeInput.value = cells[2].textContent.trim() || 'Homecare APL framework';
         bandInput.value = cells[3].textContent.trim();
-
-        // For the input, show a flattened version of the schedule
         scheduleInput.value = cells[4].textContent.trim();
-
         quantityInput.value = cells[5].textContent.trim();
         unitInput.value = cells[6].textContent.trim() || '';
       } else {
@@ -417,17 +393,14 @@
       });
     }
 
-    // Add new service
     btnAddRow.addEventListener('click', function () {
       openForm('add', null);
     });
 
-    // Cancel form
     btnCancel.addEventListener('click', function () {
       closeForm();
     });
 
-    // Apply add / edit (Save)
     btnApply.addEventListener('click', function () {
       const active = activeInput.value.trim();
       const serviceType = serviceTypeInput.value.trim();
@@ -444,7 +417,6 @@
       // Convert single-line schedule string into HTML with <br> before bullets
       let scheduleHtml = scheduleRaw;
       const parts = scheduleRaw.split('•');
-
       if (parts.length > 1) {
         const header = parts[0].trim();
         const bullets = parts
@@ -455,10 +427,8 @@
       }
 
       if (mode === 'edit' && editIndex !== null) {
-        // UPDATE existing row
         const row = specBody.rows[editIndex];
         const cells = row.cells;
-
         cells[1].textContent = active;
         cells[2].textContent = serviceType;
 
@@ -468,12 +438,10 @@
         bandSpan.textContent = band;
         cells[3].appendChild(bandSpan);
 
-        // Use innerHTML so <br> shows as line breaks
         cells[4].innerHTML = scheduleHtml;
         cells[5].textContent = quantity;
         cells[6].textContent = unit;
       } else {
-        // ADD new row
         const row = specBody.insertRow(-1);
         const c0 = row.insertCell(0);
         const c1 = row.insertCell(1);
@@ -497,7 +465,6 @@
         bandSpan.textContent = band;
         c3.appendChild(bandSpan);
 
-        // Use innerHTML so <br> shows as line breaks
         c4.innerHTML = scheduleHtml;
         c5.textContent = quantity;
         c6.textContent = unit;
@@ -507,7 +474,6 @@
       closeForm();
     });
 
-    // Copy selected rows (copy everything except Active + Service type)
     btnCopySel.addEventListener('click', function () {
       const rows = Array.from(specBody.rows);
       let copiedAny = false;
@@ -516,10 +482,9 @@
         const cb = row.querySelector('.row-select');
         if (cb && cb.checked) {
           copiedAny = true;
-
           const cells = row.cells;
           const band = cells[3].textContent.trim();
-          const scheduleHtml = cells[4].innerHTML;   // preserve <br>
+          const scheduleHtml = cells[4].innerHTML;
           const quantity = cells[5].textContent.trim();
           const unit = cells[6].textContent.trim();
 
@@ -538,15 +503,15 @@
           c0.style.textAlign = 'center';
           c0.appendChild(newCb);
 
-          c1.textContent = ''; // Active left blank
-          c2.textContent = ''; // Service type left blank
+          c1.textContent = '';
+          c2.textContent = '';
 
           const bandSpan = document.createElement('span');
           bandSpan.className = 'band-link';
           bandSpan.textContent = band;
           c3.appendChild(bandSpan);
 
-          c4.innerHTML = scheduleHtml;   // keep line breaks
+          c4.innerHTML = scheduleHtml;
           c5.textContent = quantity;
           c6.textContent = unit;
 
@@ -561,14 +526,9 @@
       bindBandLinks();
     });
 
-    // --- Modal logic ---
     function openSchedulerModal() {
       schedulerModal.classList.add('active');
-      // If you ever need a fresh scheduler each time:
-      // const frame = document.getElementById('schedulerFrame');
-      // frame.src = frame.src;
     }
-
     function closeSchedulerModal() {
       schedulerModal.classList.remove('active');
     }
@@ -577,7 +537,6 @@
     scheduleInput.addEventListener('click', openSchedulerModal);
     btnCloseScheduler.addEventListener('click', closeSchedulerModal);
 
-    // Expose a function for the iframe to call when the user saves
     window.receiveScheduleFromModal = function (scheduleText) {
       if (scheduleText) {
         scheduleInput.value = scheduleText;
@@ -585,7 +544,6 @@
       closeSchedulerModal();
     };
 
-    // Initial binding for existing rows
     bindBandLinks();
   })();
 </script>
