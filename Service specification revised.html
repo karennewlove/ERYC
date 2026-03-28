@@ -54,11 +54,6 @@
       font-weight: 600;
       text-align: left;
     }
-    /* preserve line breaks in schedule */
-    td {
-      white-space: pre-wrap;
-    }
-
     .actions {
       padding: 8px 12px;
       border-top: 1px solid #c2cbd3;
@@ -69,6 +64,7 @@
       align-items: center;
       flex-wrap: wrap;
     }
+    /* Buttons – grey with black text */
     button {
       background-color: #e1e5ea;
       color: #000000;
@@ -81,11 +77,13 @@
     button:hover {
       background-color: #ccd2dc;
     }
+    /* Link style for Service Band Group */
     .band-link {
       color: #0066cc;
       text-decoration: underline;
       cursor: pointer;
     }
+    /* Edit / Add form panel */
     .form-panel {
       border-top: 1px solid #c2cbd3;
       background-color: #f4f7fb;
@@ -130,6 +128,7 @@
       color: #555555;
       margin: 0 12px 8px;
     }
+    /* --- Modal styles for Event Scheduler --- */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -179,6 +178,7 @@
       width: 100%;
       height: 520px;
     }
+    /* Optional small schedule button next to input/textarea */
     .schedule-input-wrapper {
       display: flex;
       align-items: center;
@@ -196,10 +196,12 @@
 </head>
 <body>
 <div class="container">
+  <!-- Main header -->
   <div class="main-header">
     Service Request – Service Specification
   </div>
 
+  <!-- Service specification grid -->
   <div class="section-wrapper">
     <div class="section-header">
       Service specification
@@ -218,7 +220,7 @@
         </tr>
         </thead>
         <tbody id="specBody">
-        <!-- example rows -->
+        <!-- Example Closed framework rows -->
         <tr>
           <td style="text-align:center;">
             <input type="checkbox" class="row-select">
@@ -226,10 +228,21 @@
           <td>Y</td>
           <td>Homecare closed framework</td>
           <td><span class="band-link">Standard</span></td>
-          <td>From 2026-03-10 every week:
-• Everyday 09:00 to 09:30 (0.5 hours, 1 carers) – Personal Care (Time-critical)
-• Everyday 12:00 to 12:30 (0.5 hours, 1 carers) – Assistance with meals (Flexible)</td>
+          <td>From 13/10/2025 every week:
+• Everyday 09:00 to 09:30 (0.5 hours, 1 carers) – Personal Care</td>
           <td>3.5</td>
+          <td>Hours</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;">
+            <input type="checkbox" class="row-select">
+          </td>
+          <td>Y</td>
+          <td>Homecare closed framework</td>
+          <td><span class="band-link">Medication Calls</span></td>
+          <td>From 13/10/2025 every week:
+• Everyday 12:00 to 12:20 (0.33 hours, 1 carers) – Medication (Time-critical)</td>
+          <td>1.75</td>
           <td>Hours</td>
         </tr>
         </tbody>
@@ -240,11 +253,13 @@
       Then use the <strong>Service Band Group</strong> link on the copied rows to set the Service type and Active indicator.
     </p>
 
+    <!-- Bottom-right Add & Copy buttons -->
     <div class="actions">
       <button type="button" id="btnCopySelected">Copy selected</button>
       <button type="button" id="btnAddRow">Add service</button>
     </div>
 
+    <!-- Edit / Add form panel -->
     <div class="form-panel" id="formPanel">
       <div class="form-title" id="formTitle">Add service specification</div>
       <div class="form-grid">
@@ -274,7 +289,7 @@
         <div class="schedule-input-wrapper">
           <textarea id="schedule"
                     rows="3"
-                    placeholder="From 2026-03-10 every week&#10;• Everyday 09:00 to 09:30 (0.5 hours, 1 carers) – Personal Care"
+                    placeholder="From 13/10/2025 every week&#10;• Everyday 09:00 to 09:30 (0.5 hours, 1 carers) – Personal Care"
                     readonly></textarea>
           <button type="button" class="schedule-button" id="btnOpenScheduler">...</button>
         </div>
@@ -319,8 +334,8 @@
       <button type="button" id="btnCloseScheduler" aria-label="Close">✕</button>
     </div>
     <div class="modal-body">
-      <!-- point this to your revised scheduler file -->
-      Event scheduler revised.html</iframe>
+      <!-- IMPORTANT: path should match where Event scheduler (3).html is stored -->
+      Event scheduler (3).html</iframe>
     </div>
   </div>
 </div>
@@ -342,11 +357,12 @@
     const unitInput = document.getElementById('unit');
     const activeInput = document.getElementById('active');
 
+    // Modal elements
     const schedulerModal = document.getElementById('schedulerModal');
     const btnOpenScheduler = document.getElementById('btnOpenScheduler');
     const btnCloseScheduler = document.getElementById('btnCloseScheduler');
 
-    let mode = 'add';
+    let mode = 'add'; // 'add' or 'edit'
     let editIndex = null;
 
     function openForm(newMode, rowIndex) {
@@ -390,14 +406,17 @@
       });
     }
 
+    // Add new service
     btnAddRow.addEventListener('click', function () {
       openForm('add', null);
     });
 
+    // Cancel form
     btnCancel.addEventListener('click', function () {
       closeForm();
     });
 
+    // Apply add / edit (Save)
     btnApply.addEventListener('click', function () {
       const active = activeInput.value;
       const serviceType = serviceTypeInput.value;
@@ -412,6 +431,7 @@
       }
 
       if (mode === 'edit' && editIndex !== null) {
+        // UPDATE existing row
         const row = specBody.rows[editIndex];
         const cells = row.cells;
         cells[1].textContent = active;
@@ -425,6 +445,7 @@
         cells[5].textContent = quantity;
         cells[6].textContent = unit;
       } else {
+        // ADD new row
         const row = specBody.insertRow(-1);
         const c0 = row.insertCell(0);
         const c1 = row.insertCell(1);
@@ -456,6 +477,7 @@
       closeForm();
     });
 
+    // Copy selected rows (copy everything except Active + Service type)
     btnCopySel.addEventListener('click', function () {
       const rows = Array.from(specBody.rows);
       let copiedAny = false;
@@ -484,8 +506,8 @@
           c0.style.textAlign = 'center';
           c0.appendChild(newCb);
 
-          c1.textContent = '';
-          c2.textContent = '';
+          c1.textContent = ''; // Active left blank
+          c2.textContent = ''; // Service type left blank
 
           const bandSpan = document.createElement('span');
           bandSpan.className = 'band-link';
@@ -505,17 +527,18 @@
       bindBandLinks();
     });
 
+    // --- Modal logic ---
     function openSchedulerModal() {
       schedulerModal.classList.add('active');
     }
     function closeSchedulerModal() {
       schedulerModal.classList.remove('active');
     }
-
     btnOpenScheduler.addEventListener('click', openSchedulerModal);
     scheduleInput.addEventListener('click', openSchedulerModal);
     btnCloseScheduler.addEventListener('click', closeSchedulerModal);
 
+    // Expose a function for the iframe to call when the user saves
     window.receiveScheduleFromModal = function (scheduleText) {
       if (scheduleText) {
         scheduleInput.value = scheduleText;
@@ -523,6 +546,7 @@
       closeSchedulerModal();
     };
 
+    // Initial binding for existing rows
     bindBandLinks();
   })();
 </script>
