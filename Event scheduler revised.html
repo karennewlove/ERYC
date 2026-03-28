@@ -540,16 +540,19 @@
 
       errorSummary.style.display = 'none';
 
-      let header = 'From ' + startDate;
-      header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
+     
+let header = 'From ' + startDate;
+header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
 
-      const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
+// Use REAL newlines, not "\n" text
+const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
 
-      if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
-        window.parent.receiveScheduleFromModal(summary);
-      } else {
-        alert('Schedule saved:\n' + summary);
-      }
+if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
+  window.parent.receiveScheduleFromModal(summary);
+} else {
+  alert('Schedule saved:\n' + summary);
+}
+
     });
   })();
 </script>
