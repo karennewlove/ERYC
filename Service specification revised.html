@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Service Request – Service Specification</title>
-
   <style>
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -12,13 +11,11 @@
       margin: 20px;
       background-color: #ffffff;
     }
-
     .container {
       border: 1px solid #c2cbd3;
       border-radius: 2px;
       max-width: 1200px;
     }
-
     .main-header {
       background-color: #1f4e79;
       color: #ffffff;
@@ -26,7 +23,6 @@
       font-weight: 600;
       font-size: 14px;
     }
-
     .section-header {
       background-color: #1f4e79;
       color: #ffffff;
@@ -35,33 +31,32 @@
       font-size: 13px;
       margin-top: 0;
     }
-
     .section-wrapper {
       border-top: 1px solid #c2cbd3;
       background-color: #ffffff;
     }
-
     .table-wrapper {
       padding: 8px 12px;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
     }
-
-    th, td {
+    th,
+    td {
       padding: 4px 6px;
       border-bottom: 1px solid #e1e5ea;
       vertical-align: top;
-      white-space: pre-wrap;   /* <<<<< KEY FIX */
     }
-
     thead th {
       background-color: #dde6f1;
       font-weight: 600;
       text-align: left;
+    }
+    /* preserve line breaks in schedule */
+    td {
+      white-space: pre-wrap;
     }
 
     .actions {
@@ -74,7 +69,6 @@
       align-items: center;
       flex-wrap: wrap;
     }
-
     button {
       background-color: #e1e5ea;
       color: #000000;
@@ -84,29 +78,24 @@
       border-radius: 2px;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #ccd2dc;
     }
-
     .band-link {
       color: #0066cc;
       text-decoration: underline;
       cursor: pointer;
     }
-
     .form-panel {
       border-top: 1px solid #c2cbd3;
       background-color: #f4f7fb;
       padding: 8px 12px 10px;
       display: none;
     }
-
     .form-title {
       font-weight: 600;
       margin-bottom: 6px;
     }
-
     .form-grid {
       display: grid;
       grid-template-columns: 180px 1fr;
@@ -116,26 +105,31 @@
       font-size: 12px;
       margin-bottom: 8px;
     }
-
-    .form-grid input,
+    .form-grid label {
+      font-weight: 600;
+    }
+    .required-star {
+      color: #c00000;
+      margin-left: 2px;
+    }
+    .form-grid input[type="text"],
+    .form-grid input[type="number"],
     .form-grid select,
     .form-grid textarea {
       font-size: 12px;
       padding: 2px 4px;
       max-width: 260px;
     }
-
-    .schedule-input-wrapper {
+    .form-panel-buttons {
       display: flex;
-      align-items: center;
-      gap: 4px;
+      justify-content: flex-end;
+      gap: 8px;
     }
-
-    .schedule-button {
-      padding: 2px 6px;
+    .hint {
+      font-size: 11px;
+      color: #555555;
+      margin: 0 12px 8px;
     }
-
-    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -145,63 +139,71 @@
       justify-content: center;
       z-index: 999;
     }
-
     .modal-overlay.active {
       display: flex;
     }
-
     .modal-dialog {
       background: #ffffff;
       border-radius: 3px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.35);
       width: 760px;
       max-width: 95vw;
       max-height: 95vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.35);
     }
-
     .modal-header {
       background-color: #1f4e79;
       color: #ffffff;
       padding: 6px 10px;
       font-weight: 600;
+      font-size: 13px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .modal-header button {
       background: transparent;
-      border: none;
       color: #ffffff;
-      font-size: 16px;
-      cursor: pointer;
+      border: none;
+      font-size: 14px;
+      padding: 0 4px;
     }
-
     .modal-body {
       padding: 0;
       flex: 1;
       overflow: hidden;
     }
-
     .modal-body iframe {
       border: none;
       width: 100%;
       height: 520px;
     }
-
+    .schedule-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .schedule-input-wrapper textarea {
+      flex: 1;
+      resize: vertical;
+    }
+    .schedule-button {
+      padding: 2px 6px;
+      min-width: auto;
+    }
   </style>
 </head>
 <body>
-
 <div class="container">
-
-  <div class="main-header">Service Request – Service Specification</div>
+  <div class="main-header">
+    Service Request – Service Specification
+  </div>
 
   <div class="section-wrapper">
-    <div class="section-header">Service specification</div>
-
+    <div class="section-header">
+      Service specification
+    </div>
     <div class="table-wrapper">
       <table id="specTable">
         <thead>
@@ -215,152 +217,314 @@
           <th style="width: 8%;">Unit</th>
         </tr>
         </thead>
-
         <tbody id="specBody">
+        <!-- example rows -->
+        <tr>
+          <td style="text-align:center;">
+            <input type="checkbox" class="row-select">
+          </td>
+          <td>Y</td>
+          <td>Homecare closed framework</td>
+          <td><span class="band-link">Standard</span></td>
+          <td>From 2026-03-10 every week:
+• Everyday 09:00 to 09:30 (0.5 hours, 1 carers) – Personal Care (Time-critical)
+• Everyday 12:00 to 12:30 (0.5 hours, 1 carers) – Assistance with meals (Flexible)</td>
+          <td>3.5</td>
+          <td>Hours</td>
+        </tr>
         </tbody>
-
       </table>
     </div>
+    <p class="hint">
+      Select one or more lines and choose <strong>Copy selected</strong> to duplicate schedule, quantity and unit.
+      Then use the <strong>Service Band Group</strong> link on the copied rows to set the Service type and Active indicator.
+    </p>
 
     <div class="actions">
-      <button id="btnAddRow">Add service</button>
-      <button id="btnCopySelected">Copy selected</button>
+      <button type="button" id="btnCopySelected">Copy selected</button>
+      <button type="button" id="btnAddRow">Add service</button>
     </div>
 
-    <!-- FORM PANEL -->
     <div class="form-panel" id="formPanel">
       <div class="form-title" id="formTitle">Add service specification</div>
-
       <div class="form-grid">
-        <label>Service type:</label>
-        Event scheduler revised.html</iframe>
-      </div>
+        <label for="serviceType">
+          Service type<span class="required-star">*</span>:
+        </label>
+        <select id="serviceType">
+          <option value="Homecare APL framework">Homecare APL framework</option>
+          <option value="Homecare closed framework">Homecare closed framework</option>
+        </select>
 
+        <label for="bandGroup">
+          Service Band Group<span class="required-star">*</span>:
+        </label>
+        <select id="bandGroup">
+          <option value="">(select)</option>
+          <option value="Standard">Standard</option>
+          <option value="Medication Calls">Medication Calls</option>
+          <option value="Medication Collection">Medication Collection</option>
+          <option value="End of Life">End of Life</option>
+          <option value="Intermediate Care">Intermediate Care</option>
+        </select>
+
+        <label for="schedule">
+          Schedule<span class="required-star">*</span>:
+        </label>
+        <div class="schedule-input-wrapper">
+          <textarea id="schedule"
+                    rows="3"
+                    placeholder="From 2026-03-10 every week&#10;• Everyday 09:00 to 09:30 (0.5 hours, 1 carers) – Personal Care"
+                    readonly></textarea>
+          <button type="button" class="schedule-button" id="btnOpenScheduler">...</button>
+        </div>
+
+        <label for="quantity">
+          Quantity<span class="required-star">*</span>:
+        </label>
+        <input type="number" step="0.25" id="quantity" placeholder="e.g. 3.5">
+
+        <label for="unit">
+          Unit<span class="required-star">*</span>:
+        </label>
+        <select id="unit">
+          <option value="">(select)</option>
+          <option value="Hours">Hours</option>
+          <option value="Days">Days</option>
+          <option value="Weeks">Weeks</option>
+        </select>
+
+        <label for="active">
+          Active indicator<span class="required-star">*</span>:
+        </label>
+        <select id="active">
+          <option value="">(select)</option>
+          <option value="Y">Y</option>
+          <option value="N">N</option>
+        </select>
+      </div>
       <div class="form-panel-buttons">
-        <button id="btnCancel">Cancel</button>
-        <button id="btnApply">Save</button>
+        <button type="button" id="btnCancel">Cancel</button>
+        <button type="button" id="btnApply">Save</button>
       </div>
     </div>
-
   </div>
 </div>
 
-
-<!-- Modal -->
+<!-- Modal for Event Scheduler -->
 <div class="modal-overlay" id="schedulerModal">
   <div class="modal-dialog">
     <div class="modal-header">
       <span>Schedule details</span>
-      <button id="btnCloseScheduler">✕</button>
+      <button type="button" id="btnCloseScheduler" aria-label="Close">✕</button>
     </div>
-
     <div class="modal-body">
-      <!-- update to your GitHub Pages URL -->
+      <!-- point this to your revised scheduler file -->
       Event scheduler revised.html</iframe>
     </div>
   </div>
 </div>
 
-
 <script>
-/* ------- SERVICE SPEC JS ------- */
+  (function () {
+    const specBody = document.getElementById('specBody');
+    const formPanel = document.getElementById('formPanel');
+    const formTitle = document.getElementById('formTitle');
+    const btnAddRow = document.getElementById('btnAddRow');
+    const btnCopySel = document.getElementById('btnCopySelected');
+    const btnCancel = document.getElementById('btnCancel');
+    const btnApply = document.getElementById('btnApply');
 
-(function(){
+    const serviceTypeInput = document.getElementById('serviceType');
+    const bandInput = document.getElementById('bandGroup');
+    const scheduleInput = document.getElementById('schedule');
+    const quantityInput = document.getElementById('quantity');
+    const unitInput = document.getElementById('unit');
+    const activeInput = document.getElementById('active');
 
-  const specBody = document.getElementById('specBody');
-  const formPanel = document.getElementById('formPanel');
-  const formTitle = document.getElementById('formTitle');
+    const schedulerModal = document.getElementById('schedulerModal');
+    const btnOpenScheduler = document.getElementById('btnOpenScheduler');
+    const btnCloseScheduler = document.getElementById('btnCloseScheduler');
 
-  const btnAddRow = document.getElementById('btnAddRow');
-  const btnCopySel = document.getElementById('btnCopySelected');
-  const btnApply = document.getElementById('btnApply');
-  const btnCancel = document.getElementById('btnCancel');
+    let mode = 'add';
+    let editIndex = null;
 
-  const schedulerModal = document.getElementById('schedulerModal');
-  const btnOpenScheduler = document.getElementById('btnOpenScheduler');
-  const btnCloseScheduler = document.getElementById('btnCloseScheduler');
+    function openForm(newMode, rowIndex) {
+      mode = newMode;
+      editIndex = (newMode === 'edit') ? rowIndex : null;
 
-  const scheduleInput = document.getElementById('schedule');
-
-  let editingIndex = null;
-
-  function openForm(isEdit, index){
-    editingIndex = isEdit ? index : null;
-    formPanel.style.display = 'block';
-
-    if(isEdit){
-      formTitle.textContent = 'Edit service specification';
-      const row = specBody.rows[index];
-      scheduleInput.value = row.cells[4].textContent.trim();
-    } else {
-      formTitle.textContent = 'Add service specification';
-      scheduleInput.value = '';
-    }
-  }
-
-  function closeForm(){
-    formPanel.style.display = 'none';
-  }
-
-  btnAddRow.addEventListener('click', () => openForm(false, null));
-
-  btnCancel.addEventListener('click', closeForm);
-
-  btnApply.addEventListener('click', () => {
-
-    const schedule = scheduleInput.value.trim();
-    if(!schedule){
-      alert("Schedule required");
-      return;
-    }
-
-    if(editingIndex !== null){
-      const row = specBody.rows[editingIndex];
-      row.cells[4].textContent = schedule;
-    } else {
-      const row = specBody.insertRow();
-      row.insertCell(0).innerHTML = '<input type="checkbox" class="row-select">';
-      row.insertCell(1).textContent = "Y";
-      row.insertCell(2).textContent = "Homecare closed framework";
-      row.insertCell(3).innerHTML = '<span class="band-link">Standard</span>';
-      row.insertCell(4).textContent = schedule;
-      row.insertCell(5).textContent = "";
-      row.insertCell(6).textContent = "";
-    }
-
-    closeForm();
-  });
-
-  /* Copy selected */
-  btnCopySel.addEventListener('click', function(){
-    let found = false;
-    [...specBody.rows].forEach(row => {
-      const cb = row.querySelector('.row-select');
-      if(cb && cb.checked){
-        found = true;
-        const clone = specBody.insertRow();
-        clone.innerHTML = row.innerHTML;
-        clone.querySelector('.row-select').checked = false;
+      if (newMode === 'edit') {
+        formTitle.textContent = 'Edit service specification';
+        const row = specBody.rows[rowIndex];
+        const cells = row.cells;
+        activeInput.value = cells[1].textContent.trim() || '';
+        serviceTypeInput.value = cells[2].textContent.trim() || 'Homecare APL framework';
+        bandInput.value = cells[3].textContent.trim();
+        scheduleInput.value = cells[4].textContent.trim();
+        quantityInput.value = cells[5].textContent.trim();
+        unitInput.value = cells[6].textContent.trim() || '';
+      } else {
+        formTitle.textContent = 'Add service specification';
+        activeInput.value = '';
+        serviceTypeInput.value = 'Homecare APL framework';
+        bandInput.value = '';
+        scheduleInput.value = '';
+        quantityInput.value = '';
+        unitInput.value = '';
+        editIndex = null;
       }
-    });
-    if(!found){
-      alert("Select at least one row to copy.");
+      formPanel.style.display = 'block';
     }
-  });
 
+    function closeForm() {
+      formPanel.style.display = 'none';
+    }
 
-  /* MODAL */
-  scheduleInput?.addEventListener('click', ()=> schedulerModal.classList.add('active'));
-  document.getElementById('btnCloseScheduler')
-    .addEventListener('click', ()=> schedulerModal.classList.remove('active'));
+    function bindBandLinks() {
+      const bandLinks = specBody.querySelectorAll('.band-link');
+      bandLinks.forEach(function (link, index) {
+        link.onclick = function (e) {
+          e.preventDefault();
+          openForm('edit', index);
+        };
+      });
+    }
 
-  window.receiveScheduleFromModal = function(text){
-    if(text){ scheduleInput.value = text; }
-    schedulerModal.classList.remove('active');
-  };
+    btnAddRow.addEventListener('click', function () {
+      openForm('add', null);
+    });
 
-})();
+    btnCancel.addEventListener('click', function () {
+      closeForm();
+    });
+
+    btnApply.addEventListener('click', function () {
+      const active = activeInput.value;
+      const serviceType = serviceTypeInput.value;
+      const band = bandInput.value || '';
+      const schedule = scheduleInput.value || '';
+      const quantity = quantityInput.value || '';
+      const unit = unitInput.value || '';
+
+      if (!serviceType || !band || !schedule || !quantity || !unit || !active) {
+        alert('Please complete all required fields (marked with *).');
+        return;
+      }
+
+      if (mode === 'edit' && editIndex !== null) {
+        const row = specBody.rows[editIndex];
+        const cells = row.cells;
+        cells[1].textContent = active;
+        cells[2].textContent = serviceType;
+        cells[3].textContent = '';
+        const bandSpan = document.createElement('span');
+        bandSpan.className = 'band-link';
+        bandSpan.textContent = band;
+        cells[3].appendChild(bandSpan);
+        cells[4].textContent = schedule;
+        cells[5].textContent = quantity;
+        cells[6].textContent = unit;
+      } else {
+        const row = specBody.insertRow(-1);
+        const c0 = row.insertCell(0);
+        const c1 = row.insertCell(1);
+        const c2 = row.insertCell(2);
+        const c3 = row.insertCell(3);
+        const c4 = row.insertCell(4);
+        const c5 = row.insertCell(5);
+        const c6 = row.insertCell(6);
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'row-select';
+        c0.style.textAlign = 'center';
+        c0.appendChild(cb);
+
+        c1.textContent = active;
+        c2.textContent = serviceType;
+
+        const bandSpan = document.createElement('span');
+        bandSpan.className = 'band-link';
+        bandSpan.textContent = band;
+        c3.appendChild(bandSpan);
+
+        c4.textContent = schedule;
+        c5.textContent = quantity;
+        c6.textContent = unit;
+      }
+      bindBandLinks();
+      closeForm();
+    });
+
+    btnCopySel.addEventListener('click', function () {
+      const rows = Array.from(specBody.rows);
+      let copiedAny = false;
+      rows.forEach(function (row) {
+        const cb = row.querySelector('.row-select');
+        if (cb && cb.checked) {
+          copiedAny = true;
+          const cells = row.cells;
+          const band = cells[3].textContent.trim();
+          const schedule = cells[4].textContent.trim();
+          const quantity = cells[5].textContent.trim();
+          const unit = cells[6].textContent.trim();
+
+          const newRow = specBody.insertRow(-1);
+          const c0 = newRow.insertCell(0);
+          const c1 = newRow.insertCell(1);
+          const c2 = newRow.insertCell(2);
+          const c3 = newRow.insertCell(3);
+          const c4 = newRow.insertCell(4);
+          const c5 = newRow.insertCell(5);
+          const c6 = newRow.insertCell(6);
+
+          const newCb = document.createElement('input');
+          newCb.type = 'checkbox';
+          newCb.className = 'row-select';
+          c0.style.textAlign = 'center';
+          c0.appendChild(newCb);
+
+          c1.textContent = '';
+          c2.textContent = '';
+
+          const bandSpan = document.createElement('span');
+          bandSpan.className = 'band-link';
+          bandSpan.textContent = band;
+          c3.appendChild(bandSpan);
+
+          c4.textContent = schedule;
+          c5.textContent = quantity;
+          c6.textContent = unit;
+
+          cb.checked = false;
+        }
+      });
+      if (!copiedAny) {
+        alert('Please select at least one line to copy.');
+      }
+      bindBandLinks();
+    });
+
+    function openSchedulerModal() {
+      schedulerModal.classList.add('active');
+    }
+    function closeSchedulerModal() {
+      schedulerModal.classList.remove('active');
+    }
+
+    btnOpenScheduler.addEventListener('click', openSchedulerModal);
+    scheduleInput.addEventListener('click', openSchedulerModal);
+    btnCloseScheduler.addEventListener('click', closeSchedulerModal);
+
+    window.receiveScheduleFromModal = function (scheduleText) {
+      if (scheduleText) {
+        scheduleInput.value = scheduleText;
+      }
+      closeSchedulerModal();
+    };
+
+    bindBandLinks();
+  })();
 </script>
-
 </body>
 </html>
