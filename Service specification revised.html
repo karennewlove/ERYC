@@ -55,7 +55,7 @@
       padding: 4px 6px;
       border-bottom: 1px solid #e1e5ea;
       vertical-align: top;
-      white-space: pre-wrap;   /* <<< FIX TO SHOW LINE BREAKS */
+      white-space: pre-wrap;   /* <<<<< KEY FIX */
     }
 
     thead th {
@@ -232,47 +232,8 @@
       <div class="form-title" id="formTitle">Add service specification</div>
 
       <div class="form-grid">
-
-        <label for="serviceType">Service type<span class="required-star">*</span>:</label>
-        <select id="serviceType">
-          <option value="Homecare closed framework">Homecare closed framework</option>
-          <option value="Homecare APL framework">Homecare APL framework</option>
-        </select>
-
-        <label for="bandGroup">Service Band Group<span class="required-star">*</span>:</label>
-        <select id="bandGroup">
-          <option value="">(select)</option>
-          <option value="Standard">Standard</option>
-          <option value="Medication Calls">Medication Calls</option>
-          <option value="Medication Collection">Medication Collection</option>
-          <option value="End of Life">End of Life</option>
-          <option value="Intermediate Care">Intermediate Care</option>
-        </select>
-
-        <label for="schedule">Schedule<span class="required-star">*</span>:</label>
-        <div class="schedule-input-wrapper">
-          <textarea id="schedule" rows="3" readonly></textarea>
-          <button type="button" class="schedule-button" id="btnOpenScheduler">...</button>
-        </div>
-
-        <label for="quantity">Quantity<span class="required-star">*</span>:</label>
-        <input id="quantity" type="number" step="0.25">
-
-        <label for="unit">Unit<span class="required-star">*</span>:</label>
-        <select id="unit">
-          <option value="">(select)</option>
-          <option value="Hours">Hours</option>
-          <option value="Days">Days</option>
-          <option value="Weeks">Weeks</option>
-        </select>
-
-        <label for="active">Active<span class="required-star">*</span>:</label>
-        <select id="active">
-          <option value="">(select)</option>
-          <option value="Y">Y</option>
-          <option value="N">N</option>
-        </select>
-
+        <label>Service type:</label>
+        Event scheduler revised.html</iframe>
       </div>
 
       <div class="form-panel-buttons">
@@ -294,7 +255,8 @@
     </div>
 
     <div class="modal-body">
-      <iframe src="Event scheduler revised.html"></iframe>
+      <!-- update to your GitHub Pages URL -->
+      Event scheduler revised.html</iframe>
     </div>
   </div>
 </div>
@@ -319,11 +281,6 @@
   const btnCloseScheduler = document.getElementById('btnCloseScheduler');
 
   const scheduleInput = document.getElementById('schedule');
-  const serviceTypeInput = document.getElementById('serviceType');
-  const bandInput = document.getElementById('bandGroup');
-  const quantityInput = document.getElementById('quantity');
-  const unitInput = document.getElementById('unit');
-  const activeInput = document.getElementById('active');
 
   let editingIndex = null;
 
@@ -334,23 +291,10 @@
     if(isEdit){
       formTitle.textContent = 'Edit service specification';
       const row = specBody.rows[index];
-      const cells = row.cells;
-
-      activeInput.value = cells[1].textContent.trim();
-      serviceTypeInput.value = cells[2].textContent.trim();
-      bandInput.value = cells[3].textContent.trim();
-      scheduleInput.value = cells[4].textContent.trim();
-      quantityInput.value = cells[5].textContent.trim();
-      unitInput.value = cells[6].textContent.trim();
-
+      scheduleInput.value = row.cells[4].textContent.trim();
     } else {
       formTitle.textContent = 'Add service specification';
-      activeInput.value = '';
-      serviceTypeInput.value = 'Homecare closed framework';
-      bandInput.value = '';
       scheduleInput.value = '';
-      quantityInput.value = '';
-      unitInput.value = '';
     }
   }
 
@@ -370,35 +314,18 @@
       return;
     }
 
-    const serviceType = serviceTypeInput.value.trim();
-    const band = bandInput.value.trim();
-    const quantity = quantityInput.value.trim();
-    const unit = unitInput.value.trim();
-    const active = activeInput.value.trim();
-
-    if(!serviceType || !band || !quantity || !unit || !active){
-      alert("Please complete all required fields.");
-      return;
-    }
-
     if(editingIndex !== null){
       const row = specBody.rows[editingIndex];
-      row.cells[1].textContent = active;
-      row.cells[2].textContent = serviceType;
-      row.cells[3].textContent = band;
       row.cells[4].textContent = schedule;
-      row.cells[5].textContent = quantity;
-      row.cells[6].textContent = unit;
-
     } else {
       const row = specBody.insertRow();
       row.insertCell(0).innerHTML = '<input type="checkbox" class="row-select">';
-      row.insertCell(1).textContent = active;
-      row.insertCell(2).textContent = serviceType;
-      row.insertCell(3).innerHTML = `<span class="band-link">${band}</span>`;
+      row.insertCell(1).textContent = "Y";
+      row.insertCell(2).textContent = "Homecare closed framework";
+      row.insertCell(3).innerHTML = '<span class="band-link">Standard</span>';
       row.insertCell(4).textContent = schedule;
-      row.insertCell(5).textContent = quantity;
-      row.insertCell(6).textContent = unit;
+      row.insertCell(5).textContent = "";
+      row.insertCell(6).textContent = "";
     }
 
     closeForm();
@@ -411,10 +338,9 @@
       const cb = row.querySelector('.row-select');
       if(cb && cb.checked){
         found = true;
-
-        const newRow = specBody.insertRow();
-        newRow.innerHTML = row.innerHTML;
-        newRow.querySelector('.row-select').checked = false;
+        const clone = specBody.insertRow();
+        clone.innerHTML = row.innerHTML;
+        clone.querySelector('.row-select').checked = false;
       }
     });
     if(!found){
@@ -422,12 +348,12 @@
     }
   });
 
-  /* MODAL */
-  scheduleInput.addEventListener('click', ()=> schedulerModal.classList.add('active'));
-  btnOpenScheduler.addEventListener('click', ()=> schedulerModal.classList.add('active'));
-  btnCloseScheduler.addEventListener('click', ()=> schedulerModal.classList.remove('active'));
 
-  // receives full multiline schedule
+  /* MODAL */
+  scheduleInput?.addEventListener('click', ()=> schedulerModal.classList.add('active'));
+  document.getElementById('btnCloseScheduler')
+    .addEventListener('click', ()=> schedulerModal.classList.remove('active'));
+
   window.receiveScheduleFromModal = function(text){
     if(text){ scheduleInput.value = text; }
     schedulerModal.classList.remove('active');
@@ -438,4 +364,3 @@
 
 </body>
 </html>
-``
