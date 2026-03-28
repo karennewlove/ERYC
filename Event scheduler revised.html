@@ -493,17 +493,24 @@
         text += ' (' + numCarersInput.value + ' carers)';
       }
 
-      if (selectedOutcomes.length > 0) {
-        text += ' – ' + selectedOutcomes.join(', ');
-      }
+      
+f (selectedOutcomes.length > 0) {
+  text += ' – ' + selectedOutcomes.join(', ');
+}
 
-      if (isTimeCritical) {
-        text += ' (Time-critical)';
-      } else if (isFlexible) {
-        text += ' (Flexible)';
-      }
+// NEW: include the free-text Outcomes description
+if (outcomeText.value.trim()) {
+  text += ' – ' + outcomeText.value.trim();
+}
 
-      return { ok: true, errors: [], summary: text };
+if (isTimeCritical) {
+  text += ' (Time-critical)';
+} else if (isFlexible) {
+  text += ' (Flexible)';
+}
+
+return { ok: true, errors: [], summary: text };
+
     }
 
     // First block
