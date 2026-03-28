@@ -546,7 +546,7 @@
       header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
 
       // REAL newlines here:
-   const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
+  const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
 
       if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
         window.parent.receiveScheduleFromModal(summary);
