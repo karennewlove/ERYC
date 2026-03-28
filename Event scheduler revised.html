@@ -284,6 +284,7 @@
   </div>
 </template>
 
+
 <script>
   (function () {
     const tasksContainer = document.getElementById('tasksContainer');
@@ -441,6 +442,7 @@
 
       const getSelectedDaysForBlock = block.getSelectedDaysForBlock;
       const selectedDays = getSelectedDaysForBlock ? getSelectedDaysForBlock() : [];
+
       if (selectedDays.length === 0) {
         errors.push(`Task ${index}: Select at least one day of the week.`);
       }
@@ -540,22 +542,22 @@
 
       errorSummary.style.display = 'none';
 
-     
-let header = 'From ' + startDate;
-header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
+      let header = 'From ' + startDate;
+      header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
 
-// Use REAL newlines, not "\n" text
-const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
+      // REAL newlines here:
+      const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
 
-if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
-  window.parent.receiveScheduleFromModal(summary);
-} else {
-  alert('Schedule saved:\n' + summary);
-}
-
+      if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
+        window.parent.receiveScheduleFromModal(summary);
+      } else {
+        alert('Schedule saved:\n' + summary);
+      }
     });
   })();
 </script>
+``
+
 </body>
 </html>
 ``
