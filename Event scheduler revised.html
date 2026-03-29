@@ -439,124 +439,124 @@ clone.getSelectedPeriodsForBlock = getSelectedPeriodsForBlock;
         return Array.from(tasksContainer.querySelectorAll('.task-block'));
       }
 
-      function validateAndBuildSummaryForBlock(block, index) {
-        const errors = [];
 
-        const timeCriticalRadio = block.querySelector('.schedTimeCritical');
-        const flexibleRadio = block.querySelector('.schedFlexible');
-        const timeAndTaskRadio = block.querySelector('.schedTimeAndTask');
+function validateAndBuildSummaryForBlock(block, index) {
+  const errors = [];
 
-        const numCarersInput = block.querySelector('.numCarers');
-        const startTimeInput = block.querySelector('.startTime');
-        const endTimeInput = block.querySelector('.endTime');
-        const durationInput = block.querySelector('.duration');
+  const timeCriticalRadio = block.querySelector('.schedTimeCritical');
+  const flexibleRadio = block.querySelector('.schedFlexible');
+  const timeAndTaskRadio = block.querySelector('.schedTimeAndTask');
 
-        const outcomeCheckboxes = block.querySelectorAll('.outcome');
-        const outcomeText = block.querySelector('.outcomeText');
+  const numCarersInput = block.querySelector('.numCarers');
+  const startTimeInput = block.querySelector('.startTime');
+  const endTimeInput = block.querySelector('.endTime');
+  const durationInput = block.querySelector('.duration');
 
-        const isTimeCritical = timeCriticalRadio.checked;
-        const isFlexible = flexibleRadio.checked;
-        const isTimeAndTask = timeAndTaskRadio && timeAndTaskRadio.checked;
-        
-// Update category label depending on schedule type
- if (categoryLabel) {
-   categoryLabel.textContent = isTimeAndTask ? 'Task category' : 'Outcome category';
- }
+  const outcomeCheckboxes = block.querySelectorAll('.outcome');
+  const outcomeText = block.querySelector('.outcomeText');
 
-        if (!isTimeCritical && !isFlexible && !isTimeAndTask) {
-          errors.push(`Task ${index}: Select Time critical, Flexible, or Time and task.`);
-        }
+  const isTimeCritical = timeCriticalRadio.checked;
+  const isFlexible = flexibleRadio.checked;
+  const isTimeAndTask = timeAndTaskRadio && timeAndTaskRadio.checked;
 
-        if (!numCarersInput.value || Number(numCarersInput.value) < 1) {
-          errors.push(`Task ${index}: Enter Number of carers (must be at least 1).`);
-        }
-
-        const getSelectedDaysForBlock = block.getSelectedDaysForBlock;
-        const selectedDays = getSelectedDaysForBlock ? getSelectedDaysForBlock() : [];
-        if (selectedDays.length === 0) {
-          errors.push(`Task ${index}: Select at least one day of the week.`);
-        }
-
-// Daily schedule period is required for Flexible schedules
-if (isFlexible) {
-  const periods = block.querySelectorAll('.periodSection input[type=checkbox]:checked');
-  if (!periods || periods.length === 0) {
-    errors.push(`Task ${index}: Select at least one Daily schedule period.`);
+  // ✅ Schedule type
+  if (!isTimeCritical && !isFlexible && !isTimeAndTask) {
+    errors.push(`Task ${index}: Select Time critical, Flexible, or Time and task.`);
   }
-}
-        // Time critical + Time and task both require Start/End time
-        if (isTimeCritical || isTimeAndTask) {
-          if (!startTimeInput.value) {
-            errors.push(`Task ${index}: Start time is required for this schedule type.`);
-          }
-          if (!endTimeInput.value) {
-            errors.push(`Task ${index}: End time is required for this schedule type.`);
-          }
-        }
 
-        if (!durationInput.value || Number(durationInput.value) <= 0) {
-          errors.push(`Task ${index}: Duration (hours) is required and must be greater than 0.`);
-        }
-
-        const selectedOutcomes = [];
-        outcomeCheckboxes.forEach(cb => { if (cb.checked) selectedOutcomes.push(cb.value); });
-        if (selectedOutcomes.length === 0) {
-          errors.push(`Task ${index}: Select at least one Outcome category.`);
-        }
-
-        // Outcome text required for Time critical & Flexible, NOT required for Time and task
-        if (!isTimeAndTask && !outcomeText.value.trim()) {
-          errors.push(`Task ${index}: Enter an Outcome description.`);
-        }
-
-        if (errors.length > 0) {
-          return { ok: false, errors, summary: '' };
-        }
-
-        // Build summary (kept consistent with your existing output)
-        let text = '';
-
-        if (selectedDays.length > 0) {
-          text += selectedDays.join('–');
-        }
-
-        if ((isTimeCritical || isTimeAndTask) && startTimeInput.value && endTimeInput.value) {
-          text += ' ' + startTimeInput.value + ' to ' + endTimeInput.value;
-        }
-
-        if (durationInput.value) {
-          text += ' (' + durationInput.value + ' hours';
-          if (numCarersInput.value) {
-            text += ', ' + numCarersInput.value + ' carers';
-          }
-          text += ')';
-        } else if (numCarersInput.value) {
-          text += ' (' + numCarersInput.value + ' carers)';
-        }
-
-        if (isFlexible) {
-  const periodVals = Array.from(block.querySelectorAll('.periodSection input[type=checkbox]:checked')).map(cb => cb.value);
-  if (periodVals.length > 0) {
-    text += ' – ' + periodVals.join(', ');
+  // ✅ Number of carers
+  if (!numCarersInput.value || Number(numCarersInput.value) < 1) {
+    errors.push(`Task ${index}: Enter Number of carers (must be at least 1).`);
   }
-}
-if (selectedOutcomes.length > 0) {
-          text += ' – ' + selectedOutcomes.join(', ');
-        }
 
-        if (isTimeCritical) {
-          text += ' (Time-critical)';
-        } else if (isFlexible) {
-          text += ' (Flexible)';
-        } else if (isTimeAndTask) {
-          text += ' (Time and task)';
-        }
+  // ✅ Days of the week
+  const getSelectedDaysForBlock = block.getSelectedDaysForBlock;
+  const selectedDays = getSelectedDaysForBlock ? getSelectedDaysForBlock() : [];
+  if (selectedDays.length === 0) {
+    errors.push(`Task ${index}: Select at least one day of the week.`);
+  }
 
-        if (!isTimeAndTask && outcomeText && outcomeText.value && outcomeText.value.trim()) {
-  text += ' Outcome: ' + outcomeText.value.trim().replace(/\s+/g,' ');
+  // ✅ DAILY SCHEDULE PERIOD — FLEXIBLE ONLY (THIS IS THE BIT YOU WANT)
+  if (isFlexible) {
+    const periods = block.querySelectorAll(
+      '.periodSection input[type="checkbox"]:checked'
+    );
+    if (periods.length === 0) {
+      errors.push(`Task ${index}: Select at least one Daily schedule period.`);
+    }
+  }
+
+  // ✅ Times required for Time critical & Time and task
+  if (isTimeCritical || isTimeAndTask) {
+    if (!startTimeInput.value) {
+      errors.push(`Task ${index}: Start time is required for this schedule type.`);
+    }
+    if (!endTimeInput.value) {
+      errors.push(`Task ${index}: End time is required for this schedule type.`);
+    }
+  }
+
+  // ✅ Duration
+  if (!durationInput.value || Number(durationInput.value) <= 0) {
+    errors.push(`Task ${index}: Duration (hours) is required and must be greater than 0.`);
+  }
+
+  // ✅ Outcome category
+  const selectedOutcomes = [];
+  outcomeCheckboxes.forEach(cb => {
+    if (cb.checked) selectedOutcomes.push(cb.value);
+  });
+  if (selectedOutcomes.length === 0) {
+    errors.push(`Task ${index}: Select at least one Outcome category.`);
+  }
+
+  // ✅ Outcome text (not required for Time and task)
+  if (!isTimeAndTask && !outcomeText.value.trim()) {
+    errors.push(`Task ${index}: Enter an Outcome description.`);
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, errors, summary: '' };
+  }
+
+  // ✅ Build summary
+  let text = '';
+
+  text += selectedDays.join('–');
+
+  if ((isTimeCritical || isTimeAndTask) && startTimeInput.value && endTimeInput.value) {
+    text += ' ' + startTimeInput.value + ' to ' + endTimeInput.value;
+  }
+
+  text += ' (' + durationInput.value + ' hours';
+  if (numCarersInput.value) {
+    text += ', ' + numCarersInput.value + ' carers';
+  }
+  text += ')';
+
+  if (isFlexible) {
+    const periodVals = Array.from(
+      block.querySelectorAll('.periodSection input[type="checkbox"]:checked')
+    ).map(cb => cb.value);
+    if (periodVals.length > 0) {
+      text += ' – ' + periodVals.join(', ');
+    }
+  }
+
+  text += ' – ' + selectedOutcomes.join(', ');
+
+  if (isTimeCritical) text += ' (Time-critical)';
+  else if (isFlexible) text += ' (Flexible)';
+  else if (isTimeAndTask) text += ' (Time and task)';
+
+  if (!isTimeAndTask && outcomeText.value.trim()) {
+    text += ' Outcome: ' + outcomeText.value.trim().replace(/\s+/g, ' ');
+  }
+
+  return { ok: true, errors: [], summary: text };
 }
-return { ok: true, errors: [], summary: text };
-      }
+``
+
 
       // First block
       createTaskBlock(false);
