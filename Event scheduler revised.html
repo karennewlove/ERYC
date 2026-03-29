@@ -51,12 +51,9 @@
       padding: 2px 4px;
       box-sizing: border-box;
     }
-    input[type="number"] {
-      width: 60px;
-    }
-    input[type="time"] {
-      width: 90px;
-    }
+    input[type="number"] { width: 60px; }
+    input[type="time"] { width: 90px; }
+
     textarea {
       width: 100%;
       min-height: 40px;
@@ -95,9 +92,7 @@
       cursor: pointer;
       margin-left: 6px;
     }
-    button:hover {
-      background-color: #163656;
-    }
+    button:hover { background-color: #163656; }
     .error {
       color: #c00000;
       font-size: 11px;
@@ -111,9 +106,7 @@
       margin-bottom: 4px;
       gap: 8px;
     }
-    .row label.inline-label {
-      min-width: 140px;
-    }
+    .row label.inline-label { min-width: 140px; }
     .task-block {
       border: 1px solid #dde6f1;
       padding: 8px;
@@ -127,11 +120,10 @@
     }
   </style>
 </head>
+
 <body>
   <div class="scheduler-container">
-    <div class="scheduler-header">
-      Event Scheduler
-    </div>
+    <div class="scheduler-header">Event Scheduler</div>
     <div class="scheduler-body">
       <!-- Global Frequency / Dates -->
       <div class="section">
@@ -272,13 +264,9 @@
       </div>
 
       <div class="section">
-        <div class="section-title">
-          Provider remarks:
-        </div>
+        <div class="section-title">Provider remarks:</div>
         <textarea class="providerRemarks"></textarea>
-        <div class="small-label">
-          Optional notes for internal use or providers.
-        </div>
+        <div class="small-label">Optional notes for internal use or providers.</div>
       </div>
     </div>
   </template>
@@ -317,7 +305,6 @@
 
         const outcomeCheckboxes = clone.querySelectorAll('.outcome');
         const outcomeText = clone.querySelector('.outcomeText');
-        const providerRemarks = clone.querySelector('.providerRemarks');
 
         const radioGroupName = 'schedType_' + taskCount;
         timeCriticalRadio.name = radioGroupName;
@@ -333,7 +320,6 @@
             periodSection.style.display = 'none';
           }
         }
-
         timeCriticalRadio.addEventListener('change', updateTimeAndPeriodModeForBlock);
         flexibleRadio.addEventListener('change', updateTimeAndPeriodModeForBlock);
         updateTimeAndPeriodModeForBlock();
@@ -345,29 +331,22 @@
             dayAllCheckbox.checked = false;
           }
         });
-
         dayCheckboxes.forEach(cb => {
           cb.addEventListener('change', function () {
             if (cb.checked) everydayCheckbox.checked = false;
           });
         });
-
         dayAllCheckbox.addEventListener('change', function () {
           dayCheckboxes.forEach(cb => cb.checked = dayAllCheckbox.checked);
           everydayCheckbox.checked = false;
         });
 
         function getSelectedDaysForBlock() {
-          if (everydayCheckbox.checked) {
-            return ['Everyday'];
-          }
+          if (everydayCheckbox.checked) return ['Everyday'];
           const selected = [];
-          dayCheckboxes.forEach(cb => {
-            if (cb.checked) selected.push(cb.value);
-          });
+          dayCheckboxes.forEach(cb => { if (cb.checked) selected.push(cb.value); });
           return selected;
         }
-
         clone.getSelectedDaysForBlock = getSelectedDaysForBlock;
 
         // Copy values from last block if requested
@@ -389,7 +368,6 @@
           copyValue('.endTime', endTimeInput);
           copyValue('.duration', durationInput);
           copyValue('.outcomeText', outcomeText);
-          copyValue('.providerRemarks', providerRemarks);
 
           const lastDayAll = last.querySelector('.day-all');
           if (lastDayAll && lastDayAll.checked) dayAllCheckbox.checked = true;
@@ -419,15 +397,12 @@
 
       function validateAndBuildSummaryForBlock(block, index) {
         const errors = [];
-
         const timeCriticalRadio = block.querySelector('.schedTimeCritical');
         const flexibleRadio = block.querySelector('.schedFlexible');
         const numCarersInput = block.querySelector('.numCarers');
-
         const startTimeInput = block.querySelector('.startTime');
         const endTimeInput = block.querySelector('.endTime');
         const durationInput = block.querySelector('.duration');
-
         const outcomeCheckboxes = block.querySelectorAll('.outcome');
         const outcomeText = block.querySelector('.outcomeText');
 
@@ -437,7 +412,6 @@
         if (!isTimeCritical && !isFlexible) {
           errors.push(`Task ${index}: Select either Time critical or Flexible schedule.`);
         }
-
         if (!numCarersInput.value || Number(numCarersInput.value) < 1) {
           errors.push(`Task ${index}: Enter Number of carers (must be at least 1).`);
         }
@@ -449,12 +423,8 @@
         }
 
         if (isTimeCritical) {
-          if (!startTimeInput.value) {
-            errors.push(`Task ${index}: Start time is required for Time critical schedule.`);
-          }
-          if (!endTimeInput.value) {
-            errors.push(`Task ${index}: End time is required for Time critical schedule.`);
-          }
+          if (!startTimeInput.value) errors.push(`Task ${index}: Start time is required for Time critical schedule.`);
+          if (!endTimeInput.value) errors.push(`Task ${index}: End time is required for Time critical schedule.`);
         }
 
         if (!durationInput.value || Number(durationInput.value) <= 0) {
@@ -476,9 +446,8 @@
         }
 
         let text = '';
-        if (selectedDays.length > 0) {
-          text += selectedDays.join('–');
-        }
+
+        if (selectedDays.length > 0) text += selectedDays.join('–');
 
         if (isTimeCritical && startTimeInput.value && endTimeInput.value) {
           text += ' ' + startTimeInput.value + ' to ' + endTimeInput.value;
@@ -486,9 +455,7 @@
 
         if (durationInput.value) {
           text += ' (' + durationInput.value + ' hours';
-          if (numCarersInput.value) {
-            text += ', ' + numCarersInput.value + ' carers';
-          }
+          if (numCarersInput.value) text += ', ' + numCarersInput.value + ' carers';
           text += ')';
         } else if (numCarersInput.value) {
           text += ' (' + numCarersInput.value + ' carers)';
@@ -498,16 +465,11 @@
           text += ' – ' + selectedOutcomes.join(', ');
         }
 
-        // ✅ Outcome text on a NEW LINE under the schedule line
-        if (outcomeText && outcomeText.value && outcomeText.value.trim()) {
-          text += '\n  Outcome: ' + outcomeText.value.trim().replace(/\s+/g, ' ');
-        }
+        // ✅ Outcome on a NEW line under each task
+        text += '\n  Outcome: ' + outcomeText.value.trim().replace(/\s+/g, ' ');
 
-        if (isTimeCritical) {
-          text += ' (Time-critical)';
-        } else if (isFlexible) {
-          text += ' (Flexible)';
-        }
+        if (isTimeCritical) text += ' (Time-critical)';
+        else if (isFlexible) text += ' (Flexible)';
 
         return { ok: true, errors: [], summary: text };
       }
@@ -521,24 +483,18 @@
 
       btnSave.addEventListener('click', function () {
         const errors = [];
-
         const startDate = startDateInput.value;
         const interval = intervalInput.value || '1';
 
-        if (!startDate) {
-          errors.push('Start Date is required.');
-        }
+        if (!startDate) errors.push('Start Date is required.');
 
         const blocks = getTaskBlocks();
         const taskSummaries = [];
 
         blocks.forEach((block, i) => {
           const res = validateAndBuildSummaryForBlock(block, i + 1);
-          if (!res.ok) {
-            errors.push(...res.errors);
-          } else {
-            taskSummaries.push(res.summary);
-          }
+          if (!res.ok) errors.push(...res.errors);
+          else taskSummaries.push(res.summary);
         });
 
         if (errors.length > 0) {
@@ -552,7 +508,7 @@
         let header = 'From ' + startDate;
         header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
 
-        // ✅ REAL newlines here, PLUS a blank line between each task:
+        // ✅ Blank line between tasks
         const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n\n');
 
         if (window.parent && typeof window.parent.receiveScheduleFromModal === 'function') {
