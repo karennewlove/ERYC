@@ -30,7 +30,7 @@
     .section{ margin-bottom:8px; }
     .section-title{ font-weight:600; margin-bottom:4px; }
     label{ font-size:12px; }
-    .required-star{ color:#c00000; margin-left:2px; }
+    .required-star{ color:#c00000 !important; margin-left:2px; }
     input[type="text"],
     input[type="number"],
     input[type="time"],
@@ -458,20 +458,7 @@ clone.getSelectedPeriodsForBlock = getSelectedPeriodsForBlock;
         const isFlexible = flexibleRadio.checked;
         const isTimeAndTask = timeAndTaskRadio && timeAndTaskRadio.checked;
         
-// ✅ Daily schedule period must be selected for Flexible schedules
-if (isFlexible) {
-  const periodChecked = block.querySelectorAll(
-    '.periodSection input[type="checkbox"]:checked'
-  );
-
-  if (!periodChecked || periodChecked.length === 0) {
-    errors.push(
-      `Task ${index}: Select at least one Daily schedule period.`
-    );
-  }
-}
-
- // Update category label depending on schedule type
+// Update category label depending on schedule type
  if (categoryLabel) {
    categoryLabel.textContent = isTimeAndTask ? 'Task category' : 'Outcome category';
  }
@@ -579,7 +566,7 @@ return { ok: true, errors: [], summary: text };
       });
 
       btnSave.addEventListener('click', function () {
-        alert('Save handler fired');
+        
         const errors = [];
         const startDate = startDateInput.value;
         const interval = intervalInput.value || '1';
