@@ -468,6 +468,18 @@
           errors.push(`Task ${index}: Select at least one day of the week.`);
         }
 
+// ✅ Daily schedule period is required for Flexible schedules
+if (isFlexible) {
+  const periods = block.getSelectedPeriodsForBlock
+    ? block.getSelectedPeriodsForBlock()
+    : [];
+
+  if (periods.length === 0) {
+    errors.push(`Task ${index}: Select at least one Daily schedule period.`);
+  }
+}
+``
+
         // Time critical + Time and task both require Start/End time
         if (isTimeCritical || isTimeAndTask) {
           if (!startTimeInput.value) {
