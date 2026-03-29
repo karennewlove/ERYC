@@ -30,10 +30,8 @@
     .section{ margin-bottom:8px; }
     .section-title{ font-weight:600; margin-bottom:4px; }
     label{ font-size:12px; }
-    .required-star{ color:#c00000; margin-left:2px; }
-    
-.section-title .required-star{ color:#c00000 !important; }
-input[type="text"],
+    .required-star{color:#c00000; margin-left:2px; color:#c00000 !important;}
+    input[type="text"],
     input[type="number"],
     input[type="time"],
     input[type="date"],
@@ -202,7 +200,7 @@ input[type="text"],
 
       <!-- Period (for flexible only) -->
       <div class="section periodSection" style="display:none;">
-        <div class="section-title">Daily schedule period<span class=\"required-star\">*</span>:</div>
+        <div class="section-title">Daily schedule period<span class=\"required-star\" style=\"color:#c00000\">*</span>:</div>
         <div class="period-grid">
 <label><input type="checkbox" value="Morning"> Morning</label>
 <label><input type="checkbox" value="Mid Morning"> Mid Morning</label>
@@ -382,14 +380,15 @@ input[type="text"],
           return selected;
         }
         clone.getSelectedDaysForBlock = getSelectedDaysForBlock;
- // Daily schedule period selections (Flexible only)
- function getSelectedPeriodsForBlock() {
-   const selected = [];
-   const boxes = clone.querySelectorAll('.periodSection input[type=checkbox]');
-   boxes.forEach(cb => { if (cb.checked) selected.push(cb.value); });
-   return selected;
- }
- clone.getSelectedPeriodsForBlock = getSelectedPeriodsForBlock;
+
+// Daily schedule period selections (Flexible only)
+function getSelectedPeriodsForBlock() {
+  const selected = [];
+  const boxes = clone.querySelectorAll('.periodSection input[type=checkbox]');
+  boxes.forEach(cb => { if (cb.checked) selected.push(cb.value); });
+  return selected;
+}
+clone.getSelectedPeriodsForBlock = getSelectedPeriodsForBlock;
 
         // Copy values from last block if requested
         if (copyFromLast && tasksContainer.lastElementChild) {
@@ -478,15 +477,14 @@ input[type="text"],
           errors.push(`Task ${index}: Select at least one day of the week.`);
         }
 
-        
- // Daily schedule period is required for Flexible schedules
- if (isFlexible) {
-   const periodChecked = block.querySelectorAll('.periodSection input[type=checkbox]:checked');
-   if (!periodChecked || periodChecked.length === 0) {
-     errors.push(`Task ${index}: Select at least one Daily schedule period.`);
-   }
- }
-// Time critical + Time and task both require Start/End time
+// Daily schedule period is required for Flexible schedules
+if (isFlexible) {
+  const periodChecked = block.querySelectorAll('.periodSection input[type=checkbox]:checked');
+  if (!periodChecked || periodChecked.length === 0) {
+    errors.push(`Task ${index}: Select at least one Daily schedule period.`);
+  }
+}
+        // Time critical + Time and task both require Start/End time
         if (isTimeCritical || isTimeAndTask) {
           if (!startTimeInput.value) {
             errors.push(`Task ${index}: Start time is required for this schedule type.`);
@@ -536,11 +534,12 @@ input[type="text"],
           text += ' (' + numCarersInput.value + ' carers)';
         }
 
-        if (isFlexible) {
- const periodVals = Array.from(block.querySelectorAll('.periodSection input[type=checkbox]:checked')).map(cb => cb.value);
- if (periodVals.length > 0) {
-   text += ' – ' + periodVals.join(', ');
- }
+        // Flexible: include Daily schedule period(s) in schedule text
+if (isFlexible) {
+  const periodVals = Array.from(block.querySelectorAll('.periodSection input[type=checkbox]:checked')).map(cb => cb.value);
+  if (periodVals.length > 0) {
+    text += ' – ' + periodVals.join(', ');
+  }
 }
 if (selectedOutcomes.length > 0) {
           text += ' – ' + selectedOutcomes.join(', ');
