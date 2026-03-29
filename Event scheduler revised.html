@@ -27,20 +27,11 @@
       padding: 8px 12px 12px;
       background-color: #ffffff;
     }
-    .section {
-      margin-bottom: 8px;
-    }
-    .section-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    label {
-      font-size: 12px;
-    }
-    .required-star {
-      color: #c00000;
-      margin-left: 2px;
-    }
+    .section { margin-bottom: 8px; }
+    .section-title { font-weight: 600; margin-bottom: 4px; }
+    label { font-size: 12px; }
+    .required-star { color: #c00000; margin-left: 2px; }
+
     input[type="text"],
     input[type="number"],
     input[type="time"],
@@ -53,29 +44,21 @@
     }
     input[type="number"] { width: 60px; }
     input[type="time"] { width: 90px; }
-
     textarea {
       width: 100%;
       min-height: 40px;
       resize: vertical;
     }
-    .inline {
-      display: inline-block;
-      margin-right: 12px;
-      margin-bottom: 4px;
-    }
-    .days-grid label,
-    .period-grid label,
-    .outcomes-grid label {
+
+    .inline { display: inline-block; margin-right: 12px; margin-bottom: 4px; }
+    .days-grid label, .period-grid label, .outcomes-grid label {
       display: inline-block;
       margin-right: 10px;
       margin-bottom: 4px;
       font-size: 12px;
     }
-    .small-label {
-      font-size: 11px;
-      color: #555;
-    }
+    .small-label { font-size: 11px; color: #555; }
+
     .actions {
       text-align: right;
       padding-top: 6px;
@@ -93,12 +76,9 @@
       margin-left: 6px;
     }
     button:hover { background-color: #163656; }
-    .error {
-      color: #c00000;
-      font-size: 11px;
-      margin-top: 4px;
-      display: none;
-    }
+
+    .error { color: #c00000; font-size: 11px; margin-top: 4px; display: none; }
+
     .row {
       display: flex;
       flex-wrap: wrap;
@@ -107,17 +87,14 @@
       gap: 8px;
     }
     .row label.inline-label { min-width: 140px; }
+
     .task-block {
       border: 1px solid #dde6f1;
       padding: 8px;
       margin-bottom: 8px;
       background-color: #f8fbff;
     }
-    .task-header {
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #1f4e79;
-    }
+    .task-header { font-weight: 600; margin-bottom: 4px; color: #1f4e79; }
   </style>
 </head>
 
@@ -125,6 +102,7 @@
   <div class="scheduler-container">
     <div class="scheduler-header">Event Scheduler</div>
     <div class="scheduler-body">
+
       <!-- Global Frequency / Dates -->
       <div class="section">
         <div class="row">
@@ -280,7 +258,6 @@
       const errorSummary = document.getElementById('errorSummary');
       const startDateInput = document.getElementById('startDate');
       const intervalInput = document.getElementById('interval');
-
       let taskCount = 0;
 
       function createTaskBlock(copyFromLast = false) {
@@ -305,6 +282,7 @@
 
         const outcomeCheckboxes = clone.querySelectorAll('.outcome');
         const outcomeText = clone.querySelector('.outcomeText');
+        const providerRemarks = clone.querySelector('.providerRemarks');
 
         const radioGroupName = 'schedType_' + taskCount;
         timeCriticalRadio.name = radioGroupName;
@@ -352,7 +330,6 @@
         // Copy values from last block if requested
         if (copyFromLast && tasksContainer.lastElementChild) {
           const last = tasksContainer.lastElementChild;
-
           function copyValue(selector, targetInput) {
             const src = last.querySelector(selector);
             if (src && targetInput) targetInput.value = src.value;
@@ -368,6 +345,7 @@
           copyValue('.endTime', endTimeInput);
           copyValue('.duration', durationInput);
           copyValue('.outcomeText', outcomeText);
+          copyValue('.providerRemarks', providerRemarks);
 
           const lastDayAll = last.querySelector('.day-all');
           if (lastDayAll && lastDayAll.checked) dayAllCheckbox.checked = true;
@@ -465,7 +443,7 @@
           text += ' – ' + selectedOutcomes.join(', ');
         }
 
-        // ✅ Outcome on a NEW line under each task
+        // ✅ Outcome on a separate line
         text += '\n  Outcome: ' + outcomeText.value.trim().replace(/\s+/g, ' ');
 
         if (isTimeCritical) text += ' (Time-critical)';
