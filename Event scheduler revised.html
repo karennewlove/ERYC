@@ -155,6 +155,7 @@
 </label>
 
 
+
           <label class="inline">
             <input type="radio" class="schedTimeCritical" value="time_critical">
             Time critical
@@ -323,7 +324,7 @@
         function updateTimeAndPeriodModeForBlock() {
           const isFlexible = flexibleRadio.checked;
           const isTimeAndTask = timeAndTaskRadio && timeAndTaskRadio.checked;
- // Change Outcome category label for Time and task
+ // Update category label depending on schedule type
  if (categoryLabel) {
    categoryLabel.textContent = isTimeAndTask ? 'Task category' : 'Outcome category';
  }
@@ -444,7 +445,7 @@
         const isTimeCritical = timeCriticalRadio.checked;
         const isFlexible = flexibleRadio.checked;
         const isTimeAndTask = timeAndTaskRadio && timeAndTaskRadio.checked;
- // Change Outcome category label for Time and task
+ // Update category label depending on schedule type
  if (categoryLabel) {
    categoryLabel.textContent = isTimeAndTask ? 'Task category' : 'Outcome category';
  }
