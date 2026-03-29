@@ -44,21 +44,30 @@
     }
     input[type="number"] { width: 60px; }
     input[type="time"] { width: 90px; }
+
     textarea {
       width: 100%;
       min-height: 40px;
       resize: vertical;
     }
 
-    .inline { display: inline-block; margin-right: 12px; margin-bottom: 4px; }
-    .days-grid label, .period-grid label, .outcomes-grid label {
+    .inline {
+      display: inline-block;
+      margin-right: 12px;
+      margin-bottom: 4px;
+    }
+    .days-grid label,
+    .period-grid label,
+    .outcomes-grid label {
       display: inline-block;
       margin-right: 10px;
       margin-bottom: 4px;
       font-size: 12px;
     }
-    .small-label { font-size: 11px; color: #555; }
-
+    .small-label {
+      font-size: 11px;
+      color: #555;
+    }
     .actions {
       text-align: right;
       padding-top: 6px;
@@ -77,8 +86,12 @@
     }
     button:hover { background-color: #163656; }
 
-    .error { color: #c00000; font-size: 11px; margin-top: 4px; display: none; }
-
+    .error {
+      color: #c00000;
+      font-size: 11px;
+      margin-top: 4px;
+      display: none;
+    }
     .row {
       display: flex;
       flex-wrap: wrap;
@@ -94,7 +107,11 @@
       margin-bottom: 8px;
       background-color: #f8fbff;
     }
-    .task-header { font-weight: 600; margin-bottom: 4px; color: #1f4e79; }
+    .task-header {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1f4e79;
+    }
   </style>
 </head>
 
@@ -102,7 +119,6 @@
   <div class="scheduler-container">
     <div class="scheduler-header">Event Scheduler</div>
     <div class="scheduler-body">
-
       <!-- Global Frequency / Dates -->
       <div class="section">
         <div class="row">
@@ -258,6 +274,7 @@
       const errorSummary = document.getElementById('errorSummary');
       const startDateInput = document.getElementById('startDate');
       const intervalInput = document.getElementById('interval');
+
       let taskCount = 0;
 
       function createTaskBlock(copyFromLast = false) {
@@ -330,6 +347,7 @@
         // Copy values from last block if requested
         if (copyFromLast && tasksContainer.lastElementChild) {
           const last = tasksContainer.lastElementChild;
+
           function copyValue(selector, targetInput) {
             const src = last.querySelector(selector);
             if (src && targetInput) targetInput.value = src.value;
@@ -375,6 +393,7 @@
 
       function validateAndBuildSummaryForBlock(block, index) {
         const errors = [];
+
         const timeCriticalRadio = block.querySelector('.schedTimeCritical');
         const flexibleRadio = block.querySelector('.schedFlexible');
         const numCarersInput = block.querySelector('.numCarers');
@@ -390,6 +409,7 @@
         if (!isTimeCritical && !isFlexible) {
           errors.push(`Task ${index}: Select either Time critical or Flexible schedule.`);
         }
+
         if (!numCarersInput.value || Number(numCarersInput.value) < 1) {
           errors.push(`Task ${index}: Enter Number of carers (must be at least 1).`);
         }
@@ -423,33 +443,43 @@
           return { ok: false, errors, summary: '' };
         }
 
-        let text = '';
+        // ---- Build FIRST line (schedule line) ----
+        let line1 = '';
 
-        if (selectedDays.length > 0) text += selectedDays.join('–');
+        if (selectedDays.length > 0) {
+          line1 += selectedDays.join('–');
+        }
 
         if (isTimeCritical && startTimeInput.value && endTimeInput.value) {
-          text += ' ' + startTimeInput.value + ' to ' + endTimeInput.value;
+          line1 += ' ' + startTimeInput.value + ' to ' + endTimeInput.value;
         }
 
         if (durationInput.value) {
-          text += ' (' + durationInput.value + ' hours';
-          if (numCarersInput.value) text += ', ' + numCarersInput.value + ' carers';
-          text += ')';
+          line1 += ' (' + durationInput.value + ' hours';
+          if (numCarersInput.value) {
+            line1 += ', ' + numCarersInput.value + ' carers';
+          }
+          line1 += ')';
         } else if (numCarersInput.value) {
-          text += ' (' + numCarersInput.value + ' carers)';
+          line1 += ' (' + numCarersInput.value + ' carers)';
         }
 
         if (selectedOutcomes.length > 0) {
-          text += ' – ' + selectedOutcomes.join(', ');
+          line1 += ' – ' + selectedOutcomes.join(', ');
         }
 
-        // ✅ Outcome on a separate line
-        text += '\n  Outcome: ' + outcomeText.value.trim().replace(/\s+/g, ' ');
+        if (isTimeCritical) {
+          line1 += ' (Time-critical)';
+        } else if (isFlexible) {
+          line1 += ' (Flexible)';
+        }
 
-        if (isTimeCritical) text += ' (Time-critical)';
-        else if (isFlexible) text += ' (Flexible)';
+        // ---- Build SECOND line (outcome line) ----
+        const cleanedOutcome = outcomeText.value.trim().replace(/\s+/g, ' ');
+        const line2 = '  Outcome: ' + cleanedOutcome;
 
-        return { ok: true, errors: [], summary: text };
+        // ✅ Return exactly two lines
+        return { ok: true, errors: [], summary: [line1, line2].join('\n') };
       }
 
       // First block
@@ -464,15 +494,20 @@
         const startDate = startDateInput.value;
         const interval = intervalInput.value || '1';
 
-        if (!startDate) errors.push('Start Date is required.');
+        if (!startDate) {
+          errors.push('Start Date is required.');
+        }
 
         const blocks = getTaskBlocks();
         const taskSummaries = [];
 
         blocks.forEach((block, i) => {
           const res = validateAndBuildSummaryForBlock(block, i + 1);
-          if (!res.ok) errors.push(...res.errors);
-          else taskSummaries.push(res.summary);
+          if (!res.ok) {
+            errors.push(...res.errors);
+          } else {
+            taskSummaries.push(res.summary);
+          }
         });
 
         if (errors.length > 0) {
