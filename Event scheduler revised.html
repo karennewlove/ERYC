@@ -201,11 +201,17 @@
       <!-- Period (for flexible only) -->
       <div class="section periodSection" style="display:none;">
         <div class="section-title">Daily schedule period:</div>
-        <div class="period-grid">
-          <label><input type="checkbox" value="Morning"> Morning</label>
-          <label><input type="checkbox" value="Lunch"> Lunch</label>
-          <label><input type="checkbox" value="Etc"> ETC</label>
-        </div>
+        
+<div class="period-grid">
+  <label><input type="checkbox" value="Morning"> Morning</label>
+  <label><input type="checkbox" value="Mid Morning"> Mid Morning</label>
+  <label><input type="checkbox" value="Lunch"> Lunch</label>
+  <label><input type="checkbox" value="Mid afternoon"> Mid afternoon</label>
+  <label><input type="checkbox" value="Tea"> Tea</label>
+  <label><input type="checkbox" value="Bedtime"> Bedtime</label>
+  <label><input type="checkbox" value="Daily schedule arranged with person"> Daily schedule arranged with person</label>
+</div>
+
         <div class="small-label">
           Only relevant for flexible / outcomes-based schedules.
         </div>
@@ -377,6 +383,14 @@
         }
         clone.getSelectedDaysForBlock = getSelectedDaysForBlock;
 
+        function getSelectedPeriodsForBlock() {
+          const selected = [];
+          const boxes = clone.querySelectorAll('.periodSection input[type=checkbox]');
+          boxes.forEach(cb => { if (cb.checked) selected.push(cb.value); });
+          return selected;
+        }
+        clone.getSelectedPeriodsForBlock = getSelectedPeriodsForBlock;
+
         // Copy values from last block if requested
         if (copyFromLast && tasksContainer.lastElementChild) {
           const last = tasksContainer.lastElementChild;
@@ -514,7 +528,13 @@
           text += ' (' + numCarersInput.value + ' carers)';
         }
 
-        if (selectedOutcomes.length > 0) {
+        if (isFlexible) {
+        const periods = block.getSelectedPeriodsForBlock ? block.getSelectedPeriodsForBlock() : [];
+        if (periods.length > 0) {
+          text += ' – ' + periods.join(', ');
+        }
+      }
+      if (selectedOutcomes.length > 0) {
           text += ' – ' + selectedOutcomes.join(', ');
         }
 
