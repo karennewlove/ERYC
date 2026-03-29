@@ -414,17 +414,29 @@
         return;
       }
 
-      // Convert single-line schedule string into HTML with <br> before bullets
-      let scheduleHtml = scheduleRaw;
-      const parts = scheduleRaw.split('•');
-      if (parts.length > 1) {
-        const header = parts[0].trim();
-        const bullets = parts
-          .slice(1)
-          .map(p => '• ' + p.trim())
-          .join('<br>');
-        scheduleHtml = header + '<br>' + bullets;
-      }
+    
+// Convert schedule string into HTML with Outcome on new line
+// and a blank line between each schedule
+let scheduleHtml = scheduleRaw;
+const parts = scheduleRaw.split('•');
+
+if (parts.length > 1) {
+  const header = parts[0].trim();
+
+  const bullets = parts.slice(1).map(p => {
+    let text = p.trim();
+
+    // Force Outcome onto its own line
+    text = text.replace(/\)\s*Outcome:/g, ')<br>Outcome:');
+
+    // Return bullet with Outcome on new line
+    return '• ' + text;
+  });
+
+  // Join bullets with a blank line between each
+  scheduleHtml = header + '<br>' + bullets.join('<br><br>');
+}
+
 
       if (mode === 'edit' && editIndex !== null) {
         const row = specBody.rows[editIndex];
