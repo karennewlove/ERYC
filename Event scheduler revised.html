@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Service Request – Service Specification</title>
+  <title>Event Scheduler</title>
   <style>
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -11,239 +11,168 @@
       margin: 20px;
       background-color: #ffffff;
     }
-
-    .container {
+    .scheduler-container {
       border: 1px solid #c2cbd3;
       border-radius: 2px;
-      max-width: 1200px;
+      max-width: 700px;
     }
-
-    .main-header,
-    .section-header {
+    .scheduler-header {
       background-color: #1f4e79;
       color: #ffffff;
       padding: 6px 12px;
       font-weight: 600;
+      font-size: 14px;
     }
-
-    .section-header {
-      font-size: 13px;
+    .scheduler-body {
+      padding: 8px 12px 12px;
     }
-
-    .table-wrapper {
-      padding: 8px 12px;
-    }
-
-    table {
+    .section { margin-bottom: 8px; }
+    .section-title { font-weight: 600; margin-bottom: 4px; }
+    label { font-size: 12px; }
+    .required-star { color: #c00000; }
+    textarea {
       width: 100%;
-      border-collapse: collapse;
+      min-height: 40px;
       font-size: 12px;
     }
-
-    th, td {
-      padding: 4px 6px;
-      border-bottom: 1px solid #e1e5ea;
-      vertical-align: top;
-      white-space: pre-wrap; /* ✅ preserve newlines */
+    .task-block {
+      border: 1px solid #dde6f1;
+      padding: 8px;
+      margin-bottom: 8px;
+      background-color: #f8fbff;
     }
-
-    thead th {
-      background-color: #dde6f1;
+    .task-header {
       font-weight: 600;
-      text-align: left;
-    }
-
-    .actions {
-      padding: 8px 12px;
-      border-top: 1px solid #c2cbd3;
-      background-color: #f7f9fc;
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    button {
-      background-color: #e1e5ea;
-      border: 1px solid #c2cbd3;
-      padding: 4px 8px;
-      font-size: 12px;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #ccd2dc;
-    }
-
-    .band-link {
-      color: #0066cc;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .form-panel {
-      border-top: 1px solid #c2cbd3;
-      background-color: #f4f7fb;
-      padding: 8px 12px 10px;
-      display: none;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 6px 12px;
-      font-size: 12px;
-    }
-
-    .required-star {
-      color: #c00000;
-    }
-
-    .schedule-input-wrapper {
-      display: flex;
-      gap: 4px;
-      align-items: stretch;
-    }
-
-    /* ✅ Schedule is now multiline */
-    #schedule {
-      width: 100%;
-      min-height: 80px;
-      resize: vertical;
-      font-size: 12px;
-      padding: 4px;
-      white-space: pre-wrap;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-dialog {
-      background: #ffffff;
-      border-radius: 3px;
-      width: 760px;
-      max-width: 95vw;
-      max-height: 95vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-header {
-      background-color: #1f4e79;
-      color: #ffffff;
-      padding: 6px 10px;
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .modal-body iframe {
-      width: 100%;
-      height: 520px;
-      border: none;
+      margin-bottom: 4px;
+      color: #1f4e79;
     }
   </style>
 </head>
 
 <body>
-<div class="container">
+<div class="scheduler-container">
+  <div class="scheduler-header">Event Scheduler</div>
+  <div class="scheduler-body">
 
-  <div class="main-header">Service Request – Service Specification</div>
-
-  <div class="section-header">Service specification</div>
-
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Select</th>
-          <th>Active</th>
-          <th>Service type</th>
-          <th>Service Band Group</th>
-          <th>Schedule</th>
-          <th>Quantity</th>
-          <th>Unit</th>
-        </tr>
-      </thead>
-      <tbody id="specBody"></tbody>
-    </table>
-  </div>
-
-  <div class="actions">
-    <button id="btnAddRow">Add service</button>
-  </div>
-
-  <div class="form-panel" id="formPanel">
-    <div class="form-grid">
-
-      <label>Service Band Group<span class="required-star">*</span></label>
-      <select id="bandGroup">
-        <option value="">(select)</option>
-        <option>Standard</option>
-        <option>Medication Calls</option>
-      </select>
-
-      <label>Schedule<span class="required-star">*</span></label>
-      <div class="schedule-input-wrapper">
-        <textarea id="schedule" readonly></textarea>
-        <button type="button" id="btnOpenScheduler">...</button>
-      </div>
-
-      <label>Quantity<span class="required-star">*</span></label>
-      <input type="number" id="quantity" step="0.25">
-
-      <label>Unit<span class="required-star">*</span></label>
-      <select id="unit">
-        <option value="">(select)</option>
-        <option>Hours</option>
-        <option>Days</option>
-      </select>
-
+    <div class="section">
+      <label>Start Date:</label>
+      <input type="date" id="startDate">
+      <label style="margin-left:20px;">Interval:</label>
+      <input type="number" id="interval" value="1" min="1">
     </div>
-    <div class="actions">
-      <button id="btnCancel">Cancel</button>
-      <button id="btnApply">Save</button>
+
+    <div id="tasksContainer"></div>
+
+    <div class="section" style="text-align:right;">
+      <button id="btnAddTask">+</button>
+      <button id="btnSave">Save</button>
     </div>
   </div>
 </div>
 
-<!-- ✅ Scheduler Modal -->
-<div class="modal-overlay" id="schedulerModal">
-  <div class="modal-dialog">
-    <div class="modal-header">
-      <span>Schedule details</span>
-      <button id="btnCloseScheduler">✕</button>
+<template id="taskTemplate">
+  <div class="task-block">
+    <div class="task-header"></div>
+
+    <label>
+      <input type="radio" class="schedTimeCritical"> Time critical
+    </label>
+    <label>
+      <input type="radio" class="schedFlexible"> Flexible
+    </label>
+
+    <div>
+      <label>Number of carers*</label>
+      <input type="number" class="numCarers" min="1">
     </div>
-    <div class="modal-body">
-      <iframe src="Event scheduler revised.html"></iframe>
+
+    <div>
+      <label>Days*</label><br>
+      <label><input type="checkbox" class="day" value="Everyday"> Everyday</label>
+      <label><input type="checkbox" class="day" value="Sun"> Sun</label>
+      <label><input type="checkbox" class="day" value="Mon"> Mon</label>
+      <label><input type="checkbox" class="day" value="Tue"> Tue</label>
+      <label><input type="checkbox" class="day" value="Wed"> Wed</label>
+      <label><input type="checkbox" class="day" value="Thu"> Thu</label>
+      <label><input type="checkbox" class="day" value="Fri"> Fri</label>
+      <label><input type="checkbox" class="day" value="Sat"> Sat</label>
+    </div>
+
+    <div>
+      <label>Start time</label>
+      <input type="time" class="startTime">
+      <label>End time</label>
+      <input type="time" class="endTime">
+    </div>
+
+    <div>
+      <label>Duration (hours)</label>
+      <input type="number" class="duration" step="0.25">
+    </div>
+
+    <div>
+      <label>Outcome category*</label><br>
+      <label><input type="checkbox" class="outcome" value="Personal Care"> Personal Care</label>
+      <label><input type="checkbox" class="outcome" value="Medication"> Medication</label>
+    </div>
+
+    <div>
+      <label>Outcome*</label>
+      <textarea class="outcomeText"></textarea>
     </div>
   </div>
-</div>
+</template>
 
 <script>
 (function () {
-  const scheduleInput = document.getElementById('schedule');
-  const modal = document.getElementById('schedulerModal');
+  const tasksContainer = document.getElementById('tasksContainer');
+  const template = document.getElementById('taskTemplate');
+  const btnAddTask = document.getElementById('btnAddTask');
+  const btnSave = document.getElementById('btnSave');
+  let taskCount = 0;
 
-  document.getElementById('btnOpenScheduler').onclick = () => modal.classList.add('active');
-  document.getElementById('btnCloseScheduler').onclick = () => modal.classList.remove('active');
-  document.getElementById('btnCancel').onclick = () => modal.classList.remove('active');
+  function addTask() {
+    taskCount++;
+    const clone = template.content.cloneNode(true);
+    clone.querySelector('.task-header').textContent = 'Task ' + taskCount;
+    tasksContainer.appendChild(clone);
+  }
 
-  /* ✅ This receives the scheduler output INCLUDING Outcome line */
-  window.receiveScheduleFromModal = function (scheduleText) {
-    scheduleInput.value = scheduleText;
-    modal.classList.remove('active');
+  function buildTaskSummary(block) {
+    const days = [...block.querySelectorAll('.day:checked')].map(d => d.value).join('–');
+    const carers = block.querySelector('.numCarers').value;
+    const start = block.querySelector('.startTime').value;
+    const end = block.querySelector('.endTime').value;
+    const duration = block.querySelector('.duration').value;
+    const outcomes = [...block.querySelectorAll('.outcome:checked')].map(o => o.value).join(', ');
+    const outcomeText = block.querySelector('.outcomeText').value.trim().replace(/\s+/g, ' ');
+    const isTimeCritical = block.querySelector('.schedTimeCritical').checked;
+
+    let text = `${days} ${start} to ${end} (${duration} hours, ${carers} carers) – ${outcomes}`;
+    text += isTimeCritical ? ' (Time-critical)' : ' (Flexible)';
+    text += `\n  Outcome: ${outcomeText}`;
+    return text;
+  }
+
+  btnAddTask.onclick = addTask;
+  addTask();
+
+  btnSave.onclick = function () {
+    const startDate = document.getElementById('startDate').value;
+    const interval = document.getElementById('interval').value || '1';
+    const tasks = [...document.querySelectorAll('.task-block')];
+
+    const taskSummaries = tasks.map(buildTaskSummary);
+
+    const summary =
+      `From ${startDate} every ${interval === '1' ? 'week' : interval + ' weeks'}:\n` +
+      taskSummaries.map(t => '• ' + t).join('\n\n'); // ✅ WHITE LINE SPACING
+
+    if (window.parent?.receiveScheduleFromModal) {
+      window.parent.receiveScheduleFromModal(summary);
+    } else {
+      alert(summary);
+    }
   };
 })();
 </script>
