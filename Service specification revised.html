@@ -414,29 +414,27 @@
         return;
       }
 
-    
-// Convert schedule string into HTML with Outcome on new line
-// and a blank line between each schedule
-let scheduleHtml = scheduleRaw;
-const parts = scheduleRaw.split('•');
-
-if (parts.length > 1) {
-  const header = parts[0].trim();
-
-  const bullets = parts.slice(1).map(p => {
-    let text = p.trim();
-
-    // Force Outcome onto its own line
-    text = text.replace(/\)\s*Outcome:/g, ')<br>Outcome:');
-
-    // Return bullet with Outcome on new line
-    return '• ' + text;
-  });
-
-  // Join bullets with a blank line between each
-  scheduleHtml = header + '<br>' + bullets.join('<br><br>');
-}
-
+      // Convert schedule string into HTML with Outcome on a new line and a blank line after each schedule
+      let scheduleHtml = scheduleRaw;
+      const parts = scheduleRaw.split('•');
+      if (parts.length > 1) {
+        const header = parts[0].trim();
+        const bullets = parts
+          .slice(1)
+          .map(p => {
+            let t = p.trim();
+            // Force Outcome onto its own line (handles variants like ") Outcome:" and "(Time-critical) Outcome:")
+            t = t.replace(/\)\s*Outcome:/g, ')<br>&nbsp;&nbsp;Outcome:');
+            t = t.replace(/\(Time-critical\)\s*Outcome:/g, '(Time-critical)<br>&nbsp;&nbsp;Outcome:');
+            t = t.replace(/\(Flexible\)\s*Outcome:/g, '(Flexible)<br>&nbsp;&nbsp;Outcome:');
+            // Fallback: move any remaining inline Outcome to a new line
+            t = t.replace(/\s+Outcome:/g, '<br>&nbsp;&nbsp;Outcome:');
+            return '• ' + t;
+          })
+          // Blank line between each schedule
+          .join('<br><br>');
+        scheduleHtml = header + '<br>' + bullets;
+      }
 
       if (mode === 'edit' && editIndex !== null) {
         const row = specBody.rows[editIndex];
@@ -549,35 +547,15 @@ if (parts.length > 1) {
     scheduleInput.addEventListener('click', openSchedulerModal);
     btnCloseScheduler.addEventListener('click', closeSchedulerModal);
 
-   
-window.receiveScheduleFromModal = function (scheduleText) {
-  if (scheduleText) {
-    let s = String(scheduleText);
-
-    // Normalise line endings
-    s = s.replace(/\r\n/g, '\n');
-
-    // 1️⃣ Force Outcome onto its own line if returned inline
-    // e.g. "... (Time-critical) Outcome: xyz"
-    s = s.replace(/\)\s*Outcome:/g, ')\nOutcome:');
-
-    // 2️⃣ Ensure each bullet starts on its own line
-    // (protect the header line before the first bullet)
-    s = s.replace(/:\n\s*•/g, ':\n•');
-
-    // 3️⃣ Add a blank line between each schedule/bullet
-    s = s.replace(/\n•/g, '\n\n•');
-
-    scheduleInput.value = s;
-  }
-
-  closeSchedulerModal();
-};
-
+    window.receiveScheduleFromModal = function (scheduleText) {
+      if (scheduleText) {
+        scheduleInput.value = scheduleText;
+      }
+      closeSchedulerModal();
+    };
 
     bindBandLinks();
   })();
 </script>
 </body>
 </html>
-``
