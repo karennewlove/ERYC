@@ -537,12 +537,31 @@
     scheduleInput.addEventListener('click', openSchedulerModal);
     btnCloseScheduler.addEventListener('click', closeSchedulerModal);
 
-    window.receiveScheduleFromModal = function (scheduleText) {
-      if (scheduleText) {
-        scheduleInput.value = scheduleText;
-      }
-      closeSchedulerModal();
-    };
+   
+window.receiveScheduleFromModal = function (scheduleText) {
+  if (scheduleText) {
+    let s = String(scheduleText);
+
+    // Normalise line endings
+    s = s.replace(/\r\n/g, '\n');
+
+    // 1️⃣ Force Outcome onto its own line if returned inline
+    // e.g. "... (Time-critical) Outcome: xyz"
+    s = s.replace(/\)\s*Outcome:/g, ')\nOutcome:');
+
+    // 2️⃣ Ensure each bullet starts on its own line
+    // (protect the header line before the first bullet)
+    s = s.replace(/:\n\s*•/g, ':\n•');
+
+    // 3️⃣ Add a blank line between each schedule/bullet
+    s = s.replace(/\n•/g, '\n\n•');
+
+    scheduleInput.value = s;
+  }
+
+  closeSchedulerModal();
+};
+
 
     bindBandLinks();
   })();
