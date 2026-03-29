@@ -457,6 +457,20 @@ clone.getSelectedPeriodsForBlock = getSelectedPeriodsForBlock;
         const isTimeCritical = timeCriticalRadio.checked;
         const isFlexible = flexibleRadio.checked;
         const isTimeAndTask = timeAndTaskRadio && timeAndTaskRadio.checked;
+        
+// ✅ Daily schedule period must be selected for Flexible schedules
+if (isFlexible) {
+  const periodChecked = block.querySelectorAll(
+    '.periodSection input[type="checkbox"]:checked'
+  );
+
+  if (!periodChecked || periodChecked.length === 0) {
+    errors.push(
+      `Task ${index}: Select at least one Daily schedule period.`
+    );
+  }
+}
+
  // Update category label depending on schedule type
  if (categoryLabel) {
    categoryLabel.textContent = isTimeAndTask ? 'Task category' : 'Outcome category';
