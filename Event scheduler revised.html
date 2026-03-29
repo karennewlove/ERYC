@@ -579,6 +579,7 @@ return { ok: true, errors: [], summary: text };
       });
 
       btnSave.addEventListener('click', function () {
+        alert('Save handler fired');
         const errors = [];
         const startDate = startDateInput.value;
         const interval = intervalInput.value || '1';
