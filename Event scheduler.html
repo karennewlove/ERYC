@@ -116,12 +116,19 @@
     <div class="scheduler-body">
       <!-- Global Frequency / Dates -->
       <div class="section">
-        <div class="row">
-          <label class="inline-label">Frequency:</label>
-          <span>Weekly</span>
-          <label class="inline-label" style="margin-left:20px;">Interval:</label>
-          <input type="number" id="interval" value="1" min="1">
-        </div>
+        
+<div class="row">
+  <label class="inline-label">Frequency<span class="required-star">*</span>:</label>
+  <select id="frequency">
+    <option value="1">Weekly</option>
+    <option value="2">Every two weeks</option>
+    <option value="3">Every three weeks</option>
+    <option value="4">Every four weeks</option>
+  </select>
+  <!-- kept for backwards compatibility; driven by the dropdown -->
+  <input type="number" id="interval" value="1" min="1" max="4" style="display:none;">
+</div>
+
         <div class="row">
           <label class="inline-label">Start Date:</label>
           <input type="date" id="startDate">
@@ -290,6 +297,16 @@
       const errorSummary = document.getElementById('errorSummary');
       const startDateInput = document.getElementById('startDate');
       const intervalInput = document.getElementById('interval');
+ const frequencySelect = document.getElementById('frequency');
+
+ // Keep hidden interval in sync with Frequency dropdown
+ if (frequencySelect) {
+   intervalInput.value = frequencySelect.value || '1';
+   frequencySelect.addEventListener('change', function () {
+     intervalInput.value = frequencySelect.value || '1';
+   });
+ }
+
 
       let taskCount = 0;
 
@@ -569,7 +586,8 @@ function validateAndBuildSummaryForBlock(block, index) {
         
         const errors = [];
         const startDate = startDateInput.value;
-        const interval = intervalInput.value || '1';
+ const freqVal = (frequencySelect ? frequencySelect.value : intervalInput.value) || '1';
+        const interval = freqVal;
 
         if (!startDate) {
           errors.push('Start Date is required.');
@@ -596,7 +614,8 @@ function validateAndBuildSummaryForBlock(block, index) {
         errorSummary.style.display = 'none';
 
         let header = 'From ' + startDate;
-        header += ' every ' + (interval === '1' ? 'week' : interval + ' weeks');
+const freqText = (frequencySelect && frequencySelect.selectedOptions && frequencySelect.selectedOptions[0]) ? frequencySelect.selectedOptions[0].textContent : (interval === '1' ? 'Weekly' : ('Every ' + interval + ' weeks'));
+header += ' – ' + freqText;
 
         const summary = header + ':\n' + taskSummaries.map(t => '• ' + t).join('\n');
 
