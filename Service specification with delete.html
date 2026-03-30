@@ -488,28 +488,25 @@
 
     
  // Delete selected records
- if (btnDeleteSel) {
-   btnDeleteSel.addEventListener('click', function () {
-     const rows = Array.from(specBody.rows);
-     const toDelete = rows.filter(r => {
-       const cb = r.querySelector('.row-select');
-       return cb && cb.checked;
-     });
-
-     if (toDelete.length === 0) {
-       alert('Please select at least one line to delete.');
-       return;
-     }
-
-     const ok = confirm('Delete ' + toDelete.length + ' selected record' + (toDelete.length === 1 ? '' : 's') + '?');
-     if (!ok) return;
-
-     toDelete.forEach(r => r.remove());
-
-     // Rebind band links because indices change when rows are removed
-     bindBandLinks();
+ btnDeleteSel && btnDeleteSel.addEventListener('click', function () {
+   const rows = Array.from(specBody.rows);
+   const selectedRows = rows.filter(r => {
+     const cb = r.querySelector('.row-select');
+     return cb && cb.checked;
    });
- }
+
+   if (selectedRows.length === 0) {
+     alert('Please select at least one line to delete.');
+     return;
+   }
+
+   if (!confirm('Delete ' + selectedRows.length + ' selected record' + (selectedRows.length === 1 ? '' : 's') + '?')) {
+     return;
+   }
+
+   selectedRows.forEach(r => r.remove());
+   bindBandLinks();
+ });
 
 btnCopySel.addEventListener('click', function () {
       const rows = Array.from(specBody.rows);
