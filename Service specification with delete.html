@@ -1,4 +1,4 @@
-console.log('LOADED VERSION: delete-working v2');
+console.log('LOADED VERSION: delete-working v3');
 
 <!DOCTYPE html>
 <html lang="en">
@@ -193,6 +193,7 @@ console.log('LOADED VERSION: delete-working v2');
   </style>
 </head>
 <body>
+<div style="font-size:11px;color:#666;margin-bottom:6px;">LOADED VERSION: delete-working v1</div>
 <div class="container">
   <div class="main-header">
     Service Request – Service Specification
@@ -249,8 +250,8 @@ console.log('LOADED VERSION: delete-working v2');
     </p>
 
     <div class="actions">
-      <button type=\"button\" id=\"btnDeleteSelected\">Delete selected records</button>
- <button type=\"button\" id=\"btnCopySelected\">Copy selected</button>
+      <button type="button" id="btnDeleteSelected">Delete selected records</button>
+ <button type="button" id="btnCopySelected">Copy selected</button>
       <button type="button" id="btnAddRow">Add service</button>
     </div>
 
@@ -326,7 +327,7 @@ console.log('LOADED VERSION: delete-working v2');
       <button type="button" id="btnCloseScheduler" aria-label="Close">✕</button>
     </div>
     <div class="modal-body">
-      <iframe id="schedulerFrame" src="Event scheduler revised.html"></iframe>
+      <iframe id="schedulerFrame" src="Event scheduler.html"></iframe>
     </div>
   </div>
 </div>
@@ -338,6 +339,7 @@ console.log('LOADED VERSION: delete-working v2');
     const formTitle = document.getElementById('formTitle');
     const btnAddRow = document.getElementById('btnAddRow');
     const btnCopySel = document.getElementById('btnCopySelected');
+ const btnDeleteSel = document.getElementById('btnDeleteSelected');
     const btnCancel = document.getElementById('btnCancel');
     const btnApply = document.getElementById('btnApply');
     const serviceTypeInput = document.getElementById('serviceType');
@@ -486,7 +488,29 @@ console.log('LOADED VERSION: delete-working v2');
       closeForm();
     });
 
-    btnCopySel.addEventListener('click', function () {
+    
+ // Delete selected records
+ btnDeleteSel && btnDeleteSel.addEventListener('click', function () {
+   const rows = Array.from(specBody.rows);
+   const selectedRows = rows.filter(r => {
+     const cb = r.querySelector('.row-select');
+     return cb && cb.checked;
+   });
+
+   if (selectedRows.length === 0) {
+     alert('Please select at least one line to delete.');
+     return;
+   }
+
+   if (!confirm('Delete ' + selectedRows.length + ' selected record' + (selectedRows.length === 1 ? '' : 's') + '?')) {
+     return;
+   }
+
+   selectedRows.forEach(r => r.remove());
+   bindBandLinks();
+ });
+
+btnCopySel.addEventListener('click', function () {
       const rows = Array.from(specBody.rows);
       let copiedAny = false;
 
@@ -538,34 +562,7 @@ console.log('LOADED VERSION: delete-working v2');
       bindBandLinks();
     });
 
-    
-
- // Delete selected records (CMS prototype behaviour)
- if (btnDeleteSel) {
-   btnDeleteSel.addEventListener('click', function () {
-     const rows = Array.from(specBody.rows);
-     const selected = rows.filter(row => {
-       const cb = row.querySelector('.row-select');
-       return cb && cb.checked;
-     });
-
-     if (selected.length === 0) {
-       alert('Please select at least one line to delete.');
-       return;
-     }
-
-     if (!confirm('Delete ' + selected.length + ' selected record' + (selected.length === 1 ? '' : 's') + '?')) {
-       return;
-     }
-
-     selected.forEach(row => row.remove());
-
-     // Rebind links because row indexes change
-     bindBandLinks();
-   });
- }
-
-function openSchedulerModal() {
+    function openSchedulerModal() {
       schedulerModal.classList.add('active');
     }
     function closeSchedulerModal() {
