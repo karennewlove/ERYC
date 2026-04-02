@@ -14,7 +14,7 @@
 
     /* Page container – narrower, centred */
     .page-container {
-        max-width: 650px;  /* about half-screen width */
+        max-width: 1000px;  /* about half-screen width */
         margin: 20px auto;
         padding: 0 10px;
         box-sizing: border-box;
@@ -289,10 +289,22 @@
     /* Framework switching */
     .row-framework[data-framework="closed"] { display: table-row; }
     .row-framework[data-framework="apl"] { display: none; }
+
+/* Service Specification table column sizing */
+.service-spec-table { table-layout: fixed; }
+.service-spec-table th:nth-child(1), .service-spec-table td:nth-child(1) { width: 10%; }
+.service-spec-table th:nth-child(2), .service-spec-table td:nth-child(2) { width: 14%; }
+.service-spec-table th:nth-child(3), .service-spec-table td:nth-child(3) { width: 58%; white-space: normal;} /* Schedule widest */
+.service-spec-table th:nth-child(4), .service-spec-table td:nth-child(4) { width: 14%; }
+.service-spec-table th:nth-child(5), .service-spec-table td:nth-child(5) { width: 6%; text-align:right; }
+.service-spec-table th:nth-child(6), .service-spec-table td:nth-child(6) { width: 6%; }
+.service-spec-table th:nth-child(7), .service-spec-table td:nth-child(7) { width: 12%; }
+
 </style>
 </head>
 <body>
 <div class="page-container">
+<div style="text-align:center;font-weight:600;margin:6px 0 10px;">Homecare Example (Hourly Service)</div>
 
     <!-- Provider Details -->
     <div class="section">
@@ -324,32 +336,14 @@
     <div class="section">
         <div class="section-header">Service Specification</div>
         <div class="section-body">
-            <table>
+            <table class=\"service-spec-table\">
                 <thead>
-                    <tr>
-                        <th>Service Type</th>
-                        <th>Service Package</th>
-                        <th>Schedule</th>
-                        <th>Cost</th>
-                        <th>Time critical</th>
-                    </tr>
-                </thead>
+<tr><th>Service Type</th><th>Service Package</th><th>Schedule</th><th>Amended Schedule</th><th>Quantity</th><th>Unit</th><th>Cost / Rates</th></tr>
+</thead>
                 <tbody>
-                    <tr>
-                        <td>Closed Framework Beverley Zone 1</td>
-                        <td>Standard</td>
-                        <td>From 13/10/2025 every week, every day 09:00 and 20:00 (0.5 hours each)</td>
-                        <td>£19.50 hourly, £136.00 weekly</td>
-                        <td>(indicator)</td>
-                    </tr>
-                    <tr>
-                        <td>Closed Framework Beverley Zone 1</td>
-                        <td>Medication</td>
-                        <td>From 13/10/2025 every week, every day 12:00 (0.25 hours)</td>
-                        <td>£25.00 hourly, £43.75 weekly</td>
-                        <td>(indicator)</td>
-                    </tr>
-                </tbody>
+<tr><td>Homecare closed framework</td><td>Standard</td><td>From 2025-10-13 – Weekly)<br>Everyday (0.5 hours, 1 carers) – Morning – Personal Care, Assistance with meals<br>(Flexible)<br>Outcome: Help to get washed and dressed and have some breakfast<br><br>Everyday (0.5 hours, 1 carers) – Lunch – Personal Care, Assistance with meals<br>(Flexible)<br>Outcome: Help to get make some lunch and hang out laundry<br><br>Everyday (0.5 hours, 1 carers) – Bedtime – Personal Care, Assistance with meals<br>(Flexible)<br>Outcome: Help to get ready for bed</td><td></td><td>10.5</td><td>Hours</td><td>£19.50 hourly, £204.75 weekly</td></tr>
+<tr><td>Homecare closed framework</td><td>Medication Calls</td><td>From 2025-10-13 – Weekly)<br>Everyday 08:00 to 08:30 (0.25 hours, 1 carers) – Medication<br>(Time-critical)<br>Outcome: Give me my parkinsons medication<br><br>Everyday 12:30 to 12:45 (0.25 hours, 1 carers) – Medication<br>(Time-critical)<br>Outcome: Give me my parkinsons medication<br><br>Everyday 16:00 to 16:30 (0.5 hours, 1 carers) – Medication<br>(Time-critical)<br>Outcome: Give me my parkinsons medication</td><td></td><td>5.25</td><td>Hours</td><td>£25.00 hourly, £131.25 weekly</td></tr>
+</tbody>
             </table>
         </div>
     </div>
