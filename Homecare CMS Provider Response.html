@@ -398,7 +398,7 @@
                 <button type="button">Message provider</button>
                 <button type="button">Return to provider shortlist</button>
                 <button type="button" id="btnMarkShortlisted">Mark as shortlisted</button>
-                <button type="button" id="btnReadyFinal">Ready for final confirmation</button>
+                <button type="button" id="btnReadyFinal">Send final confirmation</button>
                 <button type="button">Request provider assessment</button>
                 <button type="button" id="btnMarkAwarded">Mark as awarded</button>
             </div>
@@ -573,7 +573,7 @@
     responseSelect.addEventListener('change', updateResponseVisibility);
     updateResponseVisibility();
 
-    // ----- Shortlist / Award / Ready for final confirmation -----
+    // ----- Shortlist / Award / Send final confirmation -----
     var shortlistStatusSpan = document.getElementById('providerShortlistStatus');
     var finalStatusSpan = document.getElementById('finalConfirmationStatus');
     var btnMarkShortlisted = document.getElementById('btnMarkShortlisted');
@@ -594,7 +594,7 @@
 
     btnReadyFinal.addEventListener('click', function () {
         if (window.confirm('Are you sure you want to set this request as ready for final confirmation?')) {
-            shortlistStatusSpan.textContent = "Ready for final confirmation";
+            shortlistStatusSpan.textContent = "Send final confirmation";
         }
     });
 
