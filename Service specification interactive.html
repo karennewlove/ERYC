@@ -449,7 +449,13 @@ Outcome: Give me my parkinsons medication</td>
       }
 
       // Convert schedule string into HTML with Outcome on a new line and a blank line after each schedule
-     let scheduleHtml = scheduleHtmlRaw;
+     
+let scheduleHtml = scheduleRaw
+  .split('\n')
+  .map(l => l.trim())
+  .filter(l => l !== '')
+  .join('<br>');
+
       const parts = scheduleRaw.split('•');
       if (parts.length > 1) {
         const header = parts[0].trim();
