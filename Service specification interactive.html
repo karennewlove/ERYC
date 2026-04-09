@@ -453,22 +453,24 @@ Outcome: Give me my parkinsons medication</td>
 
 
 
+
 let scheduleHtml = scheduleRaw;
 
-// 1. Normalise any real line breaks
+// Normalise real line breaks
 scheduleHtml = scheduleHtml.replace(/\r\n|\r|\n/g, '<br>');
 
-// 2. Force a break BEFORE every 'Everyday'
+// Break before each task
 scheduleHtml = scheduleHtml.replace(/\s*(Everyday\b)/g, '<br>$1');
 
-// 3. Force a break between ')' and 'Outcome:'
-//    Handles '(Time-critical)Outcome:' with no space
+// Ensure Time‑critical / Flexible are on their own line
+scheduleHtml = scheduleHtml
+  .replace(/(<br>\s*)?(\(Time-critical\))/g, '<br>$2')
+  .replace(/(<br>\s*)?(\(Flexible\))/g, '<br>$2');
+
+// ONLY split Outcome when it is glued to the qualifier
 scheduleHtml = scheduleHtml.replace(/\)\s*Outcome:/g, ')<br>Outcome:');
 
-// 4. Force Outcome onto its own line in all cases
-scheduleHtml = scheduleHtml.replace(/\s*Outcome:/g, '<br>Outcome:');
-
-// 5. Add a BLANK LINE after each Outcome block
+// Add blank line AFTER each Outcome (only place blank lines appear)
 scheduleHtml = scheduleHtml.replace(
   /Outcome:([^<]*)(?=<br>\s*Everyday\b|$)/g,
   function (_m, text) {
@@ -476,10 +478,11 @@ scheduleHtml = scheduleHtml.replace(
   }
 );
 
-// 6. Tidy up (keep exactly one blank line)
+// Cleanup
 scheduleHtml = scheduleHtml
   .replace(/^<br>/, '')
-  .replace(/(<br>\s*){3,}/g, '<br><br>')
+  .replace(/(<br>\s*){3,}/g, '<br><br>');
+
 
       if (mode === 'edit' && editIndex !== null) {
         const row = specBody.rows[editIndex];
