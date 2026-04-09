@@ -449,32 +449,37 @@ Outcome: Give me my parkinsons medication</td>
       }
 
       // Convert schedule string into HTML with Outcome on a new line and a blank line after each schedule
-     
-let scheduleHtml = scheduleRaw
-  .split('\n')
-  .map(l => l.trim())
-  .filter(l => l !== '')
-  .join('<br>');
 
-      const parts = scheduleRaw.split('•');
-      if (parts.length > 1) {
-        const header = parts[0].trim();
-        const bullets = parts
-          .slice(1)
-          .map(p => {
-            let t = p.trim();
-            // Force Outcome onto its own line (handles variants like ") Outcome:" and "(Time-critical) Outcome:")
-            t = t.replace(/\)\s*Outcome:/g, ')<br>&nbsp;&nbsp;Outcome:');
-            t = t.replace(/\(Time-critical\)\s*Outcome:/g, '(Time-critical)<br>&nbsp;&nbsp;Outcome:');
-            t = t.replace(/\(Flexible\)\s*Outcome:/g, '(Flexible)<br>&nbsp;&nbsp;Outcome:');
-            // Fallback: move any remaining inline Outcome to a new line
-            t = t.replace(/\s+Outcome:/g, '<br>&nbsp;&nbsp;Outcome:');
-            return '• ' + t;
-          })
-          // Blank line between each schedule
-          .join('<br><br>');
-        scheduleHtml = header + '<br>' + bullets;
-      }
+
+
+
+let scheduleHtml = scheduleRaw;
+
+// 1. Normalise any real line breaks
+scheduleHtml = scheduleHtml.replace(/\r\n|\r|\n/g, '<br>');
+
+// 2. Force a break BEFORE every 'Everyday'
+scheduleHtml = scheduleHtml.replace(/\s*(Everyday\b)/g, '<br>$1');
+
+// 3. Force a break between ')' and 'Outcome:'
+//    Handles '(Time-critical)Outcome:' with no space
+scheduleHtml = scheduleHtml.replace(/\)\s*Outcome:/g, ')<br>Outcome:');
+
+// 4. Force Outcome onto its own line in all cases
+scheduleHtml = scheduleHtml.replace(/\s*Outcome:/g, '<br>Outcome:');
+
+// 5. Add a BLANK LINE after each Outcome block
+scheduleHtml = scheduleHtml.replace(
+  /Outcome:([^<]*)(?=<br>\s*Everyday\b|$)/g,
+  function (_m, text) {
+    return 'Outcome: ' + text.trim() + '<br><br>';
+  }
+);
+
+// 6. Tidy up (keep exactly one blank line)
+scheduleHtml = scheduleHtml
+  .replace(/^<br>/, '')
+  .replace(/(<br>\s*){3,}/g, '<br><br>')
 
       if (mode === 'edit' && editIndex !== null) {
         const row = specBody.rows[editIndex];
