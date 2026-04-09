@@ -439,6 +439,7 @@ Outcome: Give me my parkinsons medication</td>
       const serviceType = serviceTypeInput.value.trim();
       const band = bandInput.value.trim();
       const scheduleRaw = scheduleInput.value.trim();
+      const scheduleHtmlRaw = scheduleRaw.replace(/\n/g, '<br>');
       const quantity = quantityInput.value.trim();
       const unit = unitInput.value.trim();
 
@@ -448,7 +449,7 @@ Outcome: Give me my parkinsons medication</td>
       }
 
       // Convert schedule string into HTML with Outcome on a new line and a blank line after each schedule
-      let scheduleHtml = scheduleRaw;
+     let scheduleHtml = scheduleHtmlRaw;
       const parts = scheduleRaw.split('•');
       if (parts.length > 1) {
         const header = parts[0].trim();
