@@ -1,0 +1,751 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Provider Response</title>
+<style>
+ body {
+ font-family: "Segoe UI", Arial, sans-serif;
+ font-size: 13px;
+ background-color: #ffffff;
+ margin: 0;
+ }
+ /* Page container – narrower, centred */
+ .page-container {
+ max-width: 1000px; /* about half-screen width */
+ margin: 20px auto;
+ padding: 0 10px;
+ box-sizing: border-box;
+ }
+ .section {
+ border: 1px solid #c2cbd3;
+ margin-bottom: 16px;
+ border-radius: 2px;
+ }
+ .section-header {
+ background-color: #1f4e79;
+ color: #ffffff;
+ padding: 6px 12px;
+ font-weight: 600;
+ font-size: 14px;
+ }
+ .section-body {
+ padding: 10px 12px 12px;
+ }
+ .field-label {
+ font-weight: 600;
+ margin-top: 4px;
+ margin-bottom: 2px;
+ }
+ .field-block {
+ margin-bottom: 10px;
+ }
+ /* Provider details – compact horizontal layout */
+ .provider-details-grid {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 12px 24px;
+ }
+ .provider-details-field {
+ flex: 1 1 46%; /* roughly two columns */
+ min-width: 230px;
+ }
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-top: 6px;
+ font-size: 12px;
+ }
+ th {
+ background-color: #dde6f1;
+ padding: 6px;
+ text-align: left;
+ font-weight: 600;
+ border-bottom: 1px solid #c2cbd3;
+ }
+ td {
+ padding: 6px;
+ border-bottom: 1px solid #e1e5ea;
+ vertical-align: top;
+ }
+ .button-row {
+ margin-top: 10px;
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ }
+ button {
+ background-color: #e1e5ea;
+ border: 1px solid #c2cbd3;
+ border-radius: 2px;
+ padding: 4px 10px;
+ cursor: pointer;
+ font-size: 12px;
+ }
+ button:hover {
+ background-color: #ccd2dc;
+ }
+ textarea {
+ width: 100%;
+ min-height: 60px;
+ padding: 6px;
+ font-size: 12px;
+ box-sizing: border-box;
+ }
+ select,
+ input[type="text"],
+ input[type="number"] {
+ padding: 4px;
+ font-size: 12px;
+ width: 260px;
+ box-sizing: border-box;
+ }
+ .notes-grid {
+ width: 100%;
+ border-collapse: collapse;
+ margin-top: 8px;
+ font-size: 12px;
+ }
+ .notes-grid th {
+ background-color: #f7f9fc;
+ font-weight: 600;
+ padding: 6px;
+ border-bottom: 1px solid #c2cbd3;
+ }
+ .notes-grid td {
+ padding: 6px;
+ border-bottom: 1px solid #e1e5ea;
+ }
+ .notes-input {
+ margin-top: 10px;
+ }
+ .notes-input .field-label {
+ margin-top: 0;
+ }
+ .helper-text {
+ font-size: 11px;
+ color: #555;
+ margin-top: 2px;
+ }
+ /* --- Scoring styles from scoring (2).html --- */
+ .scoring-container {
+ border: 1px solid #c2cbd3;
+ border-radius: 2px;
+ overflow: hidden;
+ max-width: 100%;
+ margin-top: 4px;
+ }
+ .scoring-header {
+ background-color: #1f4e79;
+ color: #ffffff;
+ padding: 6px 12px;
+ font-weight: 600;
+ font-size: 14px;
+ }
+ .scoring-toolbar {
+ padding: 8px 12px;
+ border-bottom: 1px solid #c2cbd3;
+ background-color: #f4f7fb;
+ font-size: 12px;
+ }
+ .scoring-toolbar label {
+ font-weight: 600;
+ margin-right: 6px;
+ }
+ .scoring-toolbar select {
+ padding: 2px 4px;
+ font-size: 13px;
+ }
+ .import-date {
+ margin-left: 20px;
+ font-weight: 400;
+ }
+ .import-date label {
+ font-weight: 600;
+ margin-right: 4px;
+ }
+ .scoring-table {
+ width: 100%;
+ border-collapse: collapse;
+ font-size: 13px;
+ }
+ .scoring-table th,
+ .scoring-table td {
+ padding: 4px 8px;
+ border-bottom: 1px solid #e1e5ea;
+ vertical-align: top;
+ }
+ .scoring-table thead th {
+ background-color: #dde6f1;
+ font-weight: 600;
+ text-align: left;
+ }
+ .section-row td {
+ background-color: #f4f7fb;
+ font-weight: 600;
+ border-top: 1px solid #c2cbd3;
+ }
+ .subtotal-row td {
+ font-weight: 600;
+ background-color: #f7f9fc;
+ border-top: 1px solid #c2cbd3;
+ }
+ .total-score-row td {
+ font-weight: 700;
+ background-color: #e9eff7;
+ border-top: 2px solid #1f4e79;
+ padding-top: 6px;
+ padding-bottom: 6px;
+ }
+ .scoring-table input[type="text"],
+ .scoring-table input[type="number"] {
+ width: 120px;
+ padding: 2px 4px;
+ font-size: 12px;
+ box-sizing: border-box;
+ }
+ .scoring-notes {
+ padding: 8px 12px;
+ border-top: 1px solid #e1e5ea;
+ }
+ .scoring-notes label {
+ font-weight: 600;
+ display: block;
+ margin-bottom: 4px;
+ }
+ .scoring-notes textarea {
+ width: 100%;
+ min-height: 70px;
+ font-family: "Segoe UI", Arial, sans-serif;
+ font-size: 13px;
+ padding: 6px;
+ border: 1px solid #c2cbd3;
+ border-radius: 3px;
+ resize: vertical;
+ box-sizing: border-box;
+ }
+ .scoring-actions {
+ padding: 8px 12px;
+ text-align: right;
+ background-color: #f7f9fc;
+ border-top: 1px solid #c2cbd3;
+ }
+ .scoring-actions button {
+ background-color: #1f4e79;
+ color: #ffffff;
+ border: none;
+ padding: 4px 10px;
+ font-size: 13px;
+ border-radius: 2px;
+ cursor: pointer;
+ }
+ .scoring-actions button:hover {
+ background-color: #163656;
+ }
+ /* Framework switching */
+ .row-framework[data-framework="closed"] { display: table-row; }
+ .row-framework[data-framework="apl"] { display: none; }
+ /* Service Specification table column sizing */
+ .service-spec-table { table-layout: fixed; }
+ .service-spec-table th:nth-child(1), .service-spec-table td:nth-child(1) { width: 10%; }
+ .service-spec-table th:nth-child(2), .service-spec-table td:nth-child(2) { width: 14%; }
+ .service-spec-table th:nth-child(3), .service-spec-table td:nth-child(3) { width: 30%; white-space: normal;} /* Schedule widest */
+ .service-spec-table th:nth-child(4), .service-spec-table td:nth-child(4) { width: 30%; }
+ .service-spec-table th:nth-child(5), .service-spec-table td:nth-child(5) { width: 6%; text-align:right; }
+ .service-spec-table th:nth-child(6), .service-spec-table td:nth-child(6) { width: 6%; }
+ .service-spec-table th:nth-child(7), .service-spec-table td:nth-child(7) { width: 12%; }
+</style>
+
+<style>
+/* tighter spacing in schedule columns */
+.service-spec-table td:nth-child(3),
+.service-spec-table td:nth-child(4){
+  padding-top:4px !important;
+  padding-bottom:4px !important;
+  line-height:1.3;
+}
+/* allow amended schedule to wrap nicely */
+.service-spec-table td:nth-child(4){
+  word-break: break-word;
+}
+</style>
+
+</head>
+<body>
+<div class="page-container">
+
+
+<div id="historyBanner" style="display:none; margin: 10px 0 14px 0; border:1px solid #c2cbd3; background:#f5f7fa; padding:10px 12px; border-radius:2px;">
+  <div style="font-weight:600; margin-bottom:6px;">Viewing response from history entry <span data-field="row"></span></div>
+  <div style="display:flex; gap:18px; flex-wrap:wrap; font-size:13px;">
+    <div><span style="color:#44546a;">Date posted:</span> <span data-field="posted"></span></div>
+    <div><span style="color:#44546a;">Response submitted:</span> <span data-field="submitted"></span></div>
+    <div><span style="color:#44546a;">Outcome:</span> <span data-field="outcome"></span></div>
+  </div>
+</div>
+
+<div style="text-align:center;font-weight:600;margin:6px 0 10px;">Homecare Example (Hourly Service)</div>
+ <!-- Provider Details -->
+ <div class="section">
+ <div class="section-header">Provider Details</div>
+ <div class="section-body">
+ <div class="provider-details-grid">
+ <div class="provider-details-field">
+ <div class="field-label">Provider Name</div>
+ ABC Care Provider LTD
+ </div>
+ <div class="provider-details-field">
+ <div class="field-label">Provider Address</div>
+ (provider address)
+ </div>
+ <div class="provider-details-field">
+ <div class="field-label">Provider Reference Number</div>
+ (reference number)
+ </div>
+ <div class="provider-details-field">
+ <div class="field-label">Provider shortlist status</div>
+ <span id="providerShortlistStatus">Awaiting shortlisting</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ <!-- Service Specification -->
+ <div class="section">
+ <div class="section-header">Service Specification</div>
+ <div class="section-body">
+ <table class="service-spec-table">
+ <thead>
+<tr><th>Service Type</th><th>Service Package</th><th>Schedule</th><th>Amended Schedule</th><th>Quantity</th><th>Unit</th><th>Cost / Rates</th></tr>
+</thead>
+ <tbody>
+<tr><td>Homecare closed framework</td><td>Standard</td><td>From 2025-10-13 – Weekly)<br>Everyday (0.5 hours, 1 carers) – Morning – Personal Care, Assistance with meals<br>(Flexible)<br>Outcome: Help to get washed and dressed and have some breakfast<br><br>Everyday (0.5 hours, 1 carers) – Lunch – Personal Care, Assistance with meals<br>(Flexible)<br>Outcome: Help to get make some lunch and hang out laundry<br><br>Everyday (0.5 hours, 1 carers) – Bedtime – Personal Care, Assistance with meals<br>(Flexible)<br>Outcome: Help to get ready for bed</td><td></td><td>10.5</td><td>Hours</td><td>£19.50 hourly, £204.75 weekly</td></tr>
+<tr><td>Homecare closed framework</td><td>Medication Calls</td><td>From 2025-10-13 – Weekly)<br>Everyday 08:00 to 08:30 (0.25 hours, 1 carers) – Medication<br>(Time-critical)<br>Outcome: Give me my parkinsons medication<br><br>Everyday 12:30 to 12:45 (0.25 hours, 1 carers) – Medication<br>(Time-critical)<br>Outcome: Give me my parkinsons medication<br><br>Everyday 16:00 to 16:30 (0.5 hours, 1 carers) – Medication<br>(Time-critical)<br>Outcome: Give me my parkinsons medication</td><td></td><td>5.25</td><td>Hours</td><td>£25.00 hourly, £131.25 weekly</td></tr>
+</tbody>
+ </table>
+ </div>
+ </div>
+ <!-- Provider Response Detail -->
+ <div class="section">
+ <div class="section-header">Provider Response Detail</div>
+ <div class="section-body">
+ <div class="field-label">Fields from provider response quick form (to be designed)</div>
+ </div>
+ </div>
+ <!-- Provider Response Outcome -->
+ <div class="section">
+ <div class="section-header">Provider Response Outcome</div>
+ <div class="section-body">
+   <div class="field-block">
+     <div class="field-label">Homecare Response *</div>
+
+     <!-- Radio buttons for user selection -->
+     <div id="homecareResponseRadios">
+       <label>
+         <input type="radio" name="homecareResponse" value="accept_as_specified" checked>
+         Accept as specified
+       </label><br>
+       <label>
+         <input type="radio" name="homecareResponse" value="accept_but_differs">
+         Accept but differs
+       </label><br>
+       <label>
+         <input type="radio" name="homecareResponse" value="awaiting_other">
+         Awaiting decision on another request
+       </label><br>
+       <label>
+         <input type="radio" name="homecareResponse" value="decline">
+         Decline
+       </label>
+     </div>
+
+     <!-- Hidden select kept purely to drive the existing JS behaviour -->
+     <select id="responseSelect" style="display:none;">
+       <option value="accept_as_specified" selected>Accept as specified</option>
+       <option value="accept_but_differs">Accept but differs</option>
+       <option value="awaiting_other">Awaiting decision on another request</option>
+       <option value="decline">Decline</option>
+     </select>
+
+     <!-- Always-visible note describing conditional fields -->
+     <div class="helper-text">
+       Other request ref no field: appears if "Awaiting decision on another request" is chosen.<br>
+       Reason for declining request field: appears if "Decline" is chosen.
+     </div>
+
+     <!-- Small inline script to sync radios with the hidden select -->
+     <script>
+       (function () {
+         var radios = document.querySelectorAll('input[name="homecareResponse"]');
+         var responseSelect = document.getElementById('responseSelect');
+
+         function syncRadioToSelect() {
+           var selected = document.querySelector('input[name="homecareResponse"]:checked');
+           if (selected) {
+             responseSelect.value = selected.value;
+             // Fire the existing change handler so conditional fields still work
+             var evt = new Event('change', { bubbles: true });
+             responseSelect.dispatchEvent(evt);
+           }
+         }
+
+         radios.forEach(function (rb) {
+           rb.addEventListener('change', syncRadioToSelect);
+         });
+
+         // Ensure initial state matches default radio selection
+         syncRadioToSelect();
+       })();
+     </script>
+   </div>
+
+   <div class="field-block" id="otherRequestRefBlock" style="display:none;">
+     <div class="field-label">Other request ref no *</div>
+     <input type="text" id="otherRequestRefInput">
+     <div class="helper-text">
+       Appears when “Awaiting decision on another request” is selected.
+     </div>
+   </div>
+
+   <div class="field-block" id="declineReasonBlock" style="display:none;">
+     <div class="field-label">Reason for declining request *</div>
+     <select id="declineReasonSelect">
+       <option value="">(select reason)</option>
+       <option value="no_capacity">No capacity</option>
+       <option value="cannot_meet_needs">Cannot meet needs</option>
+       <option value="price_not_viable">Price not viable</option>
+       <option value="other">Other</option>
+     </select>
+   </div>
+
+   <div class="field-block">
+     <div class="field-label">Remarks</div>
+     <textarea id="remarksText"></textarea>
+   </div>
+   <div class="button-row">
+     <button type="button">Message provider</button>
+     <button type="button">Return to provider shortlist</button>
+     <button type="button" id="btnMarkShortlisted">Mark as shortlisted</button>
+     <button type="button" id="btnReadyFinal">Send final confirmation</button>
+     <button type="button">Request provider assessment</button>
+     <button type="button" id="btnMarkAwarded">Mark as awarded</button>
+   </div>
+ </div>
+ </div>
+ <!-- Scoring Section (merged from scoring (2).html, Step 1 editable) -->
+ <div class="section">
+ <div class="section-header">Provider Scoring</div>
+ <div class="section-body">
+ <div class="scoring-container" id="providerScoring">
+ <div class="scoring-toolbar">
+ <label for="frameworkSelect">Select framework:</label>
+ <select id="frameworkSelect">
+ <option value="closed">Closed framework</option>
+ <option value="apl">APL framework</option>
+ </select>
+ <!-- Additional Information Last Import Date -->
+ <span class="import-date">
+ <label>Additional Information Last Import Date:</label>
+ <span id="lastImportDate">dd/mm/yyyy</span>
+ </span>
+ </div>
+ <table class="scoring-table">
+ <thead>
+ <tr>
+ <th style="width: 60%;">Criteria</th>
+ <th style="width: 40%;">Score</th>
+ </tr>
+ </thead>
+ <tbody>
+ <!-- STEP 1 SECTION – AUTO POPULATED -->
+ <tr class="section-row">
+ <td colspan="2">Step 1 – Auto‑populated from Additional Information</td>
+ </tr>
+ <!-- Closed framework – Step 1 (NOW EDITABLE) -->
+ <tr class="row-framework" data-framework="closed">
+ <td>CQC Rating</td>
+ <td><input type="text"></td>
+ </tr>
+ <tr class="row-framework" data-framework="closed">
+ <td>Performance</td>
+ <td><input type="text"></td>
+ </tr>
+ <tr class="row-framework" data-framework="closed">
+ <td>Contract Compliance</td>
+ <td><input type="text"></td>
+ </tr>
+ <tr class="row-framework" data-framework="closed">
+ <td>Quality Assurance</td>
+ <td><input type="text"></td>
+ </tr>
+ <!-- APL framework – Step 1 (NOW EDITABLE) -->
+ <tr class="row-framework" data-framework="apl">
+ <td>CQC Score</td>
+ <td><input type="text"></td>
+ </tr>
+ <tr class="row-framework" data-framework="apl">
+ <td>Quality of Provision</td>
+ <td><input type="text"></td>
+ </tr>
+ <!-- Step 1 Total (NOW EDITABLE) -->
+ <tr class="subtotal-row">
+ <td>Total (Step 1)</td>
+ <td><input type="text" id="step1Total"></td>
+ </tr>
+ <!-- STEP 2 SECTION – MANUAL SCORING -->
+ <tr class="section-row">
+ <td colspan="2">Step 2 – Manual scoring</td>
+ </tr>
+ <!-- Closed framework – Step 2 -->
+ <tr class="row-framework" data-framework="closed">
+ <td>Start date</td>
+ <td><input type="number" class="step2-input"></td>
+ </tr>
+ <tr class="row-framework" data-framework="closed">
+ <td>SU Preferences</td>
+ <td><input type="number" class="step2-input"></td>
+ </tr>
+ <!-- APL framework – Step 2 -->
+ <tr class="row-framework" data-framework="apl">
+ <td>Start date</td>
+ <td><input type="number" class="step2-input"></td>
+ </tr>
+ <tr class="row-framework" data-framework="apl">
+ <td>SU Preferences</td>
+ <td><input type="number" class="step2-input"></td>
+ </tr>
+ <!-- Step 2 Total -->
+ <tr class="subtotal-row">
+ <td>Total (Step 2)</td>
+ <td><input type="text" id="step2Total" readonly></td>
+ </tr>
+ </tbody>
+ <tfoot>
+ <tr class="total-score-row">
+ <td>Total score</td>
+ <td><input type="text" id="overallScore" readonly></td>
+ </tr>
+ </tfoot>
+ </table>
+ <!-- Rationale / Notes -->
+ <div class="scoring-notes">
+ <label for="rationale">Rationale / Notes:</label>
+ <textarea id="rationale" placeholder="Enter rationale, comments or decision details here..."></textarea>
+ </div>
+ <div class="scoring-actions">
+ <button type="button" id="btnCalcScore">Calculate score</button>
+ </div>
+ </div>
+ </div>
+ </div>
+ <!-- Brokerage Team Notes -->
+ <div class="section">
+ <div class="section-header">Brokerage Team Provider Response Notes</div>
+ <div class="section-body">
+ <table class="notes-grid">
+ <thead>
+ <tr>
+ <th>Date / Time</th>
+ <th>User</th>
+ <th>Comments</th>
+ </tr>
+ </thead>
+ <tbody id="notesBody">
+ <tr>
+ <td>13/10/2025</td>
+ <td>A brokerage worker</td>
+ <td>Use this box to make any notes on the provider response or note any actions taken.</td>
+ </tr>
+ </tbody>
+ </table>
+ <div class="notes-input">
+ <div class="field-block">
+ <div class="field-label">Add note (comments)</div>
+ <textarea id="newNoteText"></textarea>
+ <div class="helper-text">
+ A timestamp and user will be added automatically.
+ </div>
+ </div>
+ <div class="button-row">
+ <button type="button" id="btnAddNote">Add Note</button>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+<script>
+(function () {
+ // ----- Conditional response fields -----
+ var responseSelect = document.getElementById('responseSelect');
+ var otherRefBlock = document.getElementById('otherRequestRefBlock');
+ var declineBlock = document.getElementById('declineReasonBlock');
+ function updateResponseVisibility() {
+ var val = responseSelect.value;
+ // Awaiting decision on another request -> show Other request ref no
+ otherRefBlock.style.display = (val === 'awaiting_other') ? 'block' : 'none';
+ // Decline -> show Reason for declining
+ declineBlock.style.display = (val === 'decline') ? 'block' : 'none';
+ }
+ responseSelect.addEventListener('change', updateResponseVisibility);
+ updateResponseVisibility();
+ // ----- Shortlist / Award / Send final confirmation -----
+ var shortlistStatusSpan = document.getElementById('providerShortlistStatus');
+ var finalStatusSpan = document.getElementById('finalConfirmationStatus');
+ var btnMarkShortlisted = document.getElementById('btnMarkShortlisted');
+ var btnMarkAwarded = document.getElementById('btnMarkAwarded');
+ var btnReadyFinal = document.getElementById('btnReadyFinal');
+ btnMarkShortlisted.addEventListener('click', function () {
+ if (window.confirm('Are you sure you want to shortlist this provider?')) {
+ shortlistStatusSpan.textContent = 'Shortlisted';
+ }
+ });
+ btnMarkAwarded.addEventListener('click', function () {
+ if (window.confirm('Are you sure you want to award this provider?')) {
+ shortlistStatusSpan.textContent = 'Awarded';
+ }
+ });
+ btnReadyFinal.addEventListener('click', function () {
+ if (window.confirm('Are you sure you want to set this request as ready for final confirmation?')) {
+ shortlistStatusSpan.textContent = "Ready for final confirmation";
+ }
+ });
+ // ----- Notes: Add new note rows -----
+ var notesBody = document.getElementById('notesBody');
+ var newNoteText = document.getElementById('newNoteText');
+ var btnAddNote = document.getElementById('btnAddNote');
+ function getCurrentDateTimeString() {
+ var now = new Date();
+ var dd = String(now.getDate()).padStart(2, '0');
+ var mm = String(now.getMonth() + 1).padStart(2, '0');
+ var yyyy = now.getFullYear();
+ var hh = String(now.getHours()).padStart(2, '0');
+ var min = String(now.getMinutes()).padStart(2, '0');
+ return dd + '/' + mm + '/' + yyyy + ' ' + hh + ':' + min;
+ }
+ btnAddNote.addEventListener('click', function () {
+ var text = newNoteText.value.trim();
+ if (!text) {
+ alert('Please enter a comment before adding a note.');
+ return;
+ }
+ var row = document.createElement('tr');
+ var cDate = document.createElement('td');
+ var cUser = document.createElement('td');
+ var cComment = document.createElement('td');
+ cDate.textContent = getCurrentDateTimeString();
+ cUser.textContent = 'Brokerage worker';
+ cComment.textContent = text;
+ row.appendChild(cDate);
+ row.appendChild(cUser);
+ row.appendChild(cComment);
+ notesBody.appendChild(row);
+ newNoteText.value = '';
+ });
+ // ----- Scoring: framework toggle + score calc -----
+ var fwSelect = document.getElementById('frameworkSelect');
+ var fwRows = document.querySelectorAll('.row-framework');
+ var step1TotalInput = document.getElementById('step1Total');
+ var step2TotalInput = document.getElementById('step2Total');
+ var overallScoreInput = document.getElementById('overallScore');
+ var btnCalcScore = document.getElementById('btnCalcScore');
+ function updateFrameworkRows() {
+ var fw = fwSelect.value;
+ fwRows.forEach(function (row) {
+ row.style.display = (row.getAttribute('data-framework') === fw) ? 'table-row' : 'none';
+ });
+ }
+ fwSelect.addEventListener('change', updateFrameworkRows);
+ updateFrameworkRows();
+ function calculateScore() {
+ var fw = fwSelect.value;
+ var step2 = 0;
+ fwRows.forEach(function (row) {
+ if (row.getAttribute('data-framework') === fw) {
+ var inputs = row.querySelectorAll('input.step2-input');
+ inputs.forEach(function (inp) {
+ var v = parseFloat(inp.value);
+ if (!isNaN(v)) step2 += v;
+ });
+ }
+ });
+ step2TotalInput.value = step2;
+ var step1 = parseFloat(step1TotalInput.value) || 0;
+ overallScoreInput.value = step1 + step2;
+ }
+ btnCalcScore.addEventListener('click', calculateScore);
+})();
+</script>
+
+<script>
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const row = params.get('historyRow') || '';
+
+  const map = {
+    '1': {posted:'12/10/2025 09:00', submitted:'13/10/2025 10:42', outcome:'Declined', serviceFrom:'2025-10-13'},
+    '2': {posted:'15/10/2025 14:00', submitted:'16/10/2025 15:09', outcome:'Accept but differs', serviceFrom:'2025-10-16', amendedFrom:'2025-10-19'},
+    '3': {posted:'18/10/2025 08:30', submitted:'18/10/2025 09:31', outcome:'Accepted', serviceFrom:'2025-10-19'}
+  };
+  const data = map[row];
+
+  // Banner
+  const banner = document.getElementById('historyBanner');
+  if(banner && row && data){
+    banner.style.display='block';
+    banner.querySelector('[data-field="row"]').textContent = row;
+    banner.querySelector('[data-field="posted"]').textContent = data.posted;
+    banner.querySelector('[data-field="submitted"]').textContent = data.submitted;
+    banner.querySelector('[data-field="outcome"]').textContent = data.outcome;
+  } else if (banner) {
+    // keep hidden when no historyRow
+    banner.style.display = (row ? 'block' : 'none');
+  }
+
+  // Update schedule dates in the Service Specification table
+  if(row && data){
+    const defaultFrom = '2025-10-13';
+    const specTable = document.querySelector('table.service-spec-table');
+    if(specTable){
+      const tbody = specTable.querySelector('tbody');
+      if(tbody){
+        Array.from(tbody.querySelectorAll('tr')).forEach(function(tr){
+          const tds = tr.querySelectorAll('td');
+          if(tds.length >= 3){
+            const scheduleCell = tds[2];
+            if(scheduleCell && scheduleCell.innerHTML){
+              // First, normalise to the correct serviceFrom for the chosen history row
+              scheduleCell.innerHTML = scheduleCell.innerHTML.split(defaultFrom).join(data.serviceFrom);
+            }
+          }
+        });
+      }
+    }
+  }
+
+  // Populate Amended Schedule column for history row 2 (Standard package only)
+  if(row === '2' && data && data.amendedFrom){
+    const specTable = document.querySelector('table.service-spec-table');
+    if(specTable){
+      const tbody = specTable.querySelector('tbody');
+      if(tbody){
+        Array.from(tbody.querySelectorAll('tr')).forEach(function(tr){
+          const tds = tr.querySelectorAll('td');
+          if(tds.length >= 4){
+            const pkgText = (tds[1].innerText || '').toLowerCase();
+            const scheduleCell = tds[2];
+            const amendedCell  = tds[3];
+            if(pkgText.includes('standard') && scheduleCell && amendedCell){
+              amendedCell.innerHTML = (scheduleCell.innerHTML || '').split(data.serviceFrom).join(data.amendedFrom);
+              // subtle highlight for demo
+}
+          }
+        });
+      }
+    }
+  }
+})();
+</script>
+
+</body>
+</html>
+``
