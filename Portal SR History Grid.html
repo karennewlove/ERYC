@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,6 +61,13 @@
       cursor: help;
       font-weight: 600;
     }
+
+    .view-history-link {
+      color: #1f4e79;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -83,6 +89,7 @@
           <th>Additional packages</th>
           <th>Reason</th>
           <th>Remarks</th>
+          <th>View response history</th>
         </tr>
       </thead>
       <tbody>
@@ -92,6 +99,7 @@
           <td>A Brokerage User</td>
           <td>Posted awaiting response</td>
           <td>Posted to providers</td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -115,6 +123,7 @@
           <td></td>
           <td></td>
           <td></td>
+          <td><a class="view-history-link" href="#">View response history</a></td>
         </tr>
 
         <!-- Row 3: Provider amends response -->
@@ -135,6 +144,7 @@
           <td>
             Changed morning call offer to 09:30 as unable to provide at 09:00 after checking
           </td>
+          <td><a class="view-history-link" href="#">View response history</a></td>
         </tr>
 
         <!-- Row 4: Brokerage awards -->
@@ -153,6 +163,7 @@
           <td></td>
           <td></td>
           <td></td>
+          <td><a class="view-history-link" href="#">View response history</a></td>
         </tr>
       </tbody>
     </table>
@@ -160,4 +171,3 @@
 
 </body>
 </html>
-``
