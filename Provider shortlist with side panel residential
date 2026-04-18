@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Request – Provider Shortlist</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+      margin: 0;
+      background-color: #ffffff;
+    }
+
+    /* Overall fixed-width wrapper (for banner + content) */
+    .layout-wrapper {
+      width: 1300px;           /* ← your requested width */
+      margin: 0 auto;
+    }
+
+    /* ===== Top black banner ===== */
+    .top-banner {
+      background-color: #201c1a;
+      color: #ffffff;
+      height: 36px;
+      padding: 0 12px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .top-left,
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .top-icon-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 2px;
+      border: 1px solid #55504a;
+      background-color: #3b3734;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #ffffff;
+    }
+
+    .top-menu-btn {
+      padding: 2px 8px;
+      border-radius: 2px;
+      border: 1px solid #55504a;
+      background-color: #3b3734;
+      color: #ffffff;
+      font-size: 11px;
+      cursor: default;
+    }
+
+    .top-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-left: 8px;
+    }
+
+    .top-pill-btn {
+      padding: 2px 8px;
+      border-radius: 10px;
+      border: 1px solid #b4b4b4;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 11px;
+      cursor: default;
+    }
+
+    .quick-access {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background-color: #ffffff;
+      border: 1px solid #b4b4b4;
+      border-radius: 10px;
+      padding: 2px 6px;
+      color: #000000;
+      font-size: 11px;
+    }
+
+    .quick-access input {
+      border: none;
+      outline: none;
+      font-size: 11px;
+      width: 70px;
+    }
+
+    .top-circle-btn {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid #b4b4b4;
+      background-color: #ffffff;
+    }
+
+    /* ===== Page layout: sidebar + main ===== */
+    .page-shell {
+      display: flex;
+      height: calc(100vh - 36px);
+      box-sizing: border-box;
+    }
+
+    
+
+
+.left-nav {
+    width: 230px;
+    /* Left + right borders so the whole sidebar is framed */
+    border-left: 1px solid #c2cbd3;
+    border-right: 1px solid #c2cbd3;
+
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+
+
+    }
+
+    .nav-search {
+      padding: 6px;
+      background-color: #f2f3f5;
+      border-bottom: 1px solid #c2cbd3;
+    }
+
+    .nav-search input {
+      width: 100%;
+      font-size: 12px;
+      padding: 3px 6px;
+      border: 1px solid #b4b4b4;
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+
+    .nav-tabs {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .nav-tab {
+      color: #ffffff;
+      padding: 4px 8px;
+    }
+
+    .nav-tab.summary { background-color: #f28c28; }
+    .nav-tab.person  { background-color: #0078d7; }
+    .nav-tab.case    { background-color: #008a41; }
+
+    .nav-tree {
+      flex: 1;
+      padding: 8px;
+      font-size: 12px;
+      background-color: #ffffff;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      margin-left: 10px;
+      margin-bottom: 2px;
+    }
+
+    .nav-item.bold {
+      font-weight: 600;
+    }
+
+    .nav-footer {
+      padding: 6px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      background-color: #93346f;
+      color: #ffffff;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 10px;
+      background-color: #ffffff;
+      overflow: auto;
+    }
+
+    /* ===== Original shortlist container & table styles ===== */
+    .container {
+      border: 1px solid #c2cbd3;
+      border-radius: 2px;
+      width: 100%;              /* use full width of main content */
+      box-sizing: border-box;
+    }
+
+    .main-header {
+      background-color: #1f4e79;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .section-header {
+      background-color: #1f4e79;
+      color: #ffffff;
+      padding: 4px 12px;
+      font-weight: 600;
+      font-size: 13px;
+      margin-top: 0;
+    }
+
+    .section-wrapper {
+      border-top: 1px solid #c2cbd3;
+      background-color: #ffffff;
+    }
+
+    .table-wrapper {
+      padding: 8px 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #e1e5ea;
+      vertical-align: top;
+    }
+
+    thead th {
+      background-color: #dde6f1;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .provider-name {
+      font-weight: 600;
+    }
+
+    button {
+      background-color: #e1e5ea;
+      color: #000000;
+      border: 1px solid #c2cbd3;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ccd2dc;
+    }
+
+    .shortlist-toolbar {
+      padding: 8px 12px;
+      border-top: 1px solid #c2cbd3;
+      border-bottom: 1px solid #c2cbd3;
+      background-color: #f4f7fb;
+      font-size: 12px;
+    }
+
+    .shortlist-actions {
+      border-top: 1px solid #c2cbd3;
+      background-color: #f7f9fc;
+    }
+
+    .shortlist-actions-top {
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    
+
+.message-panel {
+    border-top: 1px solid #c2cbd3;
+    background-color: #ffffff;
+
+
+    }
+
+    .message-panel-body {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      row-gap: 8px;
+      column-gap: 12px;
+      align-items: flex-start;
+      font-size: 12px;
+    }
+
+    .message-panel-body label {
+      font-weight: 600;
+    }
+
+    .message-panel-body input[type="datetime-local"],
+    .message-panel-body select {
+      font-size: 12px;
+      padding: 2px 4px;
+      max-width: 260px;
+    }
+
+    .message-panel-body textarea {
+      font-size: 12px;
+      padding: 4px;
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .message-panel-footer {
+      padding: 8px 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background-color: #f7f9fc;
+      border-top: 1px solid #c2cbd3;
+    }
+
+    .view-link {
+      color: #0066cc;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner wrapper -->
+  <div class="layout-wrapper">
+    <div class="top-banner">
+      <div class="top-left">
+        <div class="top-icon-btn">◀</div>
+        <div class="top-icon-btn">🏠</div>
+        <button class="top-menu-btn">Menu ▾</button>
+        <div class="top-title">Service Request Provider Shortlist</div>
+      </div>
+
+      <div class="top-right">
+        <span>USER V</span>
+        <button class="top-pill-btn">Logout</button>
+        <div class="quick-access">
+          Quick Access <input type="text">
+        </div>
+        <div class="top-circle-btn"></div>
+        <div class="top-circle-btn"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content wrapper (sidebar + main) -->
+  <div class="layout-wrapper">
+    <div class="page-shell">
+
+      <!-- LEFT NAVIGATION -->
+      <aside class="left-nav">
+        <div class="nav-search">
+          <input type="text" placeholder="Search topics">
+        </div>
+
+        <div class="nav-tabs">
+          <div class="nav-tab summary">Summary</div>
+          <div class="nav-tab person">Person</div>
+          <div class="nav-tab case">Case</div>
+        </div>
+
+     
+<div class="nav-tree">
+    <div class="nav-item">Service provisions</div>
+    <div class="nav-item">Service requests</div>
+    <div class="nav-item">Service request summary</div>
+    <div class="nav-item">Service specifications</div>
+    <div class="nav-item">Service request details</div>
+    <div class="nav-item bold">Provider shortlist</div>
+    <div class="nav-item">Provider response</div>
+    <div class="nav-item">Provider assessment</div>
+    <div class="nav-item">Event history</div>
+    <div class="nav-item">Message board</div>
+    <div class="nav-item">Forms and letters</div>
+    <div class="nav-item">Related documents</div>
+    <div class="nav-item">Actions</div>
+</div>
+
+
+ 
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <div class="container">
+          <!-- Main page header -->
+          <div class="main-header">
+            Service Request – Provider Shortlist (Residential)
+          </div>
+
+          <!-- Service specification section -->
+          <div class="section-wrapper">
+            <div class="section-header">
+              Service specification
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 4%;">Active</th>
+                    <th style="width: 18%;">Service Type</th>
+                    <th style="width: 18%;">Service Band Group</th>
+                    <th style="width: 90%;">Schedule</th>
+                    <th style="width: 10%;">Quantity</th>
+                    <th style="width: 10%;">Unit</th>
+  <th style="width: 10%;">Weekly Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                  
+   
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox"> Y</td>
+                    <td>Residential Older People</td>
+                    <td>Permanent</td>
+                    
+<td>
+  From 2025-10-13<br>
+  </td>
+
+                    <td>1</td>
+                    <td>Weeks Nightly</td>
+<td>£750.00</td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Provider shortlist section -->
+          <div class="shortlist-toolbar">
+            <!-- reserved for filters/info -->
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 2%;">Select</th>
+                  <th style="width: 14%;">Service Provider / Address</th>
+                  <th style="width: 10%;">Shortlist Status</th>
+                  <th style="width: 7%;">Date Posted</th>
+                  <th style="width: 10%;">Response Due<br>Date / Time</th>
+                  <th style="width: 9%;">Date Response Received</th>
+                  <th style="width: 45%;">Service Type, Packages and Schedule</th>
+                  <th style="width: 5%;">Active Service</th>
+                  <th style="width: 12%;">Additional Information</th>
+                  <th style="width: 8%;">Response Outcome</th>
+                  <th style="width: 4%;">Reposted</th>
+                  <th style="width: 4%;">Score</th>
+                  <th style="width: 4%;">Message</th>
+                  <th style="width: 7%;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Row: Peartree -->
+                <tr>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td>
+                    <div class="provider-name">Peartree</div>
+                    <div>12 street, town, postcode</div>
+                  </td>
+                  <td>Awaiting shortlisting</td>
+                  <td>13/10/2025</td>
+                  <td>13/10/2025 12:00</td>
+                  <td>13/10/2025</td>
+                  <td>
+		<div>From 13/10/2025 Weekly</div>                    
+		<div>Residential Older People - Permanent<div>
+                    <div>£750.00</div>
+                    
+		                    <div style="margin-top:4px; font-style:italic;">
+                      Amended schedules and additional packages offered by the provider would show here
+                    </div>
+                  </td>
+                  <td>Active</td>
+                  <td>
+                    <div>Area - Beverley</div>
+                    <div>STOB: Yes</div>
+                  </td>
+                  <td>Vacant room available as specified</td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align:center;">✉</td>
+                  
+
+<td>
+  <span class="view-link">View response</span><br><br>
+  <span class="view-link">View history</span>
+</td>
+
+                </tr>
+
+                <!-- Row: Appletree -->
+                <tr>
+                  <td style="text-align:center;"><input type="checkbox"></td>
+                  <td>
+                    <div class="provider-name">Appletree</div>
+                    <div>12 street, town, postcode</div>
+                  </td>
+                  <td>Awaiting shortlisting</td>
+                  <td>13/10/2025</td>
+                  <td>13/10/2025 12:00</td>
+                  <td>13/10/2025</td>
+                  <td>
+                    <div>From 13/10/2025 Weekly</div>                    
+		<div>Residential Older People– Permanent</div>
+                    <div>Amended schedule:<br>Starting 15/10/2025 Weekly £750.00</div><br>
+
+<div>Additional Package: From 15/10/2025 Weekly</div>                    
+		<div>Residential Older people enhanced needs 1:1 Care, 12 hours £25.00 per hour Weekly £300.00</div><br>
+                   
+                  
+                    <div style="margin-top:4px; font-style:italic;">
+                      Amended schedules and additional packages offered by the provider would show here
+
+                  </td>
+                  <td>Active</td>
+                  <td>
+                    <div>Area - Beverley</div>
+                    <div>STOB: Yes</div>
+                  </td>
+                  <td>Vacant room available but differs</td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align:center;"></td>
+                  
+
+<td>
+  <span class="view-link">View response</span><br><br>
+  <span class="view-link">View history</span>
+</td>
+               
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Buttons under grid -->
+          <div class="shortlist-actions">
+            <div class="shortlist-actions-top">
+              <button type="button">Care Provider Options</button>
+              <button type="button">Cancel shortlisting</button>
+              <button type="button">Add</button>
+              <button type="button">Export to XLSX</button>
+            </div>
+          </div>
+
+          <!-- Message to provider panel -->
+          <div class="message-panel">
+            <div class="section-header">
+              Message to provider
+            </div>
+            <div class="message-panel-body">
+              <label for="responseDue">Response Due Date and Time:</label>
+              <input type="datetime-local" id="responseDue">
+
+              <label for="portalTemplate">Portal Message Template:</label>
+              <select id="portalTemplate">
+                <option>(select template)</option>
+                <option>Standard Homecare Request</option>
+                <option>Emergency Request</option>
+              </select>
+
+              <label for="portalMessage">Portal Request Message:</label>
+              <textarea id="portalMessage"></textarea>
+            </div>
+            <div class="message-panel-footer">
+              <button type="button">Post to all providers</button>
+              <button type="button">Post to selected providers</button>
+              <button type="button">Save</button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+</body>
+</html>
+``
