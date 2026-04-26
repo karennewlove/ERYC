@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +73,7 @@
     .details-cell .details-row {
       margin-bottom: 2px;
     }
+
     .details-cell .details-label {
       font-weight: 600;
     }
@@ -93,7 +93,6 @@
           <th>User</th>
           <th>Provider shortlist status</th>
           <th>Details</th>
-          <th>Reason</th>
           <th>View response history</th>
         </tr>
       </thead>
@@ -104,16 +103,15 @@
           <td>11/10/2025 13:00</td>
           <td>A Brokerage User</td>
           <td>Posted awaiting response</td>
-
           <td class="details-cell">
             <div class="details-row"><span class="details-label">Event type:</span> Posted to providers</div>
             <div class="details-row"><span class="details-label">Outcome:</span> </div>
+            <!-- Contextual Details row (only populated when relevant by event type) -->
+            <div class="details-row"><span class="details-label">Reason:</span> </div>
             <div class="details-row"><span class="details-label">Amended schedule:</span> </div>
             <div class="details-row"><span class="details-label">Additional packages:</span> </div>
             <div class="details-row"><span class="details-label">Remarks:</span> </div>
           </td>
-
-          <td></td>
           <td></td>
         </tr>
 
@@ -122,21 +120,18 @@
           <td>11/10/2025 13:30</td>
           <td>A Provider User</td>
           <td>Awaiting shortlisting</td>
-
           <td class="details-cell">
             <div class="details-row"><span class="details-label">Event type:</span> Responded</div>
             <div class="details-row"><span class="details-label">Outcome:</span> Accept</div>
+            <!-- Contextual Details row (only populated when relevant by event type) -->
+            <div class="details-row"><span class="details-label">Reason:</span> </div>
             <div class="details-row">
               <span class="details-label">Amended schedule:</span>
-              <span class="schedule-hover"
-                    title="Morning call 09:00–09:30, every day from 13/10/2025">
-                              </span>
+              <span class="schedule-hover" title="Morning call 09:00–09:30, every day from 13/10/2025"></span>
             </div>
             <div class="details-row"><span class="details-label">Additional packages:</span> </div>
             <div class="details-row"><span class="details-label">Remarks:</span> </div>
           </td>
-
-          <td></td>
           <td><a class="view-history-link" href="#">View response history</a></td>
         </tr>
 
@@ -145,15 +140,14 @@
           <td>12/10/2025 13:30</td>
           <td>A Provider User</td>
           <td>Awaiting shortlisting</td>
-
           <td class="details-cell">
             <div class="details-row"><span class="details-label">Event type:</span> Amend response</div>
             <div class="details-row"><span class="details-label">Outcome:</span> Accept but differs</div>
+            <!-- Contextual Details row (reason positioned under Outcome) -->
+            <div class="details-row"><span class="details-label">Reason:</span> Amendment remarks: Offer changed</div>
             <div class="details-row">
               <span class="details-label">Amended schedule:</span>
-              <span class="schedule-hover"
-                    title="Morning call changed to 09:30–10:00, every day from 13/10/2025">
-                             </span>
+              <span class="schedule-hover" title="Morning call changed to 09:30–10:00, every day from 13/10/2025"></span>
             </div>
             <div class="details-row"><span class="details-label">Additional packages:</span> </div>
             <div class="details-row">
@@ -161,8 +155,6 @@
               Changed morning call offer to 09:30 as unable to provide at 09:00 after checking
             </div>
           </td>
-
-          <td>Offer changed</td>
           <td><a class="view-history-link" href="#">View response history</a></td>
         </tr>
 
@@ -171,21 +163,18 @@
           <td>12/10/2025 13:30</td>
           <td>A Brokerage User</td>
           <td>Awarded</td>
-
           <td class="details-cell">
             <div class="details-row"><span class="details-label">Event type:</span> Amend response</div>
             <div class="details-row"><span class="details-label">Outcome:</span> Accept but differs</div>
+            <!-- Contextual Details row (only populated when relevant by event type) -->
+            <div class="details-row"><span class="details-label">Reason:</span> </div>
             <div class="details-row">
               <span class="details-label">Amended schedule:</span>
-              <span class="schedule-hover"
-                    title="Morning call agreed at 09:30–10:00, every day from 13/10/2025">
-                              </span>
+              <span class="schedule-hover" title="Morning call agreed at 09:30–10:00, every day from 13/10/2025"></span>
             </div>
             <div class="details-row"><span class="details-label">Additional packages:</span> </div>
             <div class="details-row"><span class="details-label">Remarks:</span> </div>
           </td>
-
-          <td></td>
           <td><a class="view-history-link" href="#">View response history</a></td>
         </tr>
       </tbody>
