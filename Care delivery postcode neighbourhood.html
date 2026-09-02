@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neighbourhood Allocation Prototype</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:30px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+}
+
+.card{
+    background:white;
+    border-radius:8px;
+    padding:24px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+h2{
+    margin-top:0;
+    color:#004578;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    box-sizing:border-box;
+}
+
+.readonly{
+    background:#f1f1f1;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    background:#0078d4;
+    color:white;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#106ebe;
+}
+
+.message{
+    margin-top:15px;
+    padding:12px;
+    border-radius:4px;
+}
+
+.success{
+    background:#dff6dd;
+    color:#107c10;
+}
+
+.warning{
+    background:#fff4ce;
+    color:#8a6d00;
+}
+
+.error{
+    background:#fde7e9;
+    color:#a4262c;
+}
+
+.hidden{
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Care & Support Plan</h2>
+
+<label>Care Delivery Postcode *</label>
+<input
+    type="text"
+    id="postcode"
+    placeholder="Enter postcode">
+
+<label>Neighbourhood</label>
+<input
+    type="text"
+    id="neighbourhood"
+    class="readonly"
+    readonly>
+
+<div id="manualSection" class="hidden">
+
+<label>Neighbourhood Override *</label>
+
+<select id="override">
+<option value="">Select neighbourhood</option>
+<option>Beverley</option>
+<option>Bridlington</option>
+<option>Goole</option>
+<option>Haltemprice</option>
+<option>Holderness</option>
+<option>Wolds</option>
+</select>
+
+</div>
+
+<div id="message"></div>
+
+<button onclick="deriveNeighbourhood()">
+Mark as complete
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const postcodeMap = {
+
+    "HU17":"Beverley",
+    "YO16":"Bridlington",
+    "DN14":"Goole",
+    "HU10":"Haltemprice",
+    "HU12":"Holderness",
+    "YO25":"Wolds"
+
+};
+
+function deriveNeighbourhood(){
+
+    const postcode =
+        document.getElementById("postcode")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const neighbourhood =
+        document.getElementById("neighbourhood");
+
+    const message =
+        document.getElementById("message");
+
+    const manualSection =
+        document.getElementById("manualSection");
+
+    manualSection.classList.add("hidden");
+
+    message.innerHTML = "";
+
+    if(postcode.length < 4){
+
+        neighbourhood.value = "";
+
+        message.innerHTML =
+            '<div class="message error">Invalid postcode format.</div>';
+
+        return;
+    }
+
+    const sector = postcode.substring(0,4);
+
+    if(postcodeMap[sector]){
+
+        neighbourhood.value =
+            postcodeMap[sector];
+
+        message.innerHTML =
+            '<div class="message success">Neighbourhood automatically derived.</div>';
+
+    }
+    else{
+
+        neighbourhood.value =
+            "Unable to determine";
+
+        manualSection.classList.remove("hidden");
+
+        message.innerHTML =
+            '<div class="message warning">No postcode mapping found. Please select a neighbourhood manually.</div>';
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
