@@ -4,435 +4,429 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Market Share Dashboard</title>
-
 <style>
-
-body{
+:root {
+    --navy: #153d64;
+    --navy-dark: #0f2e4d;
+    --page: #f4f6f9;
+    --text: #26313d;
+    --muted: #667085;
+    --border: #d8dee6;
+    --green: #2e8540;
+    --amber: #c57a00;
+    --red: #c43d3d;
+    --blue: #3276b1;
+    --purple: #7353ba;
+}
+* { box-sizing: border-box; }
+body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-    padding:20px;
-    color:#333;
+    background: var(--page);
+    margin: 0;
+    padding: 20px;
+    color: var(--text);
 }
-
-.container{
-    max-width:1400px;
-    margin:auto;
+.container { max-width: 1440px; margin: auto; }
+h1 { margin: 0 0 4px; font-size: 28px; }
+h3 { margin: 0 0 16px; }
+.subtitle { color: var(--muted); margin-bottom: 22px; }
+.card, .kpi, .chart-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
-
-h1{
-    margin-bottom:5px;
+.card { padding: 20px; margin-bottom: 20px; }
+.filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; }
+.filter { display: flex; flex-direction: column; }
+.filter label { font-size: 12px; color: var(--muted); margin-bottom: 5px; font-weight: 600; }
+.filter select {
+    min-width: 180px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: white;
 }
-
-.subtitle{
-    color:#666;
-    margin-bottom:25px;
+.action-buttons, .quick-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+button { font: inherit; }
+.btn, .quick-button {
+    border: 0;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 600;
 }
-
-.card{
-    background:white;
-    border-radius:8px;
-    padding:20px;
-    box-shadow:0 2px 4px rgba(0,0,0,0.08);
-    margin-bottom:20px;
+.btn-primary { background: var(--navy); color: white; }
+.btn-primary:hover { background: var(--navy-dark); }
+.btn-secondary { background: #e9edf2; color: #243447; }
+.btn-secondary:hover { background: #dce2e9; }
+.quick-button { border-radius: 22px; background: #e9edf2; color: #243447; }
+.quick-button.active { background: var(--navy); color: white; }
+.quick-button[data-status="Below Target"].active { background: var(--red); }
+.quick-button[data-status="On Target"].active { background: var(--green); }
+.quick-button[data-status="Above Target"].active { background: var(--amber); }
+.notice {
+    display: none;
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-left: 4px solid var(--blue);
+    background: #eef6fc;
+    color: #274862;
 }
-
-.filters{
-    display:flex;
-    flex-wrap:wrap;
-    gap:15px;
-    margin-bottom:15px;
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
 }
-
-.filter{
-    display:flex;
-    flex-direction:column;
+.kpi { padding: 18px; border-top: 4px solid var(--navy); }
+.kpi.rural-standard { border-top-color: var(--green); }
+.kpi.rural-super { border-top-color: var(--amber); }
+.kpi.rural-block { border-top-color: var(--purple); }
+.kpi-title { color: var(--muted); font-size: 13px; min-height: 34px; }
+.kpi-value { font-size: 30px; font-weight: 700; margin-top: 6px; }
+.context-bar {
+    background: #eef3f8;
+    color: var(--navy);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    font-weight: 600;
 }
-
-.filter label{
-    font-size:12px;
-    color:#666;
-    margin-bottom:4px;
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th { background: var(--navy); color: white; padding: 12px; text-align: left; }
+td { padding: 12px; border-bottom: 1px solid #edf0f3; }
+tbody tr:hover { background: #fafbfc; }
+.status { display: inline-block; padding: 6px 11px; border-radius: 18px; color: white; font-size: 12px; font-weight: 700; }
+.status-below { background: var(--red); }
+.status-above { background: var(--amber); }
+.status-target { background: var(--green); }
+.snapshot { margin-top: 14px; color: var(--muted); font-size: 12px; }
+.empty { padding: 28px; text-align: center; color: var(--muted); }
+.chart-area { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.chart-card { padding: 18px; min-height: 330px; }
+.chart-title { font-weight: 700; margin-bottom: 14px; }
+.donut-wrap { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.donut {
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    position: relative;
+    flex: 0 0 auto;
 }
-
-.filter select{
-    min-width:180px;
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:6px;
+.donut::after {
+    content: "";
+    position: absolute;
+    inset: 45px;
+    background: white;
+    border-radius: 50%;
 }
-
-.action-buttons{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
+.donut-centre {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: 700;
 }
-
-.btn{
-    border:none;
-    border-radius:6px;
-    padding:10px 16px;
-    cursor:pointer;
-    font-weight:600;
+.legend { display: grid; gap: 8px; font-size: 13px; }
+.legend-row { display: flex; align-items: center; gap: 8px; }
+.swatch { width: 12px; height: 12px; border-radius: 3px; }
+.bar-chart { display: flex; align-items: end; gap: 12px; height: 230px; padding-top: 18px; border-bottom: 1px solid var(--border); }
+.bar-group { flex: 1; display: flex; gap: 3px; height: 100%; align-items: end; justify-content: center; position: relative; }
+.bar { min-width: 13px; flex: 1; max-width: 30px; border-radius: 4px 4px 0 0; }
+.bar.actual { background: var(--blue); }
+.bar.target { background: #aeb8c4; }
+.bar-label { position: absolute; bottom: -34px; width: 100%; text-align: center; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.trend-wrap { height: 240px; position: relative; background: repeating-linear-gradient(to top, #fff, #fff 47px, #edf0f3 48px); border-left: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.trend-line { position: absolute; height: 4px; transform-origin: left center; border-radius: 4px; }
+.trend-point { position: absolute; width: 9px; height: 9px; border-radius: 50%; transform: translate(-50%, 50%); }
+.trend-note { color: var(--muted); font-size: 12px; margin-top: 10px; }
+.rural-bars { display: grid; gap: 18px; margin-top: 20px; }
+.rural-row { display: grid; grid-template-columns: 100px 1fr 74px; align-items: center; gap: 10px; font-size: 13px; }
+.track { height: 22px; background: #edf0f3; border-radius: 12px; overflow: hidden; }
+.fill { height: 100%; border-radius: 12px; min-width: 0; transition: width .2s ease; }
+.fill.standard { background: var(--green); }
+.fill.super { background: var(--amber); }
+.fill.block { background: var(--purple); }
+.small-note { color: var(--muted); font-size: 12px; margin-top: 16px; }
+@media (max-width: 1050px) { .chart-area { grid-template-columns: 1fr; } }
+@media (max-width: 650px) {
+    body { padding: 10px; }
+    .filter, .filter select { width: 100%; }
+    .btn { flex: 1 1 45%; }
 }
-
-.btn-primary{
-    background:#153d64;
-    color:white;
-}
-
-.btn-secondary{
-    background:#e9ecef;
-}
-
-.quick-filters{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:20px;
-}
-
-.quick-button{
-    padding:10px 18px;
-    border:none;
-    border-radius:20px;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.all{
-    background:#153d64;
-    color:white;
-}
-
-.below{
-    background:#d9534f;
-    color:white;
-}
-
-.ontarget{
-    background:#5cb85c;
-    color:white;
-}
-
-.above{
-    background:#f0ad4e;
-    color:white;
-}
-
-.kpis{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-    margin-bottom:20px;
-}
-
-.kpi{
-    background:white;
-    border-radius:8px;
-    padding:20px;
-    box-shadow:0 2px 4px rgba(0,0,0,0.08);
-}
-
-.kpi-title{
-    color:#666;
-    font-size:14px;
-}
-
-.kpi-value{
-    font-size:32px;
-    font-weight:bold;
-    margin-top:10px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#153d64;
-    color:white;
-    padding:12px;
-    text-align:left;
-}
-
-td{
-    padding:12px;
-    border-bottom:1px solid #eee;
-}
-
-.status{
-    padding:6px 12px;
-    border-radius:20px;
-    color:white;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.status-below{
-    background:#d9534f;
-}
-
-.status-above{
-    background:#f0ad4e;
-}
-
-.status-target{
-    background:#5cb85c;
-}
-
-.chart-area{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-.chart-placeholder{
-    background:white;
-    min-height:350px;
-    border-radius:8px;
-    box-shadow:0 2px 4px rgba(0,0,0,0.08);
-    padding:20px;
-}
-
-.chart-title{
-    font-weight:600;
-    margin-bottom:15px;
-}
-
-.placeholder{
-    height:280px;
-    background:#f0f2f5;
-    border:2px dashed #ccc;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#888;
-    font-weight:600;
-}
-
-.snapshot{
-    margin-top:15px;
-    color:#666;
-    font-size:12px;
-}
-
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
     <h1>Market Share Monitoring Dashboard</h1>
     <div class="subtitle">Homecare Framework</div>
 
-    <!-- Filters -->
-
     <div class="card">
-
         <h3>Filters</h3>
-
         <div class="filters">
-
             <div class="filter">
-                <label>Neighbourhood</label>
-                <select>
-                    <option>All Neighbourhoods</option>
-                    <option>Beverley</option>
-                    <option>Bridlington</option>
-                    <option>Goole</option>
+                <label for="neighbourhoodFilter">Neighbourhood</label>
+                <select id="neighbourhoodFilter"></select>
+            </div>
+            <div class="filter">
+                <label for="ruralityFilter">Rurality Classification</label>
+                <select id="ruralityFilter"></select>
+            </div>
+            <div class="filter">
+                <label for="providerFilter">Provider</label>
+                <select id="providerFilter"></select>
+            </div>
+            <div class="filter">
+                <label for="frameworkFilter">Framework</label>
+                <select id="frameworkFilter">
+                    <option value="Homecare Framework">Homecare Framework</option>
                 </select>
             </div>
-
             <div class="filter">
-                <label>Provider</label>
-                <select>
-                    <option>All Providers</option>
+                <label for="statusFilter">Status</label>
+                <select id="statusFilter">
+                    <option value="All">All Statuses</option>
+                    <option value="Below Target">Below Target</option>
+                    <option value="On Target">On Target</option>
+                    <option value="Above Target">Above Target</option>
                 </select>
             </div>
-
             <div class="filter">
-                <label>Framework</label>
-                <select>
-                    <option>Homecare Framework</option>
+                <label for="snapshotFilter">Snapshot Date</label>
+                <select id="snapshotFilter">
+                    <option value="07/09/2026">07/09/2026</option>
+                    <option value="31/08/2026">31/08/2026</option>
+                    <option value="24/08/2026">24/08/2026</option>
                 </select>
             </div>
-
-            <div class="filter">
-                <label>Status</label>
-                <select>
-                    <option>All Statuses</option>
-                    <option>Below Target</option>
-                    <option>On Target</option>
-                    <option>Above Target</option>
-                </select>
-            </div>
-
-            <div class="filter">
-                <label>Snapshot Date</label>
-                <select>
-                    <option>26/08/2026</option>
-                </select>
-            </div>
-
         </div>
-
         <div class="action-buttons">
-            <button class="btn btn-primary">Apply Filters</button>
-            <button class="btn btn-secondary">Clear Filters</button>
-            <button class="btn btn-primary">Refresh Snapshot</button>
-            <button class="btn btn-primary">Export to Excel</button>
+            <button class="btn btn-primary" id="applyBtn">Apply Filters</button>
+            <button class="btn btn-secondary" id="clearBtn">Clear Filters</button>
+            
+            <button class="btn btn-primary" id="exportBtn">Export to CSV</button>
         </div>
-
         <div class="quick-filters">
-
-            <button class="quick-button all">All Providers</button>
-            <button class="quick-button below">Below Target</button>
-            <button class="quick-button ontarget">On Target</button>
-            <button class="quick-button above">Above Target</button>
-            <button class="quick-button all">Lead Providers</button>
-            <button class="quick-button all">Support Providers</button>
-
+            <button class="quick-button active" data-status="All">All Providers</button>
+            <button class="quick-button" data-status="Below Target">Below Target</button>
+            <button class="quick-button" data-status="On Target">On Target</button>
+            <button class="quick-button" data-status="Above Target">Above Target</button>
+            <button class="quick-button" data-role="Lead">Lead Providers</button>
+            <button class="quick-button" data-role="Support">Support Providers</button>
         </div>
-
+        <div id="notice" class="notice" role="status"></div>
     </div>
-
-    <!-- KPI Cards -->
 
     <div class="kpis">
-
-        <div class="kpi">
-            <div class="kpi-title">Total Commissioned Hours</div>
-            <div class="kpi-value">3,000</div>
-        </div>
-
-        <div class="kpi">
-            <div class="kpi-title">Providers Below Target</div>
-            <div class="kpi-value">1</div>
-        </div>
-
-        <div class="kpi">
-            <div class="kpi-title">Providers On Target</div>
-            <div class="kpi-value">1</div>
-        </div>
-
-        <div class="kpi">
-            <div class="kpi-title">Providers Above Target</div>
-            <div class="kpi-value">1</div>
-        </div>
-
+        <div class="kpi"><div class="kpi-title">Total Commissioned Hours</div><div class="kpi-value" id="totalHours">0</div></div>
+        <div class="kpi"><div class="kpi-title">Providers Below Target</div><div class="kpi-value" id="belowCount">0</div></div>
+        <div class="kpi"><div class="kpi-title">Providers On Target</div><div class="kpi-value" id="targetCount">0</div></div>
+        <div class="kpi"><div class="kpi-title">Providers Above Target</div><div class="kpi-value" id="aboveCount">0</div></div>
+        <div class="kpi rural-standard"><div class="kpi-title">Total Standard Hours</div><div class="kpi-value" id="standardHours">0</div></div>
+        <div class="kpi rural-super"><div class="kpi-title">Total Super Rural Hours</div><div class="kpi-value" id="superHours">0</div></div>
+        <div class="kpi rural-block"><div class="kpi-title">Total Block Hours</div><div class="kpi-value" id="blockHours">0</div></div>
     </div>
-
-    <!-- Provider Table -->
 
     <div class="card">
-
         <h3>Provider Market Share</h3>
-
-        <table>
-
-            <thead>
-                <tr>
-                    <th>Provider</th>
-                    <th>Commissioned Hours</th>
-                    <th>Actual Share %</th>
-                    <th>Target Share %</th>
-                    <th>Variance %</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                <tr>
-                    <td>Lead Provider</td>
-                    <td>1,350</td>
-                    <td>45%</td>
-                    <td>50%</td>
-                    <td>-5%</td>
-                    <td>
-                        <span class="status status-below">
-                            Below Target
-                        </span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Support Provider 1</td>
-                    <td>900</td>
-                    <td>30%</td>
-                    <td>25%</td>
-                    <td>+5%</td>
-                    <td>
-                        <span class="status status-above">
-                            Above Target
-                        </span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Support Provider 2</td>
-                    <td>750</td>
-                    <td>25%</td>
-                    <td>25%</td>
-                    <td>0%</td>
-                    <td>
-                        <span class="status status-target">
-                            On Target
-                        </span>
-                    </td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <div class="snapshot">
-            Snapshot Date: 26/08/2026 09:00
+        <div class="context-bar" id="contextBar"></div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Provider</th><th>Commissioned Hours</th><th>Actual Share %</th><th>Target Share %</th><th>Variance %</th><th>Status</th></tr></thead>
+                <tbody id="providerBody"></tbody>
+            </table>
         </div>
-
+        <div class="snapshot" id="snapshotText"></div>
     </div>
-
-    <!-- Charts -->
 
     <div class="chart-area">
-
-        <div class="chart-placeholder">
-
-            <div class="chart-title">
-                Market Share Distribution
+        <div class="chart-card">
+            <div class="chart-title">Market Share Distribution</div>
+            <div class="donut-wrap">
+                <div class="donut" id="shareDonut"><div class="donut-centre"><span id="donutHours">0</span><small>hours</small></div></div>
+                <div class="legend" id="shareLegend"></div>
             </div>
-
-            <div class="placeholder">
-                Pie / Donut Chart
-            </div>
-
         </div>
-
-        <div class="chart-placeholder">
-
-            <div class="chart-title">
-                Historical Market Share Trend
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn btn-secondary">1 Month</button>
-                <button class="btn btn-secondary">3 Months</button>
-                <button class="btn btn-secondary">6 Months</button>
-                <button class="btn btn-secondary">12 Months</button>
-            </div>
-
-            <div class="placeholder">
-                Trend Chart
-            </div>
-
+        <div class="chart-card">
+            <div class="chart-title">Actual Share Compared with Target</div>
+            <div class="bar-chart" id="comparisonChart"></div>
+            <div class="small-note"><span style="color:var(--blue)">■</span> Actual &nbsp; <span style="color:#aeb8c4">■</span> Target</div>
         </div>
-
+        <div class="chart-card">
+            <div class="chart-title">Hours by Rurality Classification</div>
+            <div class="rural-bars" id="ruralBars"></div>
+            <div class="small-note">Rurality is shown for analysis only. Market share remains calculated using total hours for the selected neighbourhood.</div>
+        </div>
     </div>
-
 </div>
 
+<script>
+const data = [
+ {n:'Beverley', r:'Standard', p:'Beverley Care Partnership', role:'Lead', h:980, t:45},
+ {n:'Beverley', r:'Standard', p:'East Riding Home Support', role:'Support', h:720, t:35},
+ {n:'Beverley', r:'Standard', p:'Minster Care Services', role:'Support', h:500, t:20},
+ {n:'Bridlington', r:'Standard', p:'Coastal Care Group', role:'Lead', h:870, t:45},
+ {n:'Bridlington', r:'Standard', p:'Harbour Homecare', role:'Support', h:610, t:30},
+ {n:'Bridlington', r:'Standard', p:'East Coast Support', role:'Support', h:420, t:25},
+ {n:'Bridlington', r:'Super Rural', p:'Coastal Care Group', role:'Lead', h:260, t:45},
+ {n:'Bridlington', r:'Super Rural', p:'Harbour Homecare', role:'Support', h:190, t:30},
+ {n:'Bridlington', r:'Super Rural', p:'East Coast Support', role:'Support', h:150, t:25},
+ {n:'Goole', r:'Standard', p:'Goole Home Support', role:'Lead', h:760, t:50},
+ {n:'Goole', r:'Standard', p:'Ouse Care Services', role:'Support', h:430, t:30},
+ {n:'Goole', r:'Standard', p:'Marshland Care', role:'Support', h:310, t:20},
+ {n:'Goole', r:'Super Rural', p:'Goole Home Support', role:'Lead', h:210, t:50},
+ {n:'Goole', r:'Super Rural', p:'Ouse Care Services', role:'Support', h:150, t:30},
+ {n:'Goole', r:'Super Rural', p:'Marshland Care', role:'Support', h:140, t:20},
+ {n:'Haltemprice', r:'Standard', p:'West Hull Care Partnership', role:'Lead', h:1050, t:50},
+ {n:'Haltemprice', r:'Standard', p:'Humber Homecare', role:'Support', h:620, t:30},
+ {n:'Haltemprice', r:'Standard', p:'Cave and Wolds Support', role:'Support', h:430, t:20},
+ {n:'Holderness', r:'Standard', p:'Holderness Care Partnership', role:'Lead', h:830, t:45},
+ {n:'Holderness', r:'Standard', p:'Coast and Plains Care', role:'Support', h:590, t:30},
+ {n:'Holderness', r:'Standard', p:'Humber Support Services', role:'Support', h:480, t:25},
+ {n:'Holderness', r:'Super Rural', p:'Holderness Care Partnership', role:'Lead', h:340, t:45},
+ {n:'Holderness', r:'Super Rural', p:'Coast and Plains Care', role:'Support', h:210, t:30},
+ {n:'Holderness', r:'Super Rural', p:'Humber Support Services', role:'Support', h:250, t:25},
+ {n:'Wolds', r:'Block', p:'Wolds Block Provider', role:'Lead', h:1900, t:100}
+];
+
+const colours = ['#3276b1','#7353ba','#2e8540','#c57a00','#c43d3d','#4f8f8f'];
+const el = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString('en-GB');
+let roleFilter = 'All';
+
+function unique(values){ return [...new Set(values)].sort(); }
+function setOptions(select, values, allLabel, selected='All'){
+    select.innerHTML = `<option value="All">${allLabel}</option>` + values.map(v => `<option value="${v}">${v}</option>`).join('');
+    select.value = values.includes(selected) || selected === 'All' ? selected : 'All';
+}
+function initialise(){
+    setOptions(el('neighbourhoodFilter'), unique(data.map(x=>x.n)), 'All Neighbourhoods');
+    updateRuralityOptions();
+    updateProviderOptions();
+    render();
+}
+function updateRuralityOptions(){
+    const selected = el('ruralityFilter').value || 'All';
+
+    setOptions(
+        el('ruralityFilter'),
+        ['Standard', 'Super Rural', 'Block'],
+        'All Classifications',
+        selected
+    );
+
+}
+function updateProviderOptions(){
+    const selected = el('providerFilter').value || 'All';
+    const n = el('neighbourhoodFilter').value;
+    const source = n === 'All' ? data : data.filter(x=>x.n===n);
+    setOptions(el('providerFilter'), unique(source.map(x=>x.p)), 'All Providers', selected);
+}
+function baseRows(){
+    const n = el('neighbourhoodFilter').value;
+    const r = el('ruralityFilter').value;
+    return data.filter(x => (n==='All'||x.n===n) && (r==='All'||x.r===r));
+}
+function aggregate(rows){
+    const map = new Map();
+    rows.forEach(x => {
+        if(!map.has(x.p)) map.set(x.p,{p:x.p,role:x.role,h:0,t:x.t});
+        map.get(x.p).h += x.h;
+    });
+    const total = rows.reduce((s,x)=>s+x.h,0);
+    return [...map.values()].map(x => {
+        const actual = total ? x.h/total*100 : 0;
+        const variance = actual-x.t;
+        const status = Math.abs(variance) < 0.5 ? 'On Target' : variance < 0 ? 'Below Target' : 'Above Target';
+        return {...x,actual,variance,status};
+    });
+}
+function filteredAggregates(baseAgg){
+    const p = el('providerFilter').value;
+    const s = el('statusFilter').value;
+    return baseAgg.filter(x => (p==='All'||x.p===p) && (s==='All'||x.status===s) && (roleFilter==='All'||x.role===roleFilter));
+}
+function statusClass(status){ return status==='Below Target'?'status-below':status==='Above Target'?'status-above':'status-target'; }
+function render(){
+    const rows = baseRows();
+    const allAgg = aggregate(rows);
+    const shown = filteredAggregates(allAgg);
+    const total = rows.reduce((s,x)=>s+x.h,0);
+    const rural = {Standard:0,'Super Rural':0,Block:0};
+    rows.forEach(x=>rural[x.r]+=x.h);
+
+    el('totalHours').textContent = fmt(total);
+    el('belowCount').textContent = allAgg.filter(x=>x.status==='Below Target').length;
+    el('targetCount').textContent = allAgg.filter(x=>x.status==='On Target').length;
+    el('aboveCount').textContent = allAgg.filter(x=>x.status==='Above Target').length;
+    el('standardHours').textContent = fmt(rural.Standard);
+    el('superHours').textContent = fmt(rural['Super Rural']);
+    el('blockHours').textContent = fmt(rural.Block);
+
+    const n = el('neighbourhoodFilter').value;
+    const r = el('ruralityFilter').value;
+    el('contextBar').textContent = `${n==='All'?'All Neighbourhoods':n} | ${r==='All'?'All Rurality Classifications':r}`;
+    el('snapshotText').textContent = `Snapshot Date: ${el('snapshotFilter').value} 09:00`;
+
+    el('providerBody').innerHTML = shown.length ? shown.map(x=>`<tr>
+        <td>${x.p}</td><td>${fmt(x.h)}</td><td>${x.actual.toFixed(1)}%</td><td>${x.t.toFixed(1)}%</td>
+        <td>${x.variance>=0?'+':''}${x.variance.toFixed(1)}%</td><td><span class="status ${statusClass(x.status)}">${x.status}</span></td>
+    </tr>`).join('') : `<tr><td colspan="6" class="empty">No providers match the selected filters.</td></tr>`;
+
+    renderDonut(shown);
+    renderComparison(shown);
+    renderRurality(rural,total);
+}
+function renderDonut(rows){
+    const total = rows.reduce((s,x)=>s+x.h,0);
+    el('donutHours').textContent = fmt(total);
+    if(!total){ el('shareDonut').style.background='#e9edf2'; el('shareLegend').innerHTML='<div>No data</div>'; return; }
+    let start=0; const stops=[];
+    rows.forEach((x,i)=>{ const end=start+(x.h/total*100); stops.push(`${colours[i%colours.length]} ${start}% ${end}%`); start=end; });
+    el('shareDonut').style.background=`conic-gradient(${stops.join(',')})`;
+    el('shareLegend').innerHTML=rows.map((x,i)=>`<div class="legend-row"><span class="swatch" style="background:${colours[i%colours.length]}"></span><span>${x.p}: ${x.actual.toFixed(1)}%</span></div>`).join('');
+}
+function renderComparison(rows){
+    const max = Math.max(100,...rows.flatMap(x=>[x.actual,x.t]));
+    el('comparisonChart').innerHTML = rows.length ? rows.map(x=>`<div class="bar-group">
+        <div class="bar actual" title="Actual ${x.actual.toFixed(1)}%" style="height:${x.actual/max*100}%"></div>
+        <div class="bar target" title="Target ${x.t.toFixed(1)}%" style="height:${x.t/max*100}%"></div>
+        <div class="bar-label" title="${x.p}">${x.p}</div></div>`).join('') : '<div class="empty">No data</div>';
+}
+function renderRurality(rural,total){
+    const rows=[['Standard',rural.Standard,'standard'],['Super Rural',rural['Super Rural'],'super'],['Block',rural.Block,'block']];
+    el('ruralBars').innerHTML=rows.map(([label,value,cls])=>`<div class="rural-row"><strong>${label}</strong><div class="track"><div class="fill ${cls}" style="width:${total?value/total*100:0}%"></div></div><span>${fmt(value)}</span></div>`).join('');
+}
+function showNotice(text){ const n=el('notice'); n.textContent=text; n.style.display='block'; setTimeout(()=>n.style.display='none',2200); }
+
+el('neighbourhoodFilter').addEventListener('change',()=>{ updateRuralityOptions(); updateProviderOptions(); });
+el('applyBtn').addEventListener('click',render);
+el('clearBtn').addEventListener('click',()=>{
+    el('neighbourhoodFilter').value='All'; updateRuralityOptions(); updateProviderOptions();
+    el('ruralityFilter').value='All'; el('providerFilter').value='All'; el('statusFilter').value='All'; roleFilter='All';
+    document.querySelectorAll('.quick-button').forEach(b=>b.classList.remove('active'));
+    document.querySelector('[data-status="All"]').classList.add('active'); render();
+});
+
+el('exportBtn').addEventListener('click',()=>{
+    const rows=filteredAggregates(aggregate(baseRows()));
+    const csv=['Provider,Commissioned Hours,Actual Share %,Target Share %,Variance %,Status',...rows.map(x=>`"${x.p}",${x.h},${x.actual.toFixed(1)},${x.t.toFixed(1)},${x.variance.toFixed(1)},${x.status}`)].join('\n');
+    const blob=new Blob([csv],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='market-share-dashboard.csv'; a.click(); URL.revokeObjectURL(a.href);
+});
+document.querySelectorAll('.quick-button').forEach(btn=>btn.addEventListener('click',()=>{
+    if(btn.dataset.status){
+        roleFilter='All'; el('statusFilter').value=btn.dataset.status;
+    } else if(btn.dataset.role){
+        el('statusFilter').value='All'; roleFilter=btn.dataset.role;
+    }
+    document.querySelectorAll('.quick-button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render();
+}));
+
+initialise();
+</script>
 </body>
 </html>
